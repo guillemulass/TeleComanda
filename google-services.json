@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "237076471330",
+    "project_id": "telecomanda-8c6bc",
+    "storage_bucket": "telecomanda-8c6bc.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:237076471330:android:508333cd970eda9873f47b",
+        "android_client_info": {
+          "package_name": "com.example.telecomanda"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDkiYCGUtsjNLQrOnh7hayo5oj4bi9BVAM"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
