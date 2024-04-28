@@ -35,7 +35,7 @@ class RegisterScreenViewModel : ViewModel() {
         viewModelScope.launch {
             try {
                 auth.createUserWithEmailAndPassword(email,passw).addOnCompleteListener {
-                    saveUser(UserModel(restaurantName, email))
+                    saveUser(UserModel(email, restaurantName))
                     onSuccess()
                 }.addOnFailureListener {
                     onFailure()
@@ -51,8 +51,8 @@ class RegisterScreenViewModel : ViewModel() {
 
     private fun saveUserName(){
 
-        // Obtener una referencia a la colección "usersBooks" para el usuario actual
-        val userBooksRef = db.collection("users").document(auth.currentUser?.email!!)
+        // Obtener una referencia a la colección "restaurants" para el usuario actual
+        val userBooksRef = db.collection("restaurants").document(auth.currentUser?.email!!)
 
         // Agregar el libro a la colección "books"
         userBooksRef.set(restaurantName)
@@ -60,7 +60,7 @@ class RegisterScreenViewModel : ViewModel() {
 
     private fun saveUser(userToAdd:UserModel) {
         viewModelScope.launch {
-            firestore.collection("Users").document(email).set(userToAdd).addOnCompleteListener {
+            firestore.collection("restaurants").document(email).set(userToAdd).addOnCompleteListener {
                 println("Restaurante guardado en base de datos correctamente")
             }.addOnFailureListener {
                 println("Error guardando restaurante en base de datos")

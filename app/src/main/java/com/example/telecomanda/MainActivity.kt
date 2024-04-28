@@ -19,8 +19,11 @@ import com.example.telecomanda.screens.addToMenu.AddToMenuViewModel
 import com.example.telecomanda.screens.configurationScreen.ConfigurationScreen
 import com.example.telecomanda.screens.initialScreen.InitialScreen
 import com.example.telecomanda.screens.logIn.LogInAdministrator
+import com.example.telecomanda.screens.logIn.LogInAdministratorViewModel
 import com.example.telecomanda.screens.logIn.LogInEmployee
 import com.example.telecomanda.screens.logIn.LogInSelector
+import com.example.telecomanda.screens.menuScreen.MenuScreen
+import com.example.telecomanda.screens.menuScreen.MenuScreenViewModel
 import com.example.telecomanda.screens.registerScreen.RegisterScreen
 import com.example.telecomanda.screens.registerScreen.RegisterScreenViewModel
 import com.example.telecomanda.screens.workScreens.AdminWork
@@ -34,6 +37,9 @@ class MainActivity : ComponentActivity() {
         // VIEWMODELS
         val addToMenuViewModel = AddToMenuViewModel()
         val registerScreenViewModel = RegisterScreenViewModel()
+        val logInAdministratorViewModel = LogInAdministratorViewModel()
+        val menuScreenViewModel = MenuScreenViewModel()
+
 
         setContent {
             TeleComandaTheme {
@@ -75,7 +81,8 @@ class MainActivity : ComponentActivity() {
 
                         composable(Routes.LogInAdministratorScreenRoute.route) {
                             LogInAdministrator(
-                                navController
+                                navController,
+                                logInAdministratorViewModel
                             )
                         }
 
@@ -101,6 +108,13 @@ class MainActivity : ComponentActivity() {
                             AddToMenu(
                                 navController,
                                 addToMenuViewModel
+                            )
+                        }
+
+                        composable(Routes.MenuScreenRoute.route) {
+                            MenuScreen(
+                                navController,
+                                menuScreenViewModel
                             )
                         }
 

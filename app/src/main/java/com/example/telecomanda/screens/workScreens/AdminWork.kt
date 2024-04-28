@@ -19,6 +19,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
+import com.example.telecomanda.routes.Routes
 
 @Composable
 fun AdminWork(
@@ -107,7 +108,7 @@ fun AdminWork(
 
             Button(
                 onClick = {
-
+                    navController.navigate(Routes.ConfigurationScreenRoute.route)
                 },
                 modifier = Modifier
             ) {

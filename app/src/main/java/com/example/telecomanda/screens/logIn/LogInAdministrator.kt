@@ -9,8 +9,14 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Email
+import androidx.compose.material.icons.filled.Lock
 import androidx.compose.material3.Button
+import androidx.compose.material3.Icon
+import androidx.compose.material3.OutlinedTextFieldDefaults
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
@@ -20,8 +26,11 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight.Companion.Bold
+import androidx.compose.ui.text.input.KeyboardType
+import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
@@ -30,6 +39,7 @@ import com.example.telecomanda.routes.Routes
 @Composable
 fun LogInAdministrator(
     navController: NavHostController,
+    logInAdministratorViewModel: LogInAdministratorViewModel
 ) {
 
     var text by remember { mutableStateOf("") }
@@ -70,25 +80,57 @@ fun LogInAdministrator(
 
             Spacer(modifier = Modifier.height(32.dp))
 
-            TextField(
-                value = text,
-                onValueChange = { text = it },
-                label = { Text("Nombre del Restaurante") },
+            TextField (
+                value = logInAdministratorViewModel.email,
+                onValueChange = { logInAdministratorViewModel.changeEmail(it) },
+                label = { Text("Email") },
+                keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Email),
+                modifier = Modifier
+                    .width(330.dp)
+                    .padding(top = 55.dp),
+                colors = OutlinedTextFieldDefaults.colors(
+                    focusedBorderColor = Color(0xFFD9D9D9),
+                    unfocusedBorderColor = Color(0xFFD9D9D9),
+                    focusedLabelColor = Color(0xFFD9D9D9),
+                    unfocusedLabelColor = Color(0xFFD9D9D9),
+                    unfocusedTextColor = Color(0xFFD9D9D9),
+                    focusedTextColor = Color(0xFFD9D9D9)
+                ),
+                leadingIcon = {
+                    Icon(imageVector = Icons.Default.Email, contentDescription = null)
+                },
+                singleLine = true
+
             )
 
-            Spacer(modifier = Modifier.height(16.dp))
-
             TextField(
-                value = text,
-                onValueChange = { text = it },
-                label = { Text("Contraseña del Restaurante") },
+                value = logInAdministratorViewModel.password,
+                onValueChange = { logInAdministratorViewModel.changePassword(it) },
+                label = { Text("Contraseña") },
+                modifier = Modifier
+                    .width(330.dp)
+                    .padding(top = 30.dp),
+                colors = OutlinedTextFieldDefaults.colors(
+                    focusedBorderColor = Color(0xFFD9D9D9),
+                    unfocusedBorderColor = Color(0xFFD9D9D9),
+                    focusedLabelColor = Color(0xFFD9D9D9),
+                    unfocusedLabelColor = Color(0xFFD9D9D9),
+                    unfocusedTextColor = Color(0xFFD9D9D9),
+                    focusedTextColor = Color(0xFFD9D9D9)
+                ),
+                leadingIcon = {
+                    Icon(imageVector = Icons.Default.Lock, contentDescription = null)
+                },
+                visualTransformation = PasswordVisualTransformation(),
+                singleLine = true
             )
 
-            Spacer(modifier = Modifier.height(16.dp))
+            Spacer(modifier = Modifier.height(60.dp))
+
 
             Button(
                 onClick = {
-                    navController.navigate(Routes.AdminWorkScreenRoute.route)
+                    logInAdministratorViewModel.login { navController.navigate(Routes.EmployeeWorkScreenRoute.route) }
                 },
                 modifier = Modifier
             ) {

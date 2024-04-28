@@ -71,6 +71,14 @@ fun LogInSelector(
             ) {
                 Text(text = "Administrador")
             }
+            Button(
+                onClick = {
+                    navController.navigate(Routes.AdminWorkScreenRoute.route)
+                },
+                modifier = Modifier
+            ) {
+                Text(text = "Administrador2")
+            }
 
             Spacer(modifier = Modifier.height(16.dp))
 
@@ -82,6 +90,14 @@ fun LogInSelector(
                 modifier = Modifier
             ) {
                 Text(text = "Empleado")
+            }
+            Button(
+                onClick = {
+                    navController.navigate(Routes.EmployeeWorkScreenRoute.route)
+                },
+                modifier = Modifier
+            ) {
+                Text(text = "Administrador2")
             }
 
         }

@@ -11,6 +11,7 @@ sealed class Routes(val route : String) {
     object RegisterScreenRoute: Routes("RegisterScreen")
     object AdminWorkScreenRoute: Routes("AdminWork")
     object EmployeeWorkScreenRoute: Routes("EmployeeWork")
+    object MenuScreenRoute: Routes("MenuScreen")
 
     object ExampleScreenRoute: Routes("ExampleScreen")
 
