@@ -1,8 +1,8 @@
 package com.example.telecomanda.dataClasses
 
 data class OrderItem(
-    val name: String,
-    val price: String,
-    val type: String // Puede ser "Dish" o "Drink"
+    val name: String = "",
+    val price: String = "",
+    val type: String = "",
+    var quantity: Int = 1
 )
-

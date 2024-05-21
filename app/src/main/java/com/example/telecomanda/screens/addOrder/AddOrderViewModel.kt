@@ -2,14 +2,10 @@ package com.example.telecomanda.screens.addOrder
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.MutableLiveData
-import com.example.telecomanda.dataClasses.Dish
-import com.example.telecomanda.dataClasses.Drink
+import com.example.telecomanda.dataClasses.*
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
-import com.example.telecomanda.dataClasses.OrderItem
 import androidx.compose.runtime.mutableStateListOf
-import com.example.telecomanda.dataClasses.Order
-import com.example.telecomanda.dataClasses.Table
 
 class AddOrderViewModel : ViewModel() {
 
@@ -19,14 +15,27 @@ class AddOrderViewModel : ViewModel() {
     val orderList = mutableStateListOf<OrderItem>()
 
     private val _totalPrice = MutableLiveData<Double>()
-    var totalPrice : MutableLiveData<Double> = _totalPrice
+    val totalPrice: MutableLiveData<Double> = _totalPrice
 
     val tableList = MutableLiveData<List<Table>>()
+    val tableQuantity = MutableLiveData<Int>()
 
     init {
-        // Inicializar lista de mesas (por ejemplo, 10 mesas)
-        tableList.value = List(10) { Table(number = it + 1) }
+        fetchTables()
     }
+
+    fun fetchTables() {
+        val user = auth.currentUser?.email ?: return
+        db.collection("restaurants").document(user).collection("tables").get()
+            .addOnSuccessListener { result ->
+                val tables = result.mapNotNull { it.toObject(Table::class.java) }
+                tableList.value = tables
+            }
+            .addOnFailureListener { e ->
+                // Handle fetch error
+            }
+    }
+
 
     fun getDrinkData(onSuccess: (List<Drink>) -> Unit, onFailure: (Exception) -> Unit) {
         val drinksCollectionRef = db.collection("restaurants").document(auth.currentUser?.email!!).collection("drinks")
@@ -61,25 +70,68 @@ class AddOrderViewModel : ViewModel() {
     }
 
     fun addDishToList(dish: Dish) {
-        orderList.add(OrderItem(dish.name, dish.price, "Dish"))
+        val existingItem = orderList.find { it.name == dish.name && it.type == "Dish" }
+        if (existingItem != null) {
+            existingItem.quantity += 1
+        } else {
+            orderList.add(OrderItem(dish.name, dish.price, "Dish", 1))
+        }
         updateTotalPrice()
     }
 
     fun addDrinkToList(drink: Drink) {
-        orderList.add(OrderItem(drink.name, drink.price, "Drink"))
+        val existingItem = orderList.find { it.name == drink.name && it.type == "Drink" }
+        if (existingItem != null) {
+            existingItem.quantity += 1
+        } else {
+            orderList.add(OrderItem(drink.name, drink.price, "Drink", 1))
+        }
         updateTotalPrice()
     }
 
-    private fun updateTotalPrice() {
-        totalPrice.value = orderList.sumOf { it.price.toDoubleOrNull() ?: 0.0 }
+    fun updateTotalPrice() {
+        _totalPrice.value = orderList.sumOf { (it.price.toDoubleOrNull() ?: 0.0) * it.quantity }
     }
 
+    fun resetTotalPrice() {
+        _totalPrice.value = 0.0
+    }
+
+
+    fun getTableData(tableNumber: Int, onSuccess: (Table) -> Unit, onFailure: (Exception) -> Unit) {
+        val user = auth.currentUser?.email ?: return
+        db.collection("restaurants").document(user).collection("tables").document(tableNumber.toString()).get()
+            .addOnSuccessListener { document ->
+                if (document.exists()) {
+                    val table = document.toObject(Table::class.java)
+                    if (table != null) {
+                        onSuccess(table)
+                    } else {
+                        onFailure(Exception("Table data is null"))
+                    }
+                } else {
+                    onFailure(Exception("Table not found"))
+                }
+            }
+            .addOnFailureListener { exception ->
+                onFailure(exception)
+            }
+    }
 
     fun addOrderToTable(tableNumber: Int, order: Order) {
         tableList.value?.let { tables ->
             val updatedTables = tables.map { table ->
                 if (table.number == tableNumber) {
-                    table.copy(orders = (table.orders + order).toMutableList())
+                    val updatedOrders = table.orders.toMutableList()
+                    order.items.forEach { newItem ->
+                        val existingItem = updatedOrders.find { it.name == newItem.name && it.type == newItem.type }
+                        if (existingItem != null) {
+                            existingItem.quantity += newItem.quantity
+                        } else {
+                            updatedOrders.add(newItem)
+                        }
+                    }
+                    table.copy(orders = updatedOrders)
                 } else {
                     table
                 }
@@ -87,5 +139,13 @@ class AddOrderViewModel : ViewModel() {
             tableList.value = updatedTables
         }
     }
+
+    fun saveTable(number: Int, orders: List<OrderItem>) {
+        val tableToSave = Table(number, "", orders.toMutableList(), )
+        val restaurantsRef = db.collection("restaurants").document(auth.currentUser?.email!!)
+        val tablesCollectionRef = restaurantsRef.collection("tables")
+        tablesCollectionRef.document(number.toString()).set(tableToSave)
+    }
+
 
 }

@@ -32,6 +32,8 @@ import com.example.telecomanda.screens.menuScreen.MenuScreen
 import com.example.telecomanda.screens.menuScreen.MenuScreenViewModel
 import com.example.telecomanda.screens.registerScreen.RegisterScreen
 import com.example.telecomanda.screens.registerScreen.RegisterScreenViewModel
+import com.example.telecomanda.screens.tableQuantityController.TableQuantityControllerScreen
+import com.example.telecomanda.screens.tableQuantityController.TableQuantityControllerViewModel
 import com.example.telecomanda.screens.workScreens.AdminWork
 import com.example.telecomanda.screens.workScreens.EmployeeWork
 import com.example.telecomanda.ui.theme.TeleComandaTheme
@@ -48,6 +50,7 @@ class MainActivity : ComponentActivity() {
         val menuScreenViewModel = MenuScreenViewModel()
         val logInEmployeeViewModel = LogInEmployeeViewModel()
         val addOrderViewModel = AddOrderViewModel()
+        val tableQuantityControllerViewModel = TableQuantityControllerViewModel()
 
         //navController.popBackStack()
 
@@ -109,16 +112,6 @@ class MainActivity : ComponentActivity() {
                             )
                         }
 
-                        /*
-                        composable(Routes.AddOrderScreenRoute.route) {
-                            AddOrder(
-                                navController,
-                                addOrderViewModel
-                            )
-                        }
-
-                         */
-
                         composable(Routes.ConfigurationScreenRoute.route) {
                             ConfigurationScreen(
                                 navController
@@ -145,6 +138,7 @@ class MainActivity : ComponentActivity() {
                                 menuScreenViewModel
                             )
                         }
+
                         composable(Routes.TableSelecctionScreenRoute.route) {
                             TableSelectionScreen(
                                 navController,
@@ -155,6 +149,13 @@ class MainActivity : ComponentActivity() {
                         composable("addOrder/{tableNumber}") { backStackEntry ->
                             val tableNumber = backStackEntry.arguments?.getString("tableNumber")?.toInt() ?: 1
                             AddOrder(navController, tableNumber, addOrderViewModel)
+                        }
+
+                        composable(Routes.TableQuantityControllerScreenRoute.route) {
+                            TableQuantityControllerScreen(
+                                navController,
+                                tableQuantityControllerViewModel
+                            )
                         }
 
                     }

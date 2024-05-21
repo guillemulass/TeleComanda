@@ -3,10 +3,8 @@ package com.example.telecomanda.screens.addOrder
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
-import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.Button
 import androidx.compose.material3.Text
-import androidx.compose.material3.TextField
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -15,14 +13,13 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
+import androidx.compose.runtime.livedata.observeAsState
 import com.example.telecomanda.dataClasses.Dish
 import com.example.telecomanda.dataClasses.Drink
+import com.example.telecomanda.dataClasses.Order
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
-import androidx.compose.runtime.livedata.observeAsState
-import com.example.telecomanda.dataClasses.Order
-import com.example.telecomanda.dataClasses.OrderItem
 
 @Composable
 fun AddOrder(
@@ -54,10 +51,19 @@ fun AddOrder(
                     println(it)
                 }
             )
+            addOrderViewModel.getTableData(
+                tableNumber,
+                onSuccess = { table ->
+                    addOrderViewModel.orderList.clear() // Limpiar la comanda actual
+                    addOrderViewModel.orderList.addAll(table.orders) // Cargar los datos de la mesa seleccionada
+                    addOrderViewModel.updateTotalPrice()
+                },
+                onFailure = {
+                    println(it)
+                }
+            )
         }
     }
-
-    var currentOrder by remember { mutableStateOf(Order(emptyList(), 0.0)) }
 
     Box(
         modifier = Modifier.fillMaxSize()
@@ -81,18 +87,12 @@ fun AddOrder(
                 )
 
                 Spacer(modifier = Modifier.height(32.dp))
-
             }
 
             items(dishList) { dish ->
                 Button(
                     onClick = {
-                        val newItem = OrderItem(dish.name, dish.price, "Dish")
-                        val newItems = currentOrder.items + newItem
-                        currentOrder = currentOrder.copy(
-                            items = newItems,
-                            totalPrice = newItems.sumOf { it.price.toDoubleOrNull() ?: 0.0 }
-                        )
+                        addOrderViewModel.addDishToList(dish)
                     },
                     modifier = Modifier
                 ) {
@@ -107,12 +107,7 @@ fun AddOrder(
             items(drinkList) { drink ->
                 Button(
                     onClick = {
-                        val newItem = OrderItem(drink.name, drink.price, "Drink")
-                        val newItems = currentOrder.items + newItem
-                        currentOrder = currentOrder.copy(
-                            items = newItems,
-                            totalPrice = newItems.sumOf { it.price.toDoubleOrNull() ?: 0.0 }
-                        )
+                        addOrderViewModel.addDrinkToList(drink)
                     },
                     modifier = Modifier
                 ) {
@@ -125,7 +120,10 @@ fun AddOrder(
 
                 Button(
                     onClick = {
-                        addOrderViewModel.addOrderToTable(tableNumber.toInt(), currentOrder)
+                        addOrderViewModel.addOrderToTable(tableNumber, Order(addOrderViewModel.orderList))
+                        addOrderViewModel.saveTable(tableNumber, addOrderViewModel.orderList.toList())
+                        addOrderViewModel.orderList.clear()
+                        addOrderViewModel.resetTotalPrice()
                         navController.popBackStack()
                     },
                     modifier = Modifier
@@ -134,13 +132,13 @@ fun AddOrder(
                 }
             }
 
-            items(currentOrder.items) { orderItem ->
-                Text(text = "${orderItem.name} - ${orderItem.price}€")
+            items(addOrderViewModel.orderList) { orderItem ->
+                Text(text = "${orderItem.name} - ${orderItem.price}€ | x${orderItem.quantity}")
             }
 
             item {
                 Spacer(modifier = Modifier.height(16.dp))
-                Text(text = "Total: ${currentOrder.totalPrice}€")
+                Text(text = "Total: ${totalPrice}€")
             }
         }
     }

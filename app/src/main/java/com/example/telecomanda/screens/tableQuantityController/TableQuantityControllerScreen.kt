@@ -1,8 +1,6 @@
-package com.example.telecomanda.screens.addOrder
+package com.example.telecomanda.screens.tableQuantityController
 
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.Button
 import androidx.compose.material3.Text
 import androidx.compose.runtime.*
@@ -14,17 +12,16 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import androidx.compose.runtime.livedata.observeAsState
+import androidx.compose.ui.platform.LocalContext
 
 @Composable
-fun TableSelectionScreen(
+fun TableQuantityControllerScreen(
     navController: NavHostController,
-    addOrderViewModel: AddOrderViewModel
+    tableQuantityControllerViewModel: TableQuantityControllerViewModel
 ) {
-    val tables by addOrderViewModel.tableList.observeAsState(emptyList())
-
-    LaunchedEffect(Unit) {
-        addOrderViewModel.fetchTables()
-    }
+    val context = LocalContext.current
+    var tableQuantity by remember { mutableStateOf(0) }
+    val stateText by tableQuantityControllerViewModel.stateText.observeAsState("")
 
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
@@ -38,20 +35,20 @@ fun TableSelectionScreen(
 
         Spacer(modifier = Modifier.height(16.dp))
 
-        LazyColumn(
-            horizontalAlignment = Alignment.CenterHorizontally,
-            verticalArrangement = Arrangement.Top
-        ) {
-            items(tables) { table ->
-                Button(
-                    onClick = {
-                        navController.navigate("addOrder/${table.number}")
-                    },
-                    modifier = Modifier.fillMaxWidth().padding(8.dp)
-                ) {
-                    Text(text = "Mesa ${table.number} - Código: ${table.code}")
-                }
+        Button(onClick = {
+            tableQuantityControllerViewModel.editTableQuantity { newQuantity ->
+                tableQuantity = newQuantity
             }
+            tableQuantityControllerViewModel.editStateText("Añadida la mesa $tableQuantity")
+        }) {
+            Text("Añadir nueva mesa")
         }
+
+        Spacer(modifier = Modifier.height(16.dp))
+
+        Text(
+            text = stateText,
+            style = TextStyle(fontWeight = FontWeight.Bold, fontSize = 30.sp)
+        )
     }
 }
