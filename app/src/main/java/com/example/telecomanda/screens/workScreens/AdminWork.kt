@@ -64,18 +64,7 @@ fun AdminWork(
 
             Button(
                 onClick = {
-
-                },
-                modifier = Modifier
-            ) {
-                Text(text = "Dar de alta empleado")
-            }
-
-            Spacer(modifier = Modifier.height(16.dp))
-
-            Button(
-                onClick = {
-
+                    navController.navigate(Routes.AddOrderScreenRoute.route)
                 },
                 modifier = Modifier
             ) {
@@ -86,7 +75,7 @@ fun AdminWork(
 
             Button(
                 onClick = {
-
+                    navController.navigate(Routes.TableSelecctionScreenRoute.route)
                 },
                 modifier = Modifier
             ) {
@@ -97,7 +86,7 @@ fun AdminWork(
 
             Button(
                 onClick = {
-
+                    navController.navigate(Routes.MenuScreenRoute.route)
                 },
                 modifier = Modifier
             ) {

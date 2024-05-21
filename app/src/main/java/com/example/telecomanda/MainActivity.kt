@@ -14,6 +14,11 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.example.telecomanda.routes.Routes
+import com.example.telecomanda.screens.addEmployee.AddEmployee
+import com.example.telecomanda.screens.addEmployee.AddEmployeeViewModel
+import com.example.telecomanda.screens.addOrder.AddOrder
+import com.example.telecomanda.screens.addOrder.AddOrderViewModel
+import com.example.telecomanda.screens.addOrder.TableSelectionScreen
 import com.example.telecomanda.screens.addToMenu.AddToMenu
 import com.example.telecomanda.screens.addToMenu.AddToMenuViewModel
 import com.example.telecomanda.screens.configurationScreen.ConfigurationScreen
@@ -21,6 +26,7 @@ import com.example.telecomanda.screens.initialScreen.InitialScreen
 import com.example.telecomanda.screens.logIn.LogInAdministrator
 import com.example.telecomanda.screens.logIn.LogInAdministratorViewModel
 import com.example.telecomanda.screens.logIn.LogInEmployee
+import com.example.telecomanda.screens.logIn.LogInEmployeeViewModel
 import com.example.telecomanda.screens.logIn.LogInSelector
 import com.example.telecomanda.screens.menuScreen.MenuScreen
 import com.example.telecomanda.screens.menuScreen.MenuScreenViewModel
@@ -36,10 +42,14 @@ class MainActivity : ComponentActivity() {
 
         // VIEWMODELS
         val addToMenuViewModel = AddToMenuViewModel()
+        val addEmployeeViewModel = AddEmployeeViewModel()
         val registerScreenViewModel = RegisterScreenViewModel()
         val logInAdministratorViewModel = LogInAdministratorViewModel()
         val menuScreenViewModel = MenuScreenViewModel()
+        val logInEmployeeViewModel = LogInEmployeeViewModel()
+        val addOrderViewModel = AddOrderViewModel()
 
+        //navController.popBackStack()
 
         setContent {
             TeleComandaTheme {
@@ -75,7 +85,8 @@ class MainActivity : ComponentActivity() {
 
                         composable(Routes.LogInEmployeeScreenRoute.route) {
                             LogInEmployee(
-                                navController
+                                navController,
+                                logInEmployeeViewModel
                             )
                         }
 
@@ -98,6 +109,16 @@ class MainActivity : ComponentActivity() {
                             )
                         }
 
+                        /*
+                        composable(Routes.AddOrderScreenRoute.route) {
+                            AddOrder(
+                                navController,
+                                addOrderViewModel
+                            )
+                        }
+
+                         */
+
                         composable(Routes.ConfigurationScreenRoute.route) {
                             ConfigurationScreen(
                                 navController
@@ -111,11 +132,29 @@ class MainActivity : ComponentActivity() {
                             )
                         }
 
+                        composable(Routes.AddEmployeeScreenRoute.route) {
+                            AddEmployee(
+                                navController,
+                                addEmployeeViewModel
+                            )
+                        }
+
                         composable(Routes.MenuScreenRoute.route) {
                             MenuScreen(
                                 navController,
                                 menuScreenViewModel
                             )
+                        }
+                        composable(Routes.TableSelecctionScreenRoute.route) {
+                            TableSelectionScreen(
+                                navController,
+                                addOrderViewModel
+                            )
+                        }
+
+                        composable("addOrder/{tableNumber}") { backStackEntry ->
+                            val tableNumber = backStackEntry.arguments?.getString("tableNumber")?.toInt() ?: 1
+                            AddOrder(navController, tableNumber, addOrderViewModel)
                         }
 
                     }

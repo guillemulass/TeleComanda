@@ -30,9 +30,13 @@ import com.example.telecomanda.routes.Routes
 @Composable
 fun LogInEmployee(
     navController: NavHostController,
+    logInEmployeeViewModel: LogInEmployeeViewModel
 ) {
 
-    var text by remember { mutableStateOf("") }
+    var restaurantEmail by remember { mutableStateOf("") }
+    var employeeName by remember { mutableStateOf("") }
+    var employeePassword by remember { mutableStateOf("") }
+    var stateText by remember { mutableStateOf("") }
 
     Box (
         modifier = Modifier.fillMaxSize()
@@ -71,38 +75,58 @@ fun LogInEmployee(
             Spacer(modifier = Modifier.height(32.dp))
 
             TextField(
-                value = text,
-                onValueChange = { text = it },
-                label = { Text("Nombre del Restaurante") },
+                value = restaurantEmail,
+                onValueChange = { restaurantEmail = it },
+                label = { Text("Email del Restaurante") },
             )
 
             Spacer(modifier = Modifier.height(16.dp))
 
             TextField(
-                value = text,
-                onValueChange = { text = it },
+                value = employeeName,
+                onValueChange = { employeeName = it },
                 label = { Text("Nombre Empleado") },
             )
 
             Spacer(modifier = Modifier.height(16.dp))
 
             TextField(
-                value = text,
-                onValueChange = { text = it },
+                value = employeePassword,
+                onValueChange = { employeePassword = it },
                 label = { Text("Contraseña Empleado") },
             )
 
             Spacer(modifier = Modifier.height(16.dp))
 
+            Text(
+                text = stateText,
+                style = TextStyle(
+                    fontWeight = Bold,
+                    fontSize = 16.sp),
+                modifier = Modifier.padding(bottom = 16.dp)
+            )
+
             Button(
                 onClick = {
-                    navController.navigate(Routes.EmployeeWorkScreenRoute.route)
+                    logInEmployeeViewModel.getData(
+                        restaurantEmail, employeeName, employeePassword,
+                        onSuccess = { result ->
+                            when (result) {
+                                "true" -> navController.navigate(Routes.EmployeeWorkScreenRoute.route)
+                                else -> {
+                                    stateText = result
+                                }
+                            }
+                        },
+                        onFailure = { exception ->
+                            print(exception)
+                        }
+                    )
                 },
                 modifier = Modifier
             ) {
                 Text(text = "Iniciar Sesion")
             }
-
 
         }
     }

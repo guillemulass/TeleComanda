@@ -32,8 +32,6 @@ fun ConfigurationScreen(
     navController: NavHostController,
 ) {
 
-    var text by remember { mutableStateOf("") }
-
     Box (
         modifier = Modifier.fillMaxSize()
     ) {
@@ -83,7 +81,7 @@ fun ConfigurationScreen(
 
             Button(
                 onClick = {
-
+                    navController.navigate(Routes.AddEmployeeScreenRoute.route)
                 },
                 modifier = Modifier
             ) {
@@ -96,9 +94,8 @@ fun ConfigurationScreen(
                 text = "Ⓘ Se han añadido bebidas y platos por defecto,\npuede eliminarlos en la carta",
                 style = TextStyle(
                     fontWeight = Bold,
-                    fontSize = 40.sp)
+                    fontSize = 30.sp)
             )
-
 
         }
     }

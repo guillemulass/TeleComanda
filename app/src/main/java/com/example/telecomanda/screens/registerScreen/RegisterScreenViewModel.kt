@@ -30,7 +30,7 @@ class RegisterScreenViewModel : ViewModel() {
         onFailure:() -> Unit
     ) {
 
-        //saveUserName()
+        saveUserName()
 
         viewModelScope.launch {
             try {
@@ -49,14 +49,19 @@ class RegisterScreenViewModel : ViewModel() {
 
     }
 
-    private fun saveUserName(){
-
+    private fun saveUserName() {
         // Obtener una referencia a la colección "restaurants" para el usuario actual
         val userBooksRef = db.collection("restaurants").document(auth.currentUser?.email!!)
 
-        // Agregar el libro a la colección "books"
-        userBooksRef.set(restaurantName)
+        // Crear un mapa para almacenar los datos
+        val data = hashMapOf(
+            "restaurantName" to restaurantName
+        )
+
+        // Agregar el mapa como datos del documento
+        userBooksRef.set(data)
     }
+
 
     private fun saveUser(userToAdd:UserModel) {
         viewModelScope.launch {

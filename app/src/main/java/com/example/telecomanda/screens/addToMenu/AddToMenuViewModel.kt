@@ -1,14 +1,12 @@
 package com.example.telecomanda.screens.addToMenu
 
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.setValue
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.example.telecomanda.EnumClass.DishTypes
 import com.example.telecomanda.EnumClass.DrinkTypes
 import com.example.telecomanda.dataClasses.Dish
+import com.example.telecomanda.dataClasses.Drink
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 
@@ -34,22 +32,6 @@ class AddToMenuViewModel : ViewModel() {
     val drinkTypesArray = DrinkTypes.values().toList()
 
 
-
-    fun changeDishTypeSelector(dishTypes: DishTypes) {
-        // Implementa la lógica según tus necesidades, por ejemplo:
-        when (dishTypes) {
-            DishTypes.Primero -> {
-                // Realizar acciones cuando se selecciona "Primero"
-            }
-            DishTypes.Segundo -> {
-                // Realizar acciones cuando se selecciona "Segundo"
-            }
-            DishTypes.Postre -> {
-                // Realizar acciones cuando se selecciona "Postre"
-            }
-        }
-    }
-
     init{
         _isDish.value = true
         _isDrink.value = false
@@ -68,41 +50,38 @@ class AddToMenuViewModel : ViewModel() {
         }
     }
 
-    fun saveDish(name : String, price : String){
-        val dishToAdd = Dish(name, price)
+    fun saveDish(name : String, price : String, type: String, ingredients : List<String>){
+        val dishToAdd = Dish(name, price, type, ingredients)
 
         // Obtener una referencia a la colección "restaurants" para el usuario actual
         val restaurantsRef = db.collection("restaurants").document(auth.currentUser?.email!!)
-
-        // Crear una colección llamada "items" dentro del documento del usuario
-        val itemsCollectionRef = restaurantsRef.collection("items")
 
         // Crear una colección llamada "dishes" dentro del documento del usuario
         val dishesCollectionRef = restaurantsRef.collection("dishes")
 
-        // Agregar el libro a la colección "books"
-        itemsCollectionRef.document(name).set(dishToAdd)
+        // Agregar el plato a la colección "dishes"
+        dishesCollectionRef.document(name).set(dishToAdd)
     }
 
-    fun saveDrink(name : String, price : String){
-        val dishToAdd = Dish(name, price)
+    fun saveDrink(name : String, price : String, type: String){
+        val drinkToAdd = Drink(name, price, type)
 
         // Obtener una referencia a la colección "restaurants" para el usuario actual
         val restaurantsRef = db.collection("restaurants").document(auth.currentUser?.email!!)
 
-        // Crear una colección llamada "items" dentro del documento del usuario
-        val itemsCollectionRef = restaurantsRef.collection("items").document()
+        // Crear una colección llamada "drinks" dentro del documento del usuario
+        val dishesCollectionRef = restaurantsRef.collection("drinks")
 
-        // Crear una colección llamada "dishes" dentro del documento del usuario
-        val dishesCollectionRef = itemsCollectionRef.collection("drinks")
 
-        // Agregar el libro a la colección "books"
-        dishesCollectionRef.document(name).set(dishToAdd)
+        // Agregar la bebida a la colección "drinks"
+        dishesCollectionRef.document(name).set(drinkToAdd)
     }
 
     fun updateStateText(text: String) {
         _stateText.value = text
     }
+
+
 
 
 }

@@ -1,5 +1,5 @@
 package com.example.telecomanda.EnumClass
 
 enum class DrinkTypes {
-    Agua, Cerveza, Vina, Otro
+     Cerveza, Vino, Refresco, Otro
 }

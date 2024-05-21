@@ -12,6 +12,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
@@ -28,6 +29,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight.Companion.Bold
+import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
@@ -43,8 +45,6 @@ fun AddToMenu(
     val isDrink: Boolean by addToMenuViewModel.isDrink.observeAsState(initial = false)
     val drinkOrDishText: String by addToMenuViewModel.dishOrDrinkString.observeAsState(initial = "Plato")
     val stateText: String by addToMenuViewModel.stateText.observeAsState(initial = "")
-
-
 
     Box (
         modifier = Modifier.fillMaxSize()
@@ -108,7 +108,6 @@ fun AddToMenu(
 
 }
 
-
 @Composable
 fun textFieldsDrink(
     navController: NavHostController,
@@ -132,15 +131,7 @@ fun textFieldsDrink(
         value = price,
         onValueChange = { price = it },
         label = { Text("Precio") },
-    )
-
-    Spacer(modifier = Modifier.height(16.dp))
-
-    Text(
-        text = "Tipo $lastSelectedDrinkType" ,
-        style = TextStyle(
-            fontWeight = Bold,
-            fontSize = 20.sp)
+        keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number)
     )
 
     Spacer(modifier = Modifier.height(16.dp))
@@ -166,7 +157,9 @@ fun textFieldsDrink(
 
     Button(
         onClick = {
-            addToMenuViewModel.saveDrink(name,price)
+            addToMenuViewModel.saveDrink(name,price,lastSelectedDrinkType.toString())
+            name = ""
+            price = ""
         },
         modifier = Modifier
     ) {
@@ -181,50 +174,61 @@ fun textFieldsDish(
     addToMenuViewModel: AddToMenuViewModel
 ){
 
-    var text by remember { mutableStateOf("") }
-    var ingredientsNumber by remember { mutableStateOf("03") }
-    var lastSelectedDishType by remember { mutableStateOf(DishTypes.Primero) }
+    var name by remember { mutableStateOf("") }
+    var price by remember { mutableStateOf("") }
+    var lastSelectedDishType by remember { mutableStateOf(DishTypes.Segundo) }
+    var ingredientsNumber by remember { mutableStateOf("0") }
+    var ingredientTexts by remember { mutableStateOf(List(1) { "" }) }
+
 
     TextField(
-        value = text,
-        onValueChange = { text = it },
-        label = { Text(":Nombre") },
+        value = name,
+        onValueChange = { name = it},
+        label = { Text("Nombre") },
     )
+
 
     Spacer(modifier = Modifier.height(16.dp))
 
     TextField(
-        value = text,
-        onValueChange = { text = it },
-        label = { Text(":Precio") },
+        value = price,
+        onValueChange = { price = it },
+        label = { Text("Precio") },
+        keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number)
     )
 
     Spacer(modifier = Modifier.height(16.dp))
 
     TextField(
         value = ingredientsNumber,
-        onValueChange = { ingredientsNumber = it },
+        onValueChange = { newValue ->
+            ingredientsNumber = if (newValue.isEmpty() || newValue.toIntOrNull() == null) {
+                "0"
+            } else {
+                newValue
+            }
+            ingredientTexts = List(ingredientsNumber.toInt()) { "" }
+        },
         label = { Text("Numero de Ingredientes") },
+        keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number)
     )
 
     Spacer(modifier = Modifier.height(16.dp))
 
-    for ( i in 1..ingredientsNumber.toInt()){
+    for (i in ingredientTexts.indices) {
         TextField(
-            value = text,
-            onValueChange = { text = it },
-            label = { Text("Numero de Ingredientes") },
+            value = ingredientTexts[i],
+            onValueChange = { newValue ->
+                ingredientTexts = ingredientTexts.toMutableList().also {
+                    it[i] = newValue
+                }
+            },
+            label = { Text("Ingrediente ${i + 1}") },
         )
+
+        Spacer(modifier = Modifier.height(16.dp))
+
     }
-
-    Spacer(modifier = Modifier.height(16.dp))
-
-    Text(
-        text = "Tipo $lastSelectedDishType",
-        style = TextStyle(
-            fontWeight = Bold,
-            fontSize = 20.sp)
-    )
 
     Spacer(modifier = Modifier.height(16.dp))
 
@@ -262,6 +266,19 @@ fun textFieldsDish(
             fontWeight = Bold,
             fontSize = 30.sp)
     )
+
+    Button(
+        onClick = {
+            addToMenuViewModel.saveDish(name, price, lastSelectedDishType.toString(), ingredientTexts)
+            // Vacio los parametros para que sea mas facil añadir varios platos a la vez
+            name = ""
+            price = ""
+            ingredientTexts = List(1) { "" }
+        },
+        modifier = Modifier
+    ) {
+        Text(text = "Añadir Plato" )
+    }
 
 }
 
