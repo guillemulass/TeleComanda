@@ -64,19 +64,7 @@ fun EmployeeWork(
 
             Button(
                 onClick = {
-
-                },
-                modifier = Modifier
-            ) {
-                Text(text = "Crear Comanda")
-            }
-
-            Spacer(modifier = Modifier.height(16.dp))
-
-
-            Button(
-                onClick = {
-
+                    navController.navigate(Routes.TableSelecctionScreenRoute.route)
                 },
                 modifier = Modifier
             ) {

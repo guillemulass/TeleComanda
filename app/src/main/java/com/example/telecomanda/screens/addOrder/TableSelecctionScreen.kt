@@ -29,7 +29,9 @@ fun TableSelectionScreen(
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Center,
-        modifier = Modifier.fillMaxSize().padding(16.dp)
+        modifier = Modifier
+            .fillMaxSize()
+            .padding(16.dp)
     ) {
         Text(
             text = "Seleccionar Mesa",
@@ -47,7 +49,9 @@ fun TableSelectionScreen(
                     onClick = {
                         navController.navigate("addOrder/${table.number}")
                     },
-                    modifier = Modifier.fillMaxWidth().padding(8.dp)
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(8.dp)
                 ) {
                     Text(text = "Mesa ${table.number} - Código: ${table.code}")
                 }

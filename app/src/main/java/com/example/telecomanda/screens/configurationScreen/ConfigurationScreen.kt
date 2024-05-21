@@ -108,7 +108,18 @@ fun ConfigurationScreen(
                     fontSize = 30.sp)
             )
 
+
+            Button(
+                onClick = {
+                    navController.navigate(Routes.AdminWorkScreenRoute.route)
+                },
+                modifier = Modifier
+            ) {
+                Text(text = "Salir de configuracion")
+            }
+
         }
+
     }
 
 }

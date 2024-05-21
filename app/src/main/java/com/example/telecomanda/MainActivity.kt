@@ -6,10 +6,7 @@ import androidx.activity.compose.setContent
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
-import androidx.compose.material3.Text
-import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
@@ -148,7 +145,7 @@ class MainActivity : ComponentActivity() {
 
                         composable("addOrder/{tableNumber}") { backStackEntry ->
                             val tableNumber = backStackEntry.arguments?.getString("tableNumber")?.toInt() ?: 1
-                            AddOrder(navController, tableNumber, addOrderViewModel)
+                            AddOrder(tableNumber, navController, addOrderViewModel)
                         }
 
                         composable(Routes.TableQuantityControllerScreenRoute.route) {

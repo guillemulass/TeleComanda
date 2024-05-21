@@ -21,21 +21,11 @@ class AddOrderViewModel : ViewModel() {
     val tableQuantity = MutableLiveData<Int>()
 
     init {
-        fetchTables()
+        // Inicializar lista de mesas una vez que se obtenga la cantidad de mesas
+        getTableQuantity { quantity ->
+            tableList.value = List(quantity) { Table(number = it + 1) }
+        }
     }
-
-    fun fetchTables() {
-        val user = auth.currentUser?.email ?: return
-        db.collection("restaurants").document(user).collection("tables").get()
-            .addOnSuccessListener { result ->
-                val tables = result.mapNotNull { it.toObject(Table::class.java) }
-                tableList.value = tables
-            }
-            .addOnFailureListener { e ->
-                // Handle fetch error
-            }
-    }
-
 
     fun getDrinkData(onSuccess: (List<Drink>) -> Unit, onFailure: (Exception) -> Unit) {
         val drinksCollectionRef = db.collection("restaurants").document(auth.currentUser?.email!!).collection("drinks")
@@ -140,12 +130,50 @@ class AddOrderViewModel : ViewModel() {
         }
     }
 
-    fun saveTable(number: Int, orders: List<OrderItem>) {
-        val tableToSave = Table(number, "", orders.toMutableList(), )
+    fun saveTable(number: Int, code: String, orders: List<OrderItem>) {
+        val tableToSave = Table(number, code, orders.toMutableList())
         val restaurantsRef = db.collection("restaurants").document(auth.currentUser?.email!!)
         val tablesCollectionRef = restaurantsRef.collection("tables")
         tablesCollectionRef.document(number.toString()).set(tableToSave)
     }
 
+    fun getTableQuantity(onQuantityReceived: (Int) -> Unit) {
+        val user = auth.currentUser?.email ?: return
+        db.collection("restaurants").document(user).get().addOnSuccessListener {
+            val tableQuantity = it.get("TableQuantity").toString()
+            val quantity = tableQuantity.toIntOrNull() ?: 0
+            onQuantityReceived(quantity)
+        }
+    }
 
+    fun fetchTables() {
+        val user = auth.currentUser?.email ?: return
+        db.collection("restaurants").document(user).collection("tables").get()
+            .addOnSuccessListener { result ->
+                val tables = result.mapNotNull { it.toObject(Table::class.java) }
+                tableList.value = tables
+            }
+            .addOnFailureListener { e ->
+                // Handle fetch error
+            }
+    }
+
+    private fun generateUniqueCode(onCodeGenerated: (String) -> Unit) {
+        val user = auth.currentUser?.email ?: return
+
+        db.collection("restaurants").document(user).collection("tables").get()
+            .addOnSuccessListener { result ->
+                val existingCodes = result.mapNotNull { it.getString("code") }.toSet()
+                var uniqueCode: String
+
+                do {
+                    uniqueCode = (100000..999999).random().toString()
+                } while (existingCodes.contains(uniqueCode))
+
+                onCodeGenerated(uniqueCode)
+            }
+            .addOnFailureListener { e ->
+                // Handle fetch error
+            }
+    }
 }

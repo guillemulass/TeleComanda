@@ -10,45 +10,45 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.navigation.NavHostController
 import androidx.compose.runtime.livedata.observeAsState
-import androidx.compose.ui.platform.LocalContext
+import androidx.navigation.NavHostController
 
 @Composable
 fun TableQuantityControllerScreen(
     navController: NavHostController,
     tableQuantityControllerViewModel: TableQuantityControllerViewModel
 ) {
-    val context = LocalContext.current
-    var tableQuantity by remember { mutableStateOf(0) }
-    val stateText by tableQuantityControllerViewModel.stateText.observeAsState("")
+    val tableQuantity by tableQuantityControllerViewModel.tableQuantity.observeAsState(0)
+
+    LaunchedEffect(Unit) {
+        tableQuantityControllerViewModel.getTableQuantity { quantity ->
+            tableQuantityControllerViewModel.tableQuantity.value = quantity
+        }
+    }
 
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Center,
-        modifier = Modifier.fillMaxSize().padding(16.dp)
+        modifier = Modifier
+            .fillMaxSize()
+            .padding(16.dp)
     ) {
         Text(
-            text = "Seleccionar Mesa",
+            text = "Cantidad de Mesas: $tableQuantity",
             style = TextStyle(fontWeight = FontWeight.Bold, fontSize = 30.sp)
         )
 
         Spacer(modifier = Modifier.height(16.dp))
 
-        Button(onClick = {
-            tableQuantityControllerViewModel.editTableQuantity { newQuantity ->
-                tableQuantity = newQuantity
-            }
-            tableQuantityControllerViewModel.editStateText("Añadida la mesa $tableQuantity")
-        }) {
-            Text("Añadir nueva mesa")
+        Button(
+            onClick = {
+                tableQuantityControllerViewModel.editTableQuantity { newQuantity ->
+                    tableQuantityControllerViewModel.tableQuantity.value = newQuantity
+                }
+            },
+            modifier = Modifier.fillMaxWidth().padding(8.dp)
+        ) {
+            Text(text = "Agregar Mesa")
         }
-
-        Spacer(modifier = Modifier.height(16.dp))
-
-        Text(
-            text = stateText,
-            style = TextStyle(fontWeight = FontWeight.Bold, fontSize = 30.sp)
-        )
     }
 }
