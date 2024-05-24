@@ -91,4 +91,8 @@ dependencies {
     implementation("com.squareup.retrofit2:converter-gson:2.9.0")
 
     implementation("io.coil-kt:coil-compose:2.5.0")
+
+    // Implementacion permisos
+    implementation("com.google.accompanist:accompanist-permissions:0.29.1-alpha")
+
 }

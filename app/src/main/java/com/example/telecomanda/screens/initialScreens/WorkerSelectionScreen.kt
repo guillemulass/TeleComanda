@@ -1,4 +1,4 @@
-package com.example.telecomanda.screens.logIn
+package com.example.telecomanda.screens.initialScreens
 
 import androidx.compose.foundation.ScrollState
 import androidx.compose.foundation.layout.Arrangement
@@ -22,7 +22,7 @@ import androidx.navigation.NavHostController
 import com.example.telecomanda.routes.Routes
 
 @Composable
-fun LogInSelector(
+fun WorkerSelectionScreen(
     navController: NavHostController,
 ) {
 
@@ -51,33 +51,15 @@ fun LogInSelector(
                     fontSize = 40.sp)
             )
 
-            Spacer(modifier = Modifier.height(16.dp))
-
-
-            Text(
-                text = "Iniciar Sesion",
-                style = TextStyle(
-                    fontWeight = Bold,
-                    fontSize = 30.sp)
-            )
-
             Spacer(modifier = Modifier.height(32.dp))
 
             Button(
                 onClick = {
-                    navController.navigate(Routes.LogInAdministratorScreenRoute.route)
+                    navController.navigate(Routes.LogInSelectorScreenRoute.route)
                 },
                 modifier = Modifier
             ) {
-                Text(text = "Administrador")
-            }
-            Button(
-                onClick = {
-                    navController.navigate(Routes.AdminWorkScreenRoute.route)
-                },
-                modifier = Modifier
-            ) {
-                Text(text = "No login (solo pruebas)")
+                Text(text = "Iniciar Sesion")
             }
 
             Spacer(modifier = Modifier.height(16.dp))
@@ -85,19 +67,11 @@ fun LogInSelector(
 
             Button(
                 onClick = {
-                    navController.navigate(Routes.LogInEmployeeScreenRoute.route)
+                    navController.navigate(Routes.RegisterScreenRoute.route)
                 },
                 modifier = Modifier
             ) {
-                Text(text = "Empleado")
-            }
-            Button(
-                onClick = {
-                    navController.navigate(Routes.EmployeeWorkScreenRoute.route)
-                },
-                modifier = Modifier
-            ) {
-                Text(text = "No login (solo pruebas)")
+                Text(text = "Registrar Restaurante")
             }
 
         }

@@ -3,6 +3,10 @@ package com.example.telecomanda.routes
 sealed class Routes(val route : String) {
 
     object InitialScreenRoute: Routes("InitialScreen")
+    object WorkerSelectionScreenRoute: Routes("WorkerSelectionScreen")
+    object TableCodeInputScreenRoute: Routes("TableCodeInputScreen")
+    object ClientOrderScreenRoute: Routes("ClientOrderScreen")
+
     object AddToMenuScreenRoute: Routes("AddToMenu")
     object ConfigurationScreenRoute: Routes("ConfigurationScreen")
     object LogInAdministratorScreenRoute: Routes("LogInAdministrator")
