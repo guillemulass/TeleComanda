@@ -21,37 +21,57 @@ class RegisterScreenViewModel : ViewModel() {
 
     var restaurantName by mutableStateOf("")
         private set
-    var email by mutableStateOf("")
+    var restaurantEmail by mutableStateOf("")
         private set
     private var passw by mutableStateOf("")
+    var statusText by mutableStateOf("")
 
     fun registerRestaurant(
-        onSuccess : () -> Unit,
-        onFailure:() -> Unit
+        onSuccess: () -> Unit,
+        onFailure: () -> Unit
     ) {
-
-        saveUserName()
-
         viewModelScope.launch {
             try {
-                auth.createUserWithEmailAndPassword(email,passw).addOnCompleteListener {
-                    saveUser(UserModel(email, restaurantName))
-                    onSuccess()
-                }.addOnFailureListener {
-                    onFailure()
-                }
-            }
-            catch (e:Exception) {
+                // Verificar si el nombre del restaurante ya está en uso
+                firestore.collection("restaurantsInfoList").document(restaurantName).get()
+                    .addOnSuccessListener { document ->
+                        if (document.exists()) {
+                            // El nombre del restaurante ya está en uso
+                            statusText = "Nombre de restaurante ya usado"
+                        } else {
+                            // El nombre del restaurante no está en uso, proceder con el registro
+                            auth.createUserWithEmailAndPassword(restaurantEmail, passw)
+                                .addOnCompleteListener { task ->
+                                    if (task.isSuccessful) {
+                                        val user = task.result.user
+                                        user?.let {
+                                            saveUser(UserModel(restaurantEmail, restaurantName))
+                                            saveUserName(it.email!!)
+                                            saveRestaurantInfoList(it.uid)
+                                            onSuccess()
+                                        }
+                                    } else {
+                                        onFailure()
+                                    }
+                                }
+                                .addOnFailureListener {
+                                    onFailure()
+                                }
+                        }
+                    }
+                    .addOnFailureListener {
+                        onFailure()
+                    }
+            } catch (e: Exception) {
                 println("Error de JetPack")
+                onFailure()
             }
-
         }
-
     }
 
-    private fun saveUserName() {
+    private fun saveUserName(email: String) {
         // Obtener una referencia a la colección "restaurants" para el usuario actual
-        val userBooksRef = db.collection("restaurants").document(auth.currentUser?.email!!)
+        val userBooksRef = db.collection("restaurants").document(email)
 
         // Crear un mapa para almacenar los datos
         val data = hashMapOf(
@@ -62,25 +82,41 @@ class RegisterScreenViewModel : ViewModel() {
         userBooksRef.set(data)
     }
 
-
-    private fun saveUser(userToAdd:UserModel) {
+    private fun saveUser(userToAdd: UserModel) {
         viewModelScope.launch {
-            firestore.collection("restaurants").document(email).set(userToAdd).addOnCompleteListener {
+            firestore.collection("restaurants").document(restaurantEmail).set(userToAdd).addOnCompleteListener {
                 println("Restaurante guardado en base de datos correctamente")
             }.addOnFailureListener {
                 println("Error guardando restaurante en base de datos")
             }
         }
-
     }
-    fun changeRestaurantName(restaurantName:String) {
+
+    private fun saveRestaurantInfoList(uid: String) {
+        val restaurantInfoRef = db.collection("restaurantsInfoList").document(restaurantName)
+
+        val data = hashMapOf(
+            "restaurantName" to restaurantName,
+            "restaurantEmail" to restaurantEmail,
+            "restaurantId" to uid
+        )
+
+        restaurantInfoRef.set(data).addOnCompleteListener {
+            println("Información del restaurante guardada correctamente")
+        }.addOnFailureListener {
+            println("Error guardando la información del restaurante")
+        }
+    }
+
+    fun changeRestaurantName(restaurantName: String) {
         this.restaurantName = restaurantName
     }
-    fun changeEmail(email:String) {
-        this.email = email
-    }
-    fun changePassw(passw:String) {
-        this.passw = passw
+
+    fun changeEmail(email: String) {
+        this.restaurantEmail = email
     }
 
+    fun changePassw(passw: String) {
+        this.passw = passw
+    }
 }

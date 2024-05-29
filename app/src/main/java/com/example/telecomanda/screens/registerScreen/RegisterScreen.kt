@@ -84,7 +84,7 @@ fun RegisterScreen(
             Spacer(modifier = Modifier.height(16.dp))
 
             TextField(
-                value = registerScreenViewModel.email,
+                value = registerScreenViewModel.restaurantEmail,
                 onValueChange = { registerScreenViewModel.changeEmail(it) },
                 label = { Text("Email del Restaurante") },
             )
@@ -119,32 +119,25 @@ fun RegisterScreen(
                 onClick = {
                     navController.navigate(Routes.AddToMenuScreenRoute.route)
 
-                    if (password.length>=6 || passwordConfirmation.length>=6){
-                        if (password == passwordConfirmation){
+                    if (password.length >= 6 || passwordConfirmation.length >= 6) {
+                        if (password == passwordConfirmation) {
                             registerScreenViewModel.changePassw(passwordConfirmation)
                             warningText = ""
                             registerScreenViewModel.registerRestaurant(
                                 onSuccess = { navController.navigate(Routes.ConfigurationScreenRoute.route) },
-                                onFailure = { Toast.makeText(context,"Error al crear la cuenta, intentelo de nuevo",
-                                    Toast.LENGTH_SHORT).show()  }
+                                onFailure = { Toast.makeText(context, "Error al crear la cuenta, intentelo de nuevo", Toast.LENGTH_SHORT).show() }
                             )
-                        } else
-                        {
+                        } else {
                             warningText = "Las contraseñas no coinciden"
                         }
-                    }
-                    else{
+                    } else {
                         warningText = "La contraseña debe tener al menos 6 caracteres"
                     }
-
                 },
                 modifier = Modifier
             ) {
                 Text(text = "Continuar")
             }
-
-
         }
     }
-
 }

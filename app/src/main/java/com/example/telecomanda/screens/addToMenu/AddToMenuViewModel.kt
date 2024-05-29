@@ -3,8 +3,8 @@ package com.example.telecomanda.screens.addToMenu
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.example.telecomanda.EnumClass.DishTypes
-import com.example.telecomanda.EnumClass.DrinkTypes
+import com.example.telecomanda.enumClass.DishTypes
+import com.example.telecomanda.enumClass.DrinkTypes
 import com.example.telecomanda.dataClasses.Dish
 import com.example.telecomanda.dataClasses.Drink
 import com.google.firebase.auth.FirebaseAuth
@@ -16,7 +16,6 @@ class AddToMenuViewModel : ViewModel() {
     private val auth: FirebaseAuth = FirebaseAuth.getInstance()
 
     private val _isDish = MutableLiveData<Boolean>()
-    val isDish : LiveData<Boolean> = _isDish
 
     private val _isDrink = MutableLiveData<Boolean>()
     val isDrink : LiveData<Boolean> = _isDrink

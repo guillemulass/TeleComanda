@@ -15,17 +15,15 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
-import androidx.compose.runtime.livedata.observeAsState
 
 @Composable
 fun TableCodeInputScreen(
     navController: NavHostController,
     tableCodeInputViewModel: TableCodeInputViewModel = viewModel()
 ) {
-    val isValidTable by tableCodeInputViewModel.isValidTable.observeAsState(false)
     val invalidCodeMessage = remember { mutableStateOf("") }
 
-    Box (
+    Box(
         modifier = Modifier.fillMaxSize()
     ) {
         Column(
@@ -53,21 +51,40 @@ fun TableCodeInputScreen(
             Spacer(modifier = Modifier.height(16.dp))
 
             TextField(
-                value = tableCodeInputViewModel.restaurantEmail,
-                onValueChange = { tableCodeInputViewModel.updateRestaurantEmail(it) },
-                label = { Text("Correo del Restaurante") }
+                value = tableCodeInputViewModel.restaurantName,
+                onValueChange = { tableCodeInputViewModel.updateRestaurantName(it) },
+                label = { Text("Nombre del Restaurante") }
             )
 
             Spacer(modifier = Modifier.height(16.dp))
 
             Button(
                 onClick = {
-                    tableCodeInputViewModel.checkTableCode(
-                        onSuccess = {
-                            navController.navigate("clientOrderScreen/${tableCodeInputViewModel.tableCode}/${tableCodeInputViewModel.restaurantEmail}")
+                    tableCodeInputViewModel.getRestaurantEmailByName(
+                        restaurantName = tableCodeInputViewModel.restaurantName,
+                        onSuccess = { email ->
+                            if (email != null) {
+                                tableCodeInputViewModel.updateRestaurantEmail(email)
+                                tableCodeInputViewModel.getTableNumberByCode(
+                                    restaurantEmail = email,
+                                    tableCode = tableCodeInputViewModel.tableCode,
+                                    onSuccess = { tableNumber ->
+                                        if (tableNumber != null) {
+                                            navController.navigate("clientOrderScreen/$tableNumber/${tableCodeInputViewModel.restaurantName}")
+                                        } else {
+                                            invalidCodeMessage.value = "Código de mesa inválido"
+                                        }
+                                    },
+                                    onFailure = {
+                                        invalidCodeMessage.value = "Error al verificar el código de mesa"
+                                    }
+                                )
+                            } else {
+                                invalidCodeMessage.value = "Nombre de restaurante no encontrado"
+                            }
                         },
                         onFailure = {
-                            invalidCodeMessage.value = "Código o correo inválido"
+                            invalidCodeMessage.value = "Error al verificar el nombre del restaurante, intentelo de nuevo"
                         }
                     )
                 },

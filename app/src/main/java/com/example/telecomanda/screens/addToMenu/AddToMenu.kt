@@ -1,11 +1,9 @@
 package com.example.telecomanda.screens.addToMenu
 
 import androidx.compose.foundation.ScrollState
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
@@ -33,15 +31,13 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
-import com.example.telecomanda.EnumClass.DishTypes
-import com.example.telecomanda.EnumClass.DrinkTypes
+import com.example.telecomanda.enumClass.*
 
 @Composable
 fun AddToMenu(
     navController: NavHostController,
     addToMenuViewModel: AddToMenuViewModel
 ) {
-    val isDish: Boolean by addToMenuViewModel.isDish.observeAsState(initial = true)
     val isDrink: Boolean by addToMenuViewModel.isDrink.observeAsState(initial = false)
     val drinkOrDishText: String by addToMenuViewModel.dishOrDrinkString.observeAsState(initial = "Plato")
     val stateText: String by addToMenuViewModel.stateText.observeAsState(initial = "")
@@ -178,7 +174,7 @@ fun textFieldsDish(
     var price by remember { mutableStateOf("") }
     var lastSelectedDishType by remember { mutableStateOf(DishTypes.Segundo) }
     var ingredientsNumber by remember { mutableStateOf("0") }
-    var ingredientTexts by remember { mutableStateOf(List(1) { "" }) }
+    var ingredientTexts by remember { mutableStateOf(List(0) { "" }) }
 
 
     TextField(
@@ -273,7 +269,7 @@ fun textFieldsDish(
             // Vacio los parametros para que sea mas facil añadir varios platos a la vez
             name = ""
             price = ""
-            ingredientTexts = List(1) { "" }
+            ingredientTexts = List(0) { "" }
         },
         modifier = Modifier
     ) {

@@ -1,4 +1,4 @@
-package com.example.telecomanda.EnumClass
+package com.example.telecomanda.enumClass
 
 enum class DishTypes {
     Primero, Segundo, Postre

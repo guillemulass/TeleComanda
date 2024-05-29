@@ -7,7 +7,6 @@ import androidx.activity.compose.setContent
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
-import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Modifier
 import androidx.navigation.compose.NavHost
@@ -22,6 +21,7 @@ import com.example.telecomanda.screens.addOrder.TableSelectionScreen
 import com.example.telecomanda.screens.addToMenu.AddToMenu
 import com.example.telecomanda.screens.addToMenu.AddToMenuViewModel
 import com.example.telecomanda.screens.clientScreens.ClientOrderScreen
+import com.example.telecomanda.screens.clientScreens.ClientOrderViewModel
 import com.example.telecomanda.screens.clientScreens.TableCodeInputScreen
 import com.example.telecomanda.screens.clientScreens.TableCodeInputViewModel
 import com.example.telecomanda.screens.configurationScreen.ConfigurationScreen
@@ -42,7 +42,6 @@ import com.example.telecomanda.screens.workScreens.AdminWork
 import com.example.telecomanda.screens.workScreens.EmployeeWork
 import com.example.telecomanda.ui.theme.TeleComandaTheme
 import com.google.accompanist.permissions.ExperimentalPermissionsApi
-import com.google.accompanist.permissions.isGranted
 import com.google.accompanist.permissions.rememberPermissionState
 
 class MainActivity : ComponentActivity() {
@@ -60,6 +59,7 @@ class MainActivity : ComponentActivity() {
         val logInEmployeeViewModel = LogInEmployeeViewModel()
         val addOrderViewModel = AddOrderViewModel()
         val tableQuantityControllerViewModel = TableQuantityControllerViewModel()
+        val clientOrderViewModel = ClientOrderViewModel()
 
         //navController.popBackStack()
 
@@ -102,10 +102,10 @@ class MainActivity : ComponentActivity() {
                             )
                         }
 
-                        composable("clientOrderScreen/{tableCode}/{restaurantEmail}") { backStackEntry ->
-                            val tableCode = backStackEntry.arguments?.getString("tableCode") ?: ""
-                            val restaurantEmail = backStackEntry.arguments?.getString("restaurantEmail") ?: ""
-                            ClientOrderScreen(tableCode, restaurantEmail)
+                        composable("clientOrderScreen/{tableCode}/{restaurantName}") { backStackEntry ->
+                            val tableCode = backStackEntry.arguments?.getInt("tableCode") ?: 0
+                            val restaurantName = backStackEntry.arguments?.getString("restaurantName") ?: "123"
+                            ClientOrderScreen(tableCode, restaurantName,)
                         }
 
                         composable(Routes.RegisterScreenRoute.route) {
