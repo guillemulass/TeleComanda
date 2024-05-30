@@ -64,7 +64,6 @@ fun WorkerSelectionScreen(
 
             Spacer(modifier = Modifier.height(16.dp))
 
-
             Button(
                 onClick = {
                     navController.navigate(Routes.RegisterScreenRoute.route)
@@ -72,6 +71,17 @@ fun WorkerSelectionScreen(
                 modifier = Modifier
             ) {
                 Text(text = "Registrar Restaurante")
+            }
+
+            Spacer(modifier = Modifier.height(16.dp))
+
+            Button(
+                onClick = {
+                    navController.navigate(Routes.AddEmployeeScreenRoute.route)
+                },
+                modifier = Modifier
+            ) {
+                Text(text = "Registrar Empleado")
             }
 
         }

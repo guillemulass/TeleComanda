@@ -84,6 +84,14 @@ dependencies {
     implementation(platform("com.google.firebase:firebase-bom:32.8.0"))
     implementation("com.google.firebase:firebase-analytics")
 
+    
+    // Firebase Realtime Database
+    implementation("com.google.firebase:firebase-database-ktx:20.0.5")
+    // Firebase Authentication (if needed)
+    implementation("com.google.firebase:firebase-auth-ktx:21.0.3")
+
+
+
     implementation("androidx.compose.runtime:runtime-livedata:1.5.4")
 
     // Implementaciones de RetroFit

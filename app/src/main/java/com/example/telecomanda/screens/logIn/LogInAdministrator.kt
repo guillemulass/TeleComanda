@@ -39,7 +39,7 @@ import com.example.telecomanda.routes.Routes
 @Composable
 fun LogInAdministrator(
     navController: NavHostController,
-    logInAdministratorViewModel: LogInAdministratorViewModel
+    logInAdministratorViewModel: LogInViewModel
 ) {
 
     var text by remember { mutableStateOf("") }

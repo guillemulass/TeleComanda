@@ -39,7 +39,7 @@ fun RegisterScreen(
     var warningText by remember { mutableStateOf("") }
     val context = LocalContext.current
 
-    Box (
+    Box(
         modifier = Modifier.fillMaxSize()
     ) {
         Column(
@@ -61,7 +61,8 @@ fun RegisterScreen(
                 text = "TeleComanda",
                 style = TextStyle(
                     fontWeight = Bold,
-                    fontSize = 40.sp)
+                    fontSize = 40.sp
+                )
             )
 
             Spacer(modifier = Modifier.height(16.dp))
@@ -70,7 +71,8 @@ fun RegisterScreen(
                 text = "Crear Restaurante",
                 style = TextStyle(
                     fontWeight = Bold,
-                    fontSize = 30.sp)
+                    fontSize = 30.sp
+                )
             )
 
             Spacer(modifier = Modifier.height(32.dp))
@@ -111,14 +113,18 @@ fun RegisterScreen(
 
             Spacer(modifier = Modifier.height(16.dp))
 
-            Text(text = warningText)
+            if (warningText.isNotEmpty()) {
+                Text(text = warningText)
+            }
+
+            if (registerScreenViewModel.statusText.isNotEmpty()) {
+                Text(text = registerScreenViewModel.statusText)
+            }
 
             Spacer(modifier = Modifier.height(16.dp))
 
             Button(
                 onClick = {
-                    navController.navigate(Routes.AddToMenuScreenRoute.route)
-
                     if (password.length >= 6 || passwordConfirmation.length >= 6) {
                         if (password == passwordConfirmation) {
                             registerScreenViewModel.changePassw(passwordConfirmation)
@@ -138,6 +144,10 @@ fun RegisterScreen(
             ) {
                 Text(text = "Continuar")
             }
+
+            Spacer(modifier = Modifier.height(16.dp))
+
+
         }
     }
 }

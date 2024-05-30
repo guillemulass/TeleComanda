@@ -11,7 +11,7 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.auth
 import kotlinx.coroutines.launch
 
-class LogInAdministratorViewModel : ViewModel()  {
+class LogInViewModel : ViewModel()  {
     var email by mutableStateOf("")
         private set
     var password by mutableStateOf("")

@@ -83,6 +83,11 @@ class ClientOrderViewModel : ViewModel() {
     
     fun sendOrderToServer(tableNumber: Int, restaurantEmail: String, tableCode: String) {
         val orderItems = _orderList.value
+        println("zulepo")
+        println("tableNumber $tableNumber")
+        println("tableCode $tableCode")
+        println("restaurantEmail $restaurantEmail")
+
         val tableDocument = db.collection("restaurants").document(restaurantEmail)
             .collection("tables").document(tableNumber.toString())
 

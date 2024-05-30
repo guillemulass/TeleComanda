@@ -64,7 +64,7 @@ fun EmployeeWork(
 
             Button(
                 onClick = {
-                    navController.navigate(Routes.TableSelecctionScreenRoute.route)
+                    navController.navigate(Routes.EmployeeTableSelectionScreenRoute.route)
                 },
                 modifier = Modifier
             ) {
@@ -75,7 +75,7 @@ fun EmployeeWork(
 
             Button(
                 onClick = {
-                    navController.navigate(Routes.MenuScreenRoute.route)
+                    navController.navigate(Routes.EmployeeMenuScreenRoute.route)
                 },
                 modifier = Modifier
             ) {

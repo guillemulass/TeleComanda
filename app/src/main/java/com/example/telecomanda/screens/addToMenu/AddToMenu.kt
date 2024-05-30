@@ -99,6 +99,12 @@ fun AddToMenu(
                     navController,
                     addToMenuViewModel
                 )
+
+            Spacer(modifier = Modifier.height(16.dp))
+
+            if (stateText.isNotEmpty()) {
+                Text(text = stateText, color = Color.Red)
+            }
         }
     }
 
@@ -109,7 +115,6 @@ fun textFieldsDrink(
     navController: NavHostController,
     addToMenuViewModel: AddToMenuViewModel
 ){
-
     var name by remember { mutableStateOf("") }
     var price by remember { mutableStateOf("") }
     var lastSelectedDrinkType by remember { mutableStateOf(DrinkTypes.Otro) }
@@ -119,7 +124,6 @@ fun textFieldsDrink(
         onValueChange = { name = it},
         label = { Text("Nombre") },
     )
-
 
     Spacer(modifier = Modifier.height(16.dp))
 
@@ -134,12 +138,9 @@ fun textFieldsDrink(
 
     LazyRow {
         items(addToMenuViewModel.drinkTypesArray) { drinkType ->
-            // Para cada valor de la enum, generar un botón
             Button(
                 onClick = {
-                    // Guardar el valor del último botón pulsado
                     lastSelectedDrinkType = drinkType
-                    // Llamar al método para cambiar el tipo de plato seleccionado en el ViewModel
                 },
                 colors = ButtonDefaults.buttonColors(if (drinkType == lastSelectedDrinkType) Color.Green else Color.Gray)
             ) {
@@ -148,12 +149,11 @@ fun textFieldsDrink(
         }
     }
 
-
     Spacer(modifier = Modifier.height(16.dp))
 
     Button(
         onClick = {
-            addToMenuViewModel.saveDrink(name,price,lastSelectedDrinkType.toString())
+            addToMenuViewModel.saveDrink(name, price, lastSelectedDrinkType.toString())
             name = ""
             price = ""
         },
@@ -161,7 +161,6 @@ fun textFieldsDrink(
     ) {
         Text(text = "Añadir Bebida" )
     }
-
 }
 
 @Composable
@@ -169,20 +168,17 @@ fun textFieldsDish(
     navController: NavHostController,
     addToMenuViewModel: AddToMenuViewModel
 ){
-
     var name by remember { mutableStateOf("") }
     var price by remember { mutableStateOf("") }
     var lastSelectedDishType by remember { mutableStateOf(DishTypes.Segundo) }
     var ingredientsNumber by remember { mutableStateOf("0") }
     var ingredientTexts by remember { mutableStateOf(List(0) { "" }) }
 
-
     TextField(
         value = name,
         onValueChange = { name = it},
         label = { Text("Nombre") },
     )
-
 
     Spacer(modifier = Modifier.height(16.dp))
 
@@ -223,20 +219,15 @@ fun textFieldsDish(
         )
 
         Spacer(modifier = Modifier.height(16.dp))
-
     }
 
     Spacer(modifier = Modifier.height(16.dp))
 
     LazyRow {
         items(addToMenuViewModel.dishTypesArray) { dishType ->
-            // Para cada valor de la enum, generar un botón
             Button(
                 onClick = {
-                    // Guardar el valor del último botón pulsado
                     lastSelectedDishType = dishType
-                    // Llamar al método para cambiar el tipo de plato seleccionado en el ViewModel
-                    //addToMenuViewModel.changeDishTypeSelector(dishType)
                 },
                 colors = ButtonDefaults.buttonColors(if (dishType == lastSelectedDishType) Color.Green else Color.Gray)
             ) {
@@ -266,7 +257,6 @@ fun textFieldsDish(
     Button(
         onClick = {
             addToMenuViewModel.saveDish(name, price, lastSelectedDishType.toString(), ingredientTexts)
-            // Vacio los parametros para que sea mas facil añadir varios platos a la vez
             name = ""
             price = ""
             ingredientTexts = List(0) { "" }
@@ -275,6 +265,4 @@ fun textFieldsDish(
     ) {
         Text(text = "Añadir Plato" )
     }
-
 }
-

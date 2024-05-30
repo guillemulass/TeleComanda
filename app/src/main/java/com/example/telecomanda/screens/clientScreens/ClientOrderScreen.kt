@@ -18,6 +18,7 @@ fun ClientOrderScreen(
     tableNumber: Int,
     restaurantName: String
 ) {
+
     val clientOrderViewModel: ClientOrderViewModel = viewModel()
     val restaurantEmail = remember { mutableStateOf<String?>(null) }
     var drinks by remember { mutableStateOf(listOf<Drink>()) }
@@ -51,7 +52,9 @@ fun ClientOrderScreen(
     }
 
     Column(
-        modifier = Modifier.fillMaxSize().padding(16.dp),
+        modifier = Modifier
+            .fillMaxSize()
+            .padding(16.dp),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         Text(text = "Table Number: $tableNumber")

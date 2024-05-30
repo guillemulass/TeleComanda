@@ -1,5 +1,6 @@
 package com.example.telecomanda.screens.addEmployee
 
+import android.widget.Toast
 import androidx.compose.foundation.ScrollState
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -20,11 +21,13 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight.Companion.Bold
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
+import com.example.telecomanda.routes.Routes
 
 @Composable
 fun AddEmployee(
@@ -32,13 +35,12 @@ fun AddEmployee(
     addEmployeeViewModel: AddEmployeeViewModel
 ) {
 
-    var name by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
     var passwordConfirmation by remember { mutableStateOf("") }
-    val stateText: String by addEmployeeViewModel.stateText.observeAsState(initial = "")
+    var warningText by remember { mutableStateOf("") }
+    val context = LocalContext.current
 
-
-    Box (
+    Box(
         modifier = Modifier.fillMaxSize()
     ) {
         Column(
@@ -60,31 +62,51 @@ fun AddEmployee(
                 text = "TeleComanda",
                 style = TextStyle(
                     fontWeight = Bold,
-                    fontSize = 40.sp)
+                    fontSize = 40.sp
+                )
             )
 
             Spacer(modifier = Modifier.height(16.dp))
 
             Text(
-                text = "NombreRestaurante",
+                text = "Registrarse como camarero",
                 style = TextStyle(
                     fontWeight = Bold,
-                    fontSize = 30.sp)
+                    fontSize = 30.sp
+                )
             )
 
             Spacer(modifier = Modifier.height(32.dp))
 
             TextField(
-                value = name,
-                onValueChange = { name = it},
-                label = { Text("Nombre") },
+                value = addEmployeeViewModel.restaurantName,
+                onValueChange = { addEmployeeViewModel.changeRestaurantName(it) },
+                label = { Text("Nombre del Restaurante") },
+            )
+
+            Spacer(modifier = Modifier.height(16.dp))
+
+            TextField(
+                value = addEmployeeViewModel.restaurantUID,
+                onValueChange = { addEmployeeViewModel.changeRestaurantUID(it) },
+                label = { Text("ID del Restaurante") },
+            )
+
+            Spacer(modifier = Modifier.height(16.dp))
+
+            TextField(
+                value = addEmployeeViewModel.employeeEmail,
+                onValueChange = { addEmployeeViewModel.changeEmail(it) },
+                label = { Text("Email del usuario") },
             )
 
             Spacer(modifier = Modifier.height(16.dp))
 
             TextField(
                 value = password,
-                onValueChange = { password = it},
+                onValueChange = { newText ->
+                    password = newText
+                },
                 label = { Text("Contraseña") },
             )
 
@@ -92,35 +114,48 @@ fun AddEmployee(
 
             TextField(
                 value = passwordConfirmation,
-                onValueChange = { passwordConfirmation = it},
-                label = { Text("Confirmar contraseña") },
+                onValueChange = { newText ->
+                    passwordConfirmation = newText
+                },
+                label = { Text("Confirmar Contraseña") },
             )
 
-            Spacer(modifier = Modifier.height(32.dp))
+            Spacer(modifier = Modifier.height(16.dp))
+
+            if (warningText.isNotEmpty()) {
+                Text(text = warningText)
+            }
+
+            if (addEmployeeViewModel.statusText.isNotEmpty()) {
+                Text(text = addEmployeeViewModel.statusText)
+            }
+
+            Spacer(modifier = Modifier.height(16.dp))
 
             Button(
                 onClick = {
-                    if (password == passwordConfirmation){
-                        addEmployeeViewModel.addEmployee(name, password)
-                        addEmployeeViewModel.updateStateText("")
-                        name = ""
-                        password = ""
-                        passwordConfirmation = ""
+                    if (password.length >= 6 || passwordConfirmation.length >= 6) {
+                        if (password == passwordConfirmation) {
+                            addEmployeeViewModel.changePassw(passwordConfirmation)
+                            warningText = ""
+                            addEmployeeViewModel.registerEmployee(
+                                onSuccess = { navController.navigate(Routes.EmployeeWorkScreenRoute.route) },
+                                onFailure = { Toast.makeText(context, "Error al crear la cuenta, intentelo de nuevo", Toast.LENGTH_SHORT).show() }
+                            )
+                        } else {
+                            warningText = "Las contraseñas no coinciden"
+                        }
                     } else {
-                        addEmployeeViewModel.updateStateText("Las contraseñas no coinciden")
+                        warningText = "La contraseña debe tener al menos 6 caracteres"
                     }
                 },
                 modifier = Modifier
             ) {
-                Text(text = "Añadir empleado")
+                Text(text = "Continuar")
             }
 
-            Text(
-                text = stateText,
-                style = TextStyle(
-                    fontWeight = Bold,
-                    fontSize = 16.sp)
-            )
+            Spacer(modifier = Modifier.height(16.dp))
+
 
         }
     }

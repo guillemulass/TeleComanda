@@ -38,6 +38,7 @@ class RegisterScreenViewModel : ViewModel() {
                         if (document.exists()) {
                             // El nombre del restaurante ya está en uso
                             statusText = "Nombre de restaurante ya usado"
+                            onFailure()
                         } else {
                             // El nombre del restaurante no está en uso, proceder con el registro
                             auth.createUserWithEmailAndPassword(restaurantEmail, passw)
@@ -46,8 +47,8 @@ class RegisterScreenViewModel : ViewModel() {
                                         val user = task.result.user
                                         user?.let {
                                             saveUser(UserModel(restaurantEmail, restaurantName))
-                                            saveUserName(it.email!!)
                                             saveRestaurantInfoList(it.uid)
+                                            saveRestaurantEmail(restaurantEmail, restaurantName) // Guardar el nombre del restaurante en la ruta especificada
                                             onSuccess()
                                         }
                                     } else {
@@ -69,22 +70,9 @@ class RegisterScreenViewModel : ViewModel() {
         }
     }
 
-    private fun saveUserName(email: String) {
-        // Obtener una referencia a la colección "restaurants" para el usuario actual
-        val userBooksRef = db.collection("restaurants").document(email)
-
-        // Crear un mapa para almacenar los datos
-        val data = hashMapOf(
-            "restaurantName" to restaurantName
-        )
-
-        // Agregar el mapa como datos del documento
-        userBooksRef.set(data)
-    }
-
     private fun saveUser(userToAdd: UserModel) {
         viewModelScope.launch {
-            firestore.collection("restaurants").document(restaurantEmail).set(userToAdd).addOnCompleteListener {
+            firestore.collection("restaurants").document(restaurantName).set(userToAdd).addOnCompleteListener {
                 println("Restaurante guardado en base de datos correctamente")
             }.addOnFailureListener {
                 println("Error guardando restaurante en base de datos")
@@ -105,6 +93,20 @@ class RegisterScreenViewModel : ViewModel() {
             println("Información del restaurante guardada correctamente")
         }.addOnFailureListener {
             println("Error guardando la información del restaurante")
+        }
+    }
+
+    private fun saveRestaurantEmail(email: String, name: String) {
+        val restaurantEmailRef = db.collection("restaurantsEmail").document(email)
+
+        val data = hashMapOf(
+            "restaurantName" to name
+        )
+
+        restaurantEmailRef.set(data).addOnCompleteListener {
+            println("Nombre del restaurante guardado correctamente en /restaurantsEmail")
+        }.addOnFailureListener {
+            println("Error guardando el nombre del restaurante en /restaurantsEmail")
         }
     }
 

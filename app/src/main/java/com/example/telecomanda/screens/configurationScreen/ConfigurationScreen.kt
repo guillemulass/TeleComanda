@@ -99,16 +99,6 @@ fun ConfigurationScreen(
                 Text(text = "Modificar numero de mesas")
             }
 
-            Spacer(modifier = Modifier.height(16.dp))
-
-            Text(
-                text = "Ⓘ Se han añadido bebidas y platos por defecto,\npuede eliminarlos en la carta",
-                style = TextStyle(
-                    fontWeight = Bold,
-                    fontSize = 30.sp)
-            )
-
-
             Button(
                 onClick = {
                     navController.navigate(Routes.AdminWorkScreenRoute.route)

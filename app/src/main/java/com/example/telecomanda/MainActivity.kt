@@ -25,13 +25,17 @@ import com.example.telecomanda.screens.clientScreens.ClientOrderViewModel
 import com.example.telecomanda.screens.clientScreens.TableCodeInputScreen
 import com.example.telecomanda.screens.clientScreens.TableCodeInputViewModel
 import com.example.telecomanda.screens.configurationScreen.ConfigurationScreen
+import com.example.telecomanda.screens.employeeScreens.EmployeeAddOrder
+import com.example.telecomanda.screens.employeeScreens.EmployeeAddOrderViewModel
+import com.example.telecomanda.screens.employeeScreens.EmployeeMenuScreen
+import com.example.telecomanda.screens.employeeScreens.EmployeeMenuViewModel
+import com.example.telecomanda.screens.employeeScreens.EmployeeTableSelectionScreen
 import com.example.telecomanda.screens.initialScreens.InitialScreen
 import com.example.telecomanda.screens.initialScreens.WorkerSelectionScreen
 import com.example.telecomanda.screens.logIn.LogInAdministrator
-import com.example.telecomanda.screens.logIn.LogInAdministratorViewModel
 import com.example.telecomanda.screens.logIn.LogInEmployee
-import com.example.telecomanda.screens.logIn.LogInEmployeeViewModel
 import com.example.telecomanda.screens.logIn.LogInSelector
+import com.example.telecomanda.screens.logIn.LogInViewModel
 import com.example.telecomanda.screens.menuScreen.MenuScreen
 import com.example.telecomanda.screens.menuScreen.MenuScreenViewModel
 import com.example.telecomanda.screens.registerScreen.RegisterScreen
@@ -54,12 +58,12 @@ class MainActivity : ComponentActivity() {
         val tableCodeInputViewModel = TableCodeInputViewModel()
         val addEmployeeViewModel = AddEmployeeViewModel()
         val registerScreenViewModel = RegisterScreenViewModel()
-        val logInAdministratorViewModel = LogInAdministratorViewModel()
+        val logInViewModel = LogInViewModel()
         val menuScreenViewModel = MenuScreenViewModel()
-        val logInEmployeeViewModel = LogInEmployeeViewModel()
         val addOrderViewModel = AddOrderViewModel()
         val tableQuantityControllerViewModel = TableQuantityControllerViewModel()
-        val clientOrderViewModel = ClientOrderViewModel()
+        val employeeAddOrderViewModel = EmployeeAddOrderViewModel()
+        val employeeMenuViewModel = EmployeeMenuViewModel()
 
         //navController.popBackStack()
 
@@ -105,7 +109,7 @@ class MainActivity : ComponentActivity() {
                         composable("clientOrderScreen/{tableCode}/{restaurantName}") { backStackEntry ->
                             val tableCode = backStackEntry.arguments?.getInt("tableCode") ?: 0
                             val restaurantName = backStackEntry.arguments?.getString("restaurantName") ?: "123"
-                            ClientOrderScreen(tableCode, restaurantName,)
+                            ClientOrderScreen(tableCode, restaurantName)
                         }
 
                         composable(Routes.RegisterScreenRoute.route) {
@@ -124,14 +128,14 @@ class MainActivity : ComponentActivity() {
                         composable(Routes.LogInEmployeeScreenRoute.route) {
                             LogInEmployee(
                                 navController,
-                                logInEmployeeViewModel
+                                logInViewModel
                             )
                         }
 
                         composable(Routes.LogInAdministratorScreenRoute.route) {
                             LogInAdministrator(
                                 navController,
-                                logInAdministratorViewModel
+                                logInViewModel
                             )
                         }
 
@@ -174,6 +178,13 @@ class MainActivity : ComponentActivity() {
                             )
                         }
 
+                        composable(Routes.EmployeeMenuScreenRoute.route) {
+                            EmployeeMenuScreen(
+                                navController,
+                                employeeMenuViewModel
+                            )
+                        }
+
                         composable(Routes.TableSelecctionScreenRoute.route) {
                             TableSelectionScreen(
                                 navController,
@@ -191,6 +202,18 @@ class MainActivity : ComponentActivity() {
                                 navController,
                                 tableQuantityControllerViewModel
                             )
+                        }
+
+                        composable(Routes.EmployeeTableSelectionScreenRoute.route) {
+                            EmployeeTableSelectionScreen(
+                                navController,
+                                employeeAddOrderViewModel
+                            )
+                        }
+
+                        composable("employeeAddOrder/{tableNumber}") { backStackEntry ->
+                            val tableNumber = backStackEntry.arguments?.getString("tableNumber")?.toInt() ?: 1
+                            EmployeeAddOrder(tableNumber, navController, employeeAddOrderViewModel)
                         }
 
                     }

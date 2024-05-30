@@ -19,6 +19,11 @@ sealed class Routes(val route : String) {
     object AddEmployeeScreenRoute: Routes("AddEmployeeScreen")
     object AddOrderScreenRoute: Routes("AddOrderScreen")
     object TableSelecctionScreenRoute: Routes("TableSelectionScreen")
+
+    object EmployeeAddOrderScreenRoute: Routes("EmployeeAddOrderScreen")
+    object EmployeeTableSelectionScreenRoute: Routes("EmployeeTableSelectionScreen")
+    object EmployeeMenuScreenRoute: Routes("EmployeeMenuScreen")
+
     object TableQuantityControllerScreenRoute: Routes("TableQuantityControllerScreen")
 
     object ExampleScreenRoute: Routes("ExampleScreen")
