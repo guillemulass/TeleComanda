@@ -130,7 +130,7 @@ fun LogInAdministrator(
 
             Button(
                 onClick = {
-                    logInAdministratorViewModel.login { navController.navigate(Routes.EmployeeWorkScreenRoute.route) }
+                    logInAdministratorViewModel.login { navController.navigate(Routes.AdminWorkScreenRoute.route) }
                 },
                 modifier = Modifier
             ) {

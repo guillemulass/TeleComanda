@@ -21,7 +21,6 @@ import com.example.telecomanda.screens.addOrder.TableSelectionScreen
 import com.example.telecomanda.screens.addToMenu.AddToMenu
 import com.example.telecomanda.screens.addToMenu.AddToMenuViewModel
 import com.example.telecomanda.screens.clientScreens.ClientOrderScreen
-import com.example.telecomanda.screens.clientScreens.ClientOrderViewModel
 import com.example.telecomanda.screens.clientScreens.TableCodeInputScreen
 import com.example.telecomanda.screens.clientScreens.TableCodeInputViewModel
 import com.example.telecomanda.screens.configurationScreen.ConfigurationScreen
@@ -62,7 +61,6 @@ class MainActivity : ComponentActivity() {
         val menuScreenViewModel = MenuScreenViewModel()
         val addOrderViewModel = AddOrderViewModel()
         val tableQuantityControllerViewModel = TableQuantityControllerViewModel()
-        val employeeAddOrderViewModel = EmployeeAddOrderViewModel()
         val employeeMenuViewModel = EmployeeMenuViewModel()
 
         //navController.popBackStack()
@@ -206,14 +204,13 @@ class MainActivity : ComponentActivity() {
 
                         composable(Routes.EmployeeTableSelectionScreenRoute.route) {
                             EmployeeTableSelectionScreen(
-                                navController,
-                                employeeAddOrderViewModel
+                                navController
                             )
                         }
 
                         composable("employeeAddOrder/{tableNumber}") { backStackEntry ->
                             val tableNumber = backStackEntry.arguments?.getString("tableNumber")?.toInt() ?: 1
-                            EmployeeAddOrder(tableNumber, navController, employeeAddOrderViewModel)
+                            EmployeeAddOrder(tableNumber, navController)
                         }
 
                     }

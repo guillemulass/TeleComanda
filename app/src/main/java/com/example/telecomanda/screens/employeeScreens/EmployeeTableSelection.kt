@@ -14,12 +14,15 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import androidx.compose.runtime.livedata.observeAsState
+import androidx.lifecycle.viewmodel.compose.viewModel
 
 @Composable
 fun EmployeeTableSelectionScreen(
     navController: NavHostController,
-    addOrderViewModel: EmployeeAddOrderViewModel
 ) {
+
+    val addOrderViewModel: EmployeeAddOrderViewModel = viewModel()
+
     val tables by addOrderViewModel.tableList.observeAsState(emptyList())
 
     LaunchedEffect(Unit) {

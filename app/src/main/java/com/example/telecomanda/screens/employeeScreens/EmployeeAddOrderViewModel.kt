@@ -24,7 +24,6 @@ class EmployeeAddOrderViewModel : ViewModel() {
     val tableList = MutableLiveData<List<Table>>()
 
     init {
-        // Inicializar lista de mesas una vez que se obtenga la cantidad de mesas
         viewModelScope.launch {
             val quantity = getTableQuantity()
             tableList.value = List(quantity) { Table(number = it + 1) }
@@ -38,7 +37,11 @@ class EmployeeAddOrderViewModel : ViewModel() {
     }
 
     private suspend fun getTableQuantity(): Int {
-        val document = db.collection("restaurants").document(getRestaurantName()).get().await()
+        val restaurantName = getRestaurantName()
+        if (restaurantName.isEmpty()) {
+            throw IllegalArgumentException("Restaurant name is empty")
+        }
+        val document = db.collection("restaurants").document(restaurantName).get().await()
         return document.getLong("TableQuantity")?.toInt() ?: 0
     }
 
