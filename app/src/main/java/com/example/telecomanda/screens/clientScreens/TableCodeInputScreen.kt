@@ -22,7 +22,6 @@ fun TableCodeInputScreen(
     tableCodeInputViewModel: TableCodeInputViewModel = viewModel()
 ) {
     val invalidCodeMessage = remember { mutableStateOf("") }
-    val msg = remember { mutableStateOf("") }
 
     Box(
         modifier = Modifier.fillMaxSize()
@@ -59,88 +58,36 @@ fun TableCodeInputScreen(
 
             Spacer(modifier = Modifier.height(16.dp))
 
-
             Button(
                 onClick = {
                     tableCodeInputViewModel.checkTableCode(
                         onSuccess = {
-                            tableCodeInputViewModel.getRestaurantEmailByName(
-                                restaurantName = tableCodeInputViewModel.restaurantName,
-                                onSuccess = { email ->
-                                    if (email != null) {
-                                        tableCodeInputViewModel.getTableNumberByCode(
-                                            restaurantEmail = email,
-                                            tableCode = tableCodeInputViewModel.tableCode,
-                                            onSuccess = { tableNumber ->
-                                                if (tableNumber != null) {
-                                                    msg.value = "tableNumber $tableNumber\n" +
-                                                            "restaurantName ${tableCodeInputViewModel.restaurantName}"
-                                                    //navController.navigate("clientOrderScreen/$tableNumber/${tableCodeInputViewModel.restaurantName}")
-                                                } else {
-                                                    invalidCodeMessage.value = "Código de mesa inválido"
-                                                }
-                                            },
-                                            onFailure = {
-                                                invalidCodeMessage.value = "Error al verificar el código de mesa"
-                                            }
-                                        )
+                            tableCodeInputViewModel.getTableNumberByCode(
+                                tableCode = tableCodeInputViewModel.tableCode,
+                                onSuccess = { tableNumber ->
+                                    if (tableNumber != null) {
+                                        tableCodeInputViewModel.updateTableNumber(tableNumber.toString())
+                                        navController.navigate("clientOrderScreen/${tableCodeInputViewModel.tableNumber}/${tableCodeInputViewModel.restaurantName}/${tableCodeInputViewModel.tableCode}")
                                     } else {
-                                        invalidCodeMessage.value = "Nombre de restaurante no encontrado"
+                                        invalidCodeMessage.value = "Código de mesa inválido"
                                     }
                                 },
                                 onFailure = {
-                                    invalidCodeMessage.value = "Error al verificar el nombre del restaurante, intentelo de nuevo"
+                                    println("Error al verificar el código de mesa")
+                                    invalidCodeMessage.value = "Error al verificar el código de mesa"
                                 }
                             )
                         },
                         onFailure = {
+                            println("Error al verificar el nombre del restaurante, intentelo de nuevo")
                             invalidCodeMessage.value = "Error al verificar el nombre del restaurante, intentelo de nuevo"
                         }
-
                     )
                 },
                 modifier = Modifier
             ) {
                 Text(text = "Aceptar")
             }
-
-            Button(onClick = {
-                tableCodeInputViewModel.getRestaurantEmailByName(
-                    restaurantName = tableCodeInputViewModel.restaurantName,
-                    onSuccess = {
-                        tableCodeInputViewModel.updateRestaurantEmail(it!!)
-                    },
-                    onFailure = {}
-                )
-
-                var tableNum = ""
-
-                tableCodeInputViewModel.getTableNumberr(tableCodeInputViewModel.restaurantEmail_, tableCodeInputViewModel.tableCode) { tableNumber ->
-                    if (tableNumber != null) {
-                        tableNum = tableNumber
-                        println("Table number: $tableNumber")
-                    } else {
-                        println("Table not found")
-                    }
-                }
-
-                msg.value = "Succes\n" +
-                        "restaurantName ${tableCodeInputViewModel.restaurantName}\n" +
-                        "restaurantEmail ${tableCodeInputViewModel.restaurantEmail_}\n" +
-                        "tableCode ${tableCodeInputViewModel.tableCode}\n" +
-                        "tableNum = $tableNum \n" +
-                        "tableNum = ${tableCodeInputViewModel.tableNumber.value}"
-                println(msg.value)
-            }
-            ) {
-                Text(text = "Prueba")
-            }
-
-            Text(
-                text = msg.value,
-                style = TextStyle(color = androidx.compose.ui.graphics.Color.Red, fontSize = 16.sp),
-                modifier = Modifier.padding(top = 8.dp)
-            )
 
             if (invalidCodeMessage.value.isNotEmpty()) {
                 Text(

@@ -15,10 +15,10 @@ import com.example.telecomanda.dataClasses.Drink
 
 @Composable
 fun ClientOrderScreen(
-    tableNumber: Int,
-    restaurantName: String
+    tableNumber: String,
+    restaurantName: String,
+    tableCode: String
 ) {
-
     val clientOrderViewModel: ClientOrderViewModel = viewModel()
     val restaurantEmail = remember { mutableStateOf<String?>(null) }
     var drinks by remember { mutableStateOf(listOf<Drink>()) }
@@ -28,22 +28,19 @@ fun ClientOrderScreen(
     val errorMessage by clientOrderViewModel.errorMessage.collectAsState()
 
     LaunchedEffect(restaurantName) {
-        clientOrderViewModel.getRestaurantEmailByName(
+        clientOrderViewModel.getDrinkData(
             restaurantName,
-            onSuccess = { email ->
-                restaurantEmail.value = email
-                if (email != null) {
-                    clientOrderViewModel.getDrinkData(email, onSuccess = { fetchedDrinks ->
-                        drinks = fetchedDrinks
-                    }, onFailure = {
-                        // Handle error
-                    })
-                    clientOrderViewModel.getDishData(email, onSuccess = { fetchedDishes ->
-                        dishes = fetchedDishes
-                    }, onFailure = {
-                        // Handle error
-                    })
-                }
+            onSuccess = { fetchedDrinks ->
+                drinks = fetchedDrinks
+            },
+            onFailure = {
+                // Handle error
+            }
+        )
+        clientOrderViewModel.getDishData(
+            restaurantName,
+            onSuccess = { fetchedDishes ->
+                dishes = fetchedDishes
             },
             onFailure = {
                 // Handle error
@@ -66,7 +63,7 @@ fun ClientOrderScreen(
             Text(text = "Error: $it")
         }
 
-        if (restaurantEmail.value != null) {
+        if (drinks.isNotEmpty() || dishes.isNotEmpty()) {
             LazyColumn(
                 modifier = Modifier.fillMaxHeight(0.5f)
             ) {
@@ -82,34 +79,38 @@ fun ClientOrderScreen(
                     }
                 }
             }
+        } else {
+            Text(text = "No drinks or dishes available")
+        }
 
-            Spacer(modifier = Modifier.height(16.dp))
+        Spacer(modifier = Modifier.height(16.dp))
 
-            LazyColumn(
-                horizontalAlignment = Alignment.CenterHorizontally,
-                verticalArrangement = Arrangement.Top,
-                modifier = Modifier.fillMaxHeight(0.5f)
-            ) {
-                items(orderList) { orderItem ->
-                    Text(text = "${orderItem.name} - ${orderItem.price}€ | x${orderItem.quantity}")
-                }
-
-                item {
-                    Spacer(modifier = Modifier.height(16.dp))
-                    Text(text = "Total: ${totalPrice}€")
-                }
+        LazyColumn(
+            horizontalAlignment = Alignment.CenterHorizontally,
+            verticalArrangement = Arrangement.Top,
+            modifier = Modifier.fillMaxHeight(0.5f)
+        ) {
+            items(orderList) { orderItem ->
+                Text(text = "${orderItem.name} - ${orderItem.price}€ | x${orderItem.quantity}")
             }
 
-            Spacer(modifier = Modifier.height(16.dp))
-
-            Button(onClick = {
-                restaurantEmail.value?.let { email ->
-                    clientOrderViewModel.sendOrderToServer(tableNumber, email, tableCode = tableNumber.toString())
-                }
-            }) {
-                Text(text = "Confirmar Comanda")
+            item {
+                Spacer(modifier = Modifier.height(16.dp))
+                Text(text = "Total: ${totalPrice}€")
             }
+        }
 
+        Spacer(modifier = Modifier.height(16.dp))
+
+        Button(onClick = {
+            restaurantEmail.value?.let {
+                clientOrderViewModel.sendOrderToServer(
+                    tableNumber.toInt(),
+                    restaurantName,
+                    tableCode)
+            }
+        }) {
+            Text(text = "Confirmar Comanda")
         }
     }
 }

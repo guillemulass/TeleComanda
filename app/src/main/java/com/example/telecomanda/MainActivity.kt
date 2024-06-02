@@ -104,10 +104,11 @@ class MainActivity : ComponentActivity() {
                             )
                         }
 
-                        composable("clientOrderScreen/{tableCode}/{restaurantName}") { backStackEntry ->
-                            val tableCode = backStackEntry.arguments?.getInt("tableCode") ?: 0
-                            val restaurantName = backStackEntry.arguments?.getString("restaurantName") ?: "123"
-                            ClientOrderScreen(tableCode, restaurantName)
+                        composable("clientOrderScreen/{tableNumber}/{restaurantName}/{tableCode}") { backStackEntry ->
+                            val tableNumber = backStackEntry.arguments?.getString("tableNumber") ?: ""
+                            val restaurantName = backStackEntry.arguments?.getString("restaurantName") ?: ""
+                            val tableCode = backStackEntry.arguments?.getString("tableCode") ?: ""
+                            ClientOrderScreen(tableNumber, restaurantName, tableCode)
                         }
 
                         composable(Routes.RegisterScreenRoute.route) {

@@ -25,30 +25,32 @@ class ClientOrderViewModel : ViewModel() {
     private val _errorMessage = MutableStateFlow<String?>(null)
     val errorMessage: StateFlow<String?> = _errorMessage
 
-    fun getDrinkData(restaurantEmail: String, onSuccess: (List<Drink>) -> Unit, onFailure: (Exception) -> Unit) {
-        val drinksCollectionRef = db.collection("restaurants").document(restaurantEmail).collection("drinks")
-        drinksCollectionRef.get()
-            .addOnSuccessListener { drinks ->
+    fun getDrinkData(restaurantName: String, onSuccess: (List<Drink>) -> Unit, onFailure: (Exception) -> Unit) {
+        viewModelScope.launch {
+            try {
+                val drinksCollectionRef = db.collection("restaurants").document(restaurantName).collection("drinks")
+                val drinks = drinksCollectionRef.get().await()
                 val drinkList = drinks.map { it.toObject(Drink::class.java) }
                 onSuccess(drinkList)
-            }
-            .addOnFailureListener { exception ->
+            } catch (exception: Exception) {
                 onFailure(exception)
                 _errorMessage.value = "Error al obtener las bebidas: ${exception.message}"
             }
+        }
     }
 
-    fun getDishData(restaurantEmail: String, onSuccess: (List<Dish>) -> Unit, onFailure: (Exception) -> Unit) {
-        val dishesCollectionRef = db.collection("restaurants").document(restaurantEmail).collection("dishes")
-        dishesCollectionRef.get()
-            .addOnSuccessListener { dishes ->
+    fun getDishData(restaurantName: String, onSuccess: (List<Dish>) -> Unit, onFailure: (Exception) -> Unit) {
+        viewModelScope.launch {
+            try {
+                val dishesCollectionRef = db.collection("restaurants").document(restaurantName).collection("dishes")
+                val dishes = dishesCollectionRef.get().await()
                 val dishList = dishes.map { it.toObject(Dish::class.java) }
                 onSuccess(dishList)
-            }
-            .addOnFailureListener { exception ->
+            } catch (exception: Exception) {
                 onFailure(exception)
                 _errorMessage.value = "Error al obtener los platos: ${exception.message}"
             }
+        }
     }
 
     fun addDishToList(dish: Dish) {
@@ -80,15 +82,11 @@ class ClientOrderViewModel : ViewModel() {
     private fun updateTotalPrice() {
         _totalPrice.value = _orderList.value.sumOf { (it.price.toDoubleOrNull() ?: 0.0) * it.quantity }
     }
-    
-    fun sendOrderToServer(tableNumber: Int, restaurantEmail: String, tableCode: String) {
-        val orderItems = _orderList.value
-        println("zulepo")
-        println("tableNumber $tableNumber")
-        println("tableCode $tableCode")
-        println("restaurantEmail $restaurantEmail")
 
-        val tableDocument = db.collection("restaurants").document(restaurantEmail)
+    fun sendOrderToServer(tableNumber: Int, restaurantName: String, tableCode: String) {
+        val orderItems = _orderList.value
+
+        val tableDocument = db.collection("restaurants").document(restaurantName)
             .collection("tables").document(tableNumber.toString())
 
         tableDocument.get().addOnSuccessListener { document ->
@@ -114,55 +112,8 @@ class ClientOrderViewModel : ViewModel() {
         }
     }
 
-
     private fun clearOrderList() {
         _orderList.value = emptyList()
         updateTotalPrice()
-    }
-
-    fun getRestaurantEmailByName(
-        restaurantName: String,
-        onSuccess: (String?) -> Unit,
-        onFailure: () -> Unit
-    ) {
-        viewModelScope.launch {
-            try {
-                val document = db.collection("restaurantsInfoList").document(restaurantName).get().await()
-                if (document.exists()) {
-                    val email = document.getString("restaurantEmail")
-                    onSuccess(email)
-                } else {
-                    onSuccess(null)
-                }
-            } catch (e: Exception) {
-                _errorMessage.value = "Error obteniendo el email del restaurante: ${e.message}"
-                onFailure()
-            }
-        }
-    }
-
-    fun getTableNumberByCode(
-        restaurantEmail: String,
-        tableCode: String,
-        onSuccess: (Int?) -> Unit,
-        onFailure: () -> Unit
-    ) {
-        viewModelScope.launch {
-            try {
-                val tablesCollection = db.collection("restaurants").document(restaurantEmail).collection("tables")
-                val tablesSnapshot = tablesCollection.get().await()
-                for (document in tablesSnapshot.documents) {
-                    val table = document.toObject(Table::class.java)
-                    if (table?.code == tableCode) {
-                        onSuccess(table.number)
-                        return@launch
-                    }
-                }
-                onSuccess(null)
-            } catch (e: Exception) {
-                _errorMessage.value = "Error obteniendo el número de mesa: ${e.message}"
-                onFailure()
-            }
-        }
     }
 }
