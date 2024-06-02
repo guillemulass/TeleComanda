@@ -16,7 +16,6 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import com.example.telecomanda.dataClasses.Dish
 import com.example.telecomanda.dataClasses.Drink
-import com.example.telecomanda.dataClasses.Order
 import com.example.telecomanda.dataClasses.Table
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.ktx.auth
@@ -36,24 +35,33 @@ fun AddOrder(
 
     LaunchedEffect(tableNumber, auth.currentUser?.uid) {
         val userId = auth.currentUser?.uid
+        println("User ID: $userId")
         if (userId != null) {
             addOrderViewModel.getDishData(
-                onSuccess = { dishes -> dishList = dishes },
-                onFailure = { println(it) }
+                onSuccess = { dishes ->
+                    dishList = dishes
+                    println("Dishes loaded: $dishes")
+                },
+                onFailure = { println("Failed to load dishes: $it") }
             )
             addOrderViewModel.getDrinkData(
-                onSuccess = { drinks -> drinkList = drinks },
-                onFailure = { println(it) }
+                onSuccess = { drinks ->
+                    drinkList = drinks
+                    println("Drinks loaded: $drinks")
+                },
+                onFailure = { println("Failed to load drinks: $it") }
             )
             addOrderViewModel.getTableData(
                 tableNumber,
                 onSuccess = {
                     table = it
-                    addOrderViewModel.orderList.clear()
-                    addOrderViewModel.orderList.addAll(it.orders)
+                    addOrderViewModel.totalOrderList.clear()
+                    addOrderViewModel.totalOrderList.addAll(it.orders)
+                    addOrderViewModel.currentOrderList.clear()
                     addOrderViewModel.updateTotalPrice()
+                    println("Table loaded: $table")
                 },
-                onFailure = { println(it) }
+                onFailure = { println("Failed to load table data: $it") }
             )
         }
     }
@@ -68,6 +76,14 @@ fun AddOrder(
             navController = navController,
             tableNumber = tableNumber
         )
+    } ?: run {
+        // Si la mesa es nula, muestra un mensaje de carga
+        Box(
+            contentAlignment = Alignment.Center,
+            modifier = Modifier.fillMaxSize()
+        ) {
+            Text(text = "Cargando datos de la mesa...")
+        }
     }
 }
 
@@ -101,58 +117,78 @@ fun OrderScreen(
 
         Spacer(modifier = Modifier.height(16.dp))
 
+        // Display available dishes and drinks
         LazyColumn(
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.Top,
-            modifier = Modifier.fillMaxSize()
+            modifier = Modifier.fillMaxHeight(0.3f)
         ) {
             items(dishList) { dish ->
                 Button(
-                    onClick = { addOrderViewModel.addDishToList(dish) },
+                    onClick = { addOrderViewModel.addDishToCurrentList(dish) },
                     modifier = Modifier
                 ) {
                     Text(text = dish.name)
                 }
             }
 
-            item {
-                Spacer(modifier = Modifier.height(16.dp))
-            }
-
             items(drinkList) { drink ->
                 Button(
-                    onClick = { addOrderViewModel.addDrinkToList(drink) },
+                    onClick = { addOrderViewModel.addDrinkToCurrentList(drink) },
                     modifier = Modifier
                 ) {
                     Text(text = drink.name)
                 }
             }
+        }
 
-            item {
-                Spacer(modifier = Modifier.height(32.dp))
+        Spacer(modifier = Modifier.height(16.dp))
 
-                Button(
-                    onClick = {
-                        addOrderViewModel.addOrderToTable(tableNumber, Order(addOrderViewModel.orderList))
-                        addOrderViewModel.saveTable(table.number, table.code, addOrderViewModel.orderList.toList())
-                        addOrderViewModel.orderList.clear()
-                        addOrderViewModel.resetTotalPrice()
-                        navController.popBackStack()
-                    },
-                    modifier = Modifier
-                ) {
-                    Text(text = "Confirmar Comanda")
-                }
-            }
-
-            items(addOrderViewModel.orderList) { orderItem ->
+        // Display current order
+        Text(text = "Current Order")
+        LazyColumn(
+            horizontalAlignment = Alignment.CenterHorizontally,
+            verticalArrangement = Arrangement.Top,
+            modifier = Modifier.fillMaxHeight(0.3f)
+        ) {
+            items(addOrderViewModel.currentOrderList) { orderItem ->
                 Text(text = "${orderItem.name} - ${orderItem.price}€ | x${orderItem.quantity}")
             }
-
             item {
                 Spacer(modifier = Modifier.height(16.dp))
                 Text(text = "Total: ${totalPrice}€")
             }
+        }
+
+        Spacer(modifier = Modifier.height(16.dp))
+
+        // Display total order
+        Text(text = "Total Order")
+        LazyColumn(
+            horizontalAlignment = Alignment.CenterHorizontally,
+            verticalArrangement = Arrangement.Top,
+            modifier = Modifier.fillMaxHeight(0.3f)
+        ) {
+            items(addOrderViewModel.totalOrderList) { orderItem ->
+                Text(text = "${orderItem.name} - ${orderItem.price}€ | x${orderItem.quantity}")
+            }
+        }
+
+        Spacer(modifier = Modifier.height(16.dp))
+
+        Button(
+            onClick = {
+                val combinedOrderList = addOrderViewModel.totalOrderList.toMutableList()
+                combinedOrderList.addAll(addOrderViewModel.currentOrderList)
+                addOrderViewModel.totalOrderList.clear()
+                addOrderViewModel.totalOrderList.addAll(combinedOrderList)
+                addOrderViewModel.saveTable(table.number, table.code, combinedOrderList)
+                addOrderViewModel.clearCurrentOrderList()
+                navController.popBackStack()
+            },
+            modifier = Modifier
+        ) {
+            Text(text = "Confirmar Comanda")
         }
     }
 }

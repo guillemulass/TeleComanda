@@ -1,6 +1,5 @@
 package com.example.telecomanda.screens.employeeScreens
 
-
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
@@ -32,7 +31,6 @@ fun EmployeeAddOrder(
 
     val addOrderViewModel: EmployeeAddOrderViewModel = viewModel()
 
-
     val auth: FirebaseAuth = Firebase.auth
     var dishList by remember { mutableStateOf(emptyList<Dish>()) }
     var drinkList by remember { mutableStateOf(emptyList<Drink>()) }
@@ -54,8 +52,8 @@ fun EmployeeAddOrder(
                 tableNumber,
                 onSuccess = {
                     table = it
-                    addOrderViewModel.orderList.clear()
-                    addOrderViewModel.orderList.addAll(it.orders)
+                    addOrderViewModel.totalOrderList.clear()
+                    addOrderViewModel.totalOrderList.addAll(it.orders)
                     addOrderViewModel.updateTotalPrice()
                 },
                 onFailure = { println(it) }
@@ -106,58 +104,75 @@ fun OrderScreen(
 
         Spacer(modifier = Modifier.height(16.dp))
 
+        // Display available dishes and drinks
         LazyColumn(
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.Top,
-            modifier = Modifier.fillMaxSize()
+            modifier = Modifier.fillMaxHeight(0.3f)
         ) {
             items(dishList) { dish ->
                 Button(
-                    onClick = { addOrderViewModel.addDishToList(dish) },
+                    onClick = { addOrderViewModel.addDishToCurrentList(dish) },
                     modifier = Modifier
                 ) {
                     Text(text = dish.name)
                 }
             }
 
-            item {
-                Spacer(modifier = Modifier.height(16.dp))
-            }
-
             items(drinkList) { drink ->
                 Button(
-                    onClick = { addOrderViewModel.addDrinkToList(drink) },
+                    onClick = { addOrderViewModel.addDrinkToCurrentList(drink) },
                     modifier = Modifier
                 ) {
                     Text(text = drink.name)
                 }
             }
+        }
 
-            item {
-                Spacer(modifier = Modifier.height(32.dp))
+        Spacer(modifier = Modifier.height(16.dp))
 
-                Button(
-                    onClick = {
-                        addOrderViewModel.addOrderToTable(tableNumber, Order(addOrderViewModel.orderList))
-                        addOrderViewModel.saveTable(table.number, table.code, addOrderViewModel.orderList.toList())
-                        addOrderViewModel.orderList.clear()
-                        addOrderViewModel.resetTotalPrice()
-                        navController.popBackStack()
-                    },
-                    modifier = Modifier
-                ) {
-                    Text(text = "Confirmar Comanda")
-                }
-            }
-
-            items(addOrderViewModel.orderList) { orderItem ->
+        // Display current order
+        Text(text = "Current Order")
+        LazyColumn(
+            horizontalAlignment = Alignment.CenterHorizontally,
+            verticalArrangement = Arrangement.Top,
+            modifier = Modifier.fillMaxHeight(0.3f)
+        ) {
+            items(addOrderViewModel.currentOrderList) { orderItem ->
                 Text(text = "${orderItem.name} - ${orderItem.price}€ | x${orderItem.quantity}")
             }
-
             item {
                 Spacer(modifier = Modifier.height(16.dp))
                 Text(text = "Total: ${totalPrice}€")
             }
+        }
+
+        Spacer(modifier = Modifier.height(16.dp))
+
+        // Display total order
+        Text(text = "Total Order")
+        LazyColumn(
+            horizontalAlignment = Alignment.CenterHorizontally,
+            verticalArrangement = Arrangement.Top,
+            modifier = Modifier.fillMaxHeight(0.3f)
+        ) {
+            items(addOrderViewModel.totalOrderList) { orderItem ->
+                Text(text = "${orderItem.name} - ${orderItem.price}€ | x${orderItem.quantity}")
+            }
+        }
+
+        Spacer(modifier = Modifier.height(16.dp))
+
+        Button(
+            onClick = {
+                addOrderViewModel.addCurrentOrderToTotalOrder()
+                addOrderViewModel.saveTable(table.number, table.code, addOrderViewModel.totalOrderList.toList())
+                addOrderViewModel.clearCurrentOrderList()
+                navController.popBackStack()
+            },
+            modifier = Modifier
+        ) {
+            Text(text = "Confirmar Comanda")
         }
     }
 }

@@ -20,10 +20,10 @@ fun ClientOrderScreen(
     tableCode: String
 ) {
     val clientOrderViewModel: ClientOrderViewModel = viewModel()
-    val restaurantEmail = remember { mutableStateOf<String?>(null) }
     var drinks by remember { mutableStateOf(listOf<Drink>()) }
     var dishes by remember { mutableStateOf(listOf<Dish>()) }
-    val orderList by clientOrderViewModel.orderList.collectAsState()
+    val currentOrderList by clientOrderViewModel.currentOrderList.collectAsState()
+    val totalOrderList by clientOrderViewModel.totalOrderList.collectAsState()
     val totalPrice by clientOrderViewModel.totalPrice.collectAsState()
     val errorMessage by clientOrderViewModel.errorMessage.collectAsState()
 
@@ -46,6 +46,7 @@ fun ClientOrderScreen(
                 // Handle error
             }
         )
+        clientOrderViewModel.listenToOrderUpdates(tableNumber.toInt(), restaurantName)
     }
 
     Column(
@@ -65,16 +66,16 @@ fun ClientOrderScreen(
 
         if (drinks.isNotEmpty() || dishes.isNotEmpty()) {
             LazyColumn(
-                modifier = Modifier.fillMaxHeight(0.5f)
+                modifier = Modifier.fillMaxHeight(0.3f)
             ) {
                 items(drinks) { drink ->
-                    Button(onClick = { clientOrderViewModel.addDrinkToList(drink) }) {
+                    Button(onClick = { clientOrderViewModel.addDrinkToCurrentList(drink) }) {
                         Text(text = drink.name)
                     }
                 }
 
                 items(dishes) { dish ->
-                    Button(onClick = { clientOrderViewModel.addDishToList(dish) }) {
+                    Button(onClick = { clientOrderViewModel.addDishToCurrentList(dish) }) {
                         Text(text = dish.name)
                     }
                 }
@@ -85,15 +86,15 @@ fun ClientOrderScreen(
 
         Spacer(modifier = Modifier.height(16.dp))
 
+        Text(text = "Current Order")
         LazyColumn(
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.Top,
-            modifier = Modifier.fillMaxHeight(0.5f)
+            modifier = Modifier.fillMaxHeight(0.3f)
         ) {
-            items(orderList) { orderItem ->
+            items(currentOrderList) { orderItem ->
                 Text(text = "${orderItem.name} - ${orderItem.price}€ | x${orderItem.quantity}")
             }
-
             item {
                 Spacer(modifier = Modifier.height(16.dp))
                 Text(text = "Total: ${totalPrice}€")
@@ -102,13 +103,25 @@ fun ClientOrderScreen(
 
         Spacer(modifier = Modifier.height(16.dp))
 
-        Button(onClick = {
-            restaurantEmail.value?.let {
-                clientOrderViewModel.sendOrderToServer(
-                    tableNumber.toInt(),
-                    restaurantName,
-                    tableCode)
+        Text(text = "Total Order")
+        LazyColumn(
+            horizontalAlignment = Alignment.CenterHorizontally,
+            verticalArrangement = Arrangement.Top,
+            modifier = Modifier.fillMaxHeight(0.3f)
+        ) {
+            items(totalOrderList) { orderItem ->
+                Text(text = "${orderItem.name} - ${orderItem.price}€ | x${orderItem.quantity}")
             }
+        }
+
+        Spacer(modifier = Modifier.height(16.dp))
+
+        Button(onClick = {
+            clientOrderViewModel.sendOrderToServer(
+                tableNumber.toInt(),
+                restaurantName,
+                tableCode
+            )
         }) {
             Text(text = "Confirmar Comanda")
         }

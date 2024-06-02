@@ -19,7 +19,8 @@ class EmployeeAddOrderViewModel : ViewModel() {
     private val db = FirebaseFirestore.getInstance()
     private val auth: FirebaseAuth = FirebaseAuth.getInstance()
 
-    val orderList = mutableStateListOf<OrderItem>()
+    val currentOrderList = mutableStateListOf<OrderItem>()
+    val totalOrderList = mutableStateListOf<OrderItem>()
     val totalPrice = MutableLiveData<Double>()
     val tableList = MutableLiveData<List<Table>>()
 
@@ -88,32 +89,49 @@ class EmployeeAddOrderViewModel : ViewModel() {
         }
     }
 
-    fun addDishToList(dish: Dish) {
-        val existingItem = orderList.find { it.name == dish.name && it.type == "Dish" }
+    fun addDishToCurrentList(dish: Dish) {
+        val existingItem = currentOrderList.find { it.name == dish.name && it.type == "Dish" }
         if (existingItem != null) {
             existingItem.quantity += 1
         } else {
-            orderList.add(OrderItem(dish.name, dish.price, "Dish", 1))
+            currentOrderList.add(OrderItem(dish.name, dish.price, "Dish", 1))
         }
         updateTotalPrice()
     }
 
-    fun addDrinkToList(drink: Drink) {
-        val existingItem = orderList.find { it.name == drink.name && it.type == "Drink" }
+    fun addDrinkToCurrentList(drink: Drink) {
+        val existingItem = currentOrderList.find { it.name == drink.name && it.type == "Drink" }
         if (existingItem != null) {
             existingItem.quantity += 1
         } else {
-            orderList.add(OrderItem(drink.name, drink.price, "Drink", 1))
+            currentOrderList.add(OrderItem(drink.name, drink.price, "Drink", 1))
         }
         updateTotalPrice()
     }
 
     fun updateTotalPrice() {
-        totalPrice.value = orderList.sumOf { (it.price.toDoubleOrNull() ?: 0.0) * it.quantity }
+        totalPrice.value = currentOrderList.sumOf { (it.price.toDoubleOrNull() ?: 0.0) * it.quantity }
     }
 
     fun resetTotalPrice() {
         totalPrice.value = 0.0
+    }
+
+    fun clearCurrentOrderList() {
+        currentOrderList.clear()
+        updateTotalPrice()
+    }
+
+    fun addCurrentOrderToTotalOrder() {
+        currentOrderList.forEach { newItem ->
+            val existingItem = totalOrderList.find { it.name == newItem.name && it.type == newItem.type }
+            if (existingItem != null) {
+                existingItem.quantity += newItem.quantity
+            } else {
+                totalOrderList.add(newItem)
+            }
+        }
+        clearCurrentOrderList()
     }
 
     fun getTableData(tableNumber: Int, onSuccess: (Table) -> Unit, onFailure: (Exception) -> Unit) {
@@ -132,28 +150,6 @@ class EmployeeAddOrderViewModel : ViewModel() {
             } catch (e: Exception) {
                 onFailure(e)
             }
-        }
-    }
-
-    fun addOrderToTable(tableNumber: Int, order: Order) {
-        tableList.value?.let { tables ->
-            val updatedTables = tables.map { table ->
-                if (table.number == tableNumber) {
-                    val updatedOrders = table.orders.toMutableList()
-                    order.items.forEach { newItem ->
-                        val existingItem = updatedOrders.find { it.name == newItem.name && it.type == newItem.type }
-                        if (existingItem != null) {
-                            existingItem.quantity += newItem.quantity
-                        } else {
-                            updatedOrders.add(newItem)
-                        }
-                    }
-                    table.copy(orders = updatedOrders)
-                } else {
-                    table
-                }
-            }
-            tableList.value = updatedTables
         }
     }
 

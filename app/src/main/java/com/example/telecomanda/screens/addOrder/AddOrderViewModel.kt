@@ -6,105 +6,133 @@ import com.example.telecomanda.dataClasses.*
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import androidx.compose.runtime.mutableStateListOf
+import androidx.lifecycle.viewModelScope
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.tasks.await
 
 class AddOrderViewModel : ViewModel() {
 
     private val db = FirebaseFirestore.getInstance()
     private val auth: FirebaseAuth = FirebaseAuth.getInstance()
 
-    val orderList = mutableStateListOf<OrderItem>()
-
+    val currentOrderList = mutableStateListOf<OrderItem>()
+    val totalOrderList = mutableStateListOf<OrderItem>()
     private val _totalPrice = MutableLiveData<Double>()
     val totalPrice: MutableLiveData<Double> = _totalPrice
-
     val tableList = MutableLiveData<List<Table>>()
 
     init {
-        // Inicializar lista de mesas una vez que se obtenga la cantidad de mesas
-        getTableQuantity { quantity ->
-            tableList.value = List(quantity) { Table(number = it + 1) }
-        }
+        fetchTables()
+    }
+
+    private suspend fun getRestaurantName(): String {
+        val email = auth.currentUser?.email ?: return ""
+        val document = db.collection("restaurantsEmail").document(email).get().await()
+        return document.getString("restaurantName") ?: ""
     }
 
     fun getDrinkData(onSuccess: (List<Drink>) -> Unit, onFailure: (Exception) -> Unit) {
-        val drinksCollectionRef = db.collection("restaurants").document(auth.currentUser?.email!!).collection("drinks")
-        drinksCollectionRef.get()
-            .addOnSuccessListener { drinks ->
-                val drinkList = mutableListOf<Drink>()
-                for (drink in drinks) {
-                    val drinkToAdd = drink.toObject(Drink::class.java)
-                    drinkList.add(drinkToAdd)
+        viewModelScope.launch {
+            try {
+                val restaurantName = getRestaurantName()
+                if (restaurantName.isNotEmpty()) {
+                    val drinksCollectionRef = db.collection("restaurants").document(restaurantName).collection("drinks")
+                    val drinksSnapshot = drinksCollectionRef.get().await()
+                    val drinkList = drinksSnapshot.mapNotNull { it.toObject(Drink::class.java) }
+                    onSuccess(drinkList)
+                } else {
+                    onFailure(Exception("Restaurant name is empty"))
                 }
-                onSuccess(drinkList)
+            } catch (e: Exception) {
+                onFailure(e)
             }
-            .addOnFailureListener { exception ->
-                onFailure(exception)
-            }
+        }
     }
 
     fun getDishData(onSuccess: (List<Dish>) -> Unit, onFailure: (Exception) -> Unit) {
-        val dishesCollectionRef = db.collection("restaurants").document(auth.currentUser?.email!!).collection("dishes")
-        dishesCollectionRef.get()
-            .addOnSuccessListener { dishes ->
-                val dishList = mutableListOf<Dish>()
-                for (dish in dishes) {
-                    val dishToAdd = dish.toObject(Dish::class.java)
-                    dishList.add(dishToAdd)
+        viewModelScope.launch {
+            try {
+                val restaurantName = getRestaurantName()
+                if (restaurantName.isNotEmpty()) {
+                    val dishesCollectionRef = db.collection("restaurants").document(restaurantName).collection("dishes")
+                    val dishesSnapshot = dishesCollectionRef.get().await()
+                    val dishList = dishesSnapshot.mapNotNull { it.toObject(Dish::class.java) }
+                    onSuccess(dishList)
+                } else {
+                    onFailure(Exception("Restaurant name is empty"))
                 }
-                onSuccess(dishList)
+            } catch (e: Exception) {
+                onFailure(e)
             }
-            .addOnFailureListener { exception ->
-                onFailure(exception)
-            }
+        }
     }
 
-    fun addDishToList(dish: Dish) {
-        val existingItem = orderList.find { it.name == dish.name && it.type == "Dish" }
+    fun addDishToCurrentList(dish: Dish) {
+        val existingItem = currentOrderList.find { it.name == dish.name && it.type == "Dish" }
         if (existingItem != null) {
             existingItem.quantity += 1
         } else {
-            orderList.add(OrderItem(dish.name, dish.price, "Dish", 1))
+            currentOrderList.add(OrderItem(dish.name, dish.price, "Dish", 1))
         }
         updateTotalPrice()
     }
 
-    fun addDrinkToList(drink: Drink) {
-        val existingItem = orderList.find { it.name == drink.name && it.type == "Drink" }
+    fun addDrinkToCurrentList(drink: Drink) {
+        val existingItem = currentOrderList.find { it.name == drink.name && it.type == "Drink" }
         if (existingItem != null) {
             existingItem.quantity += 1
         } else {
-            orderList.add(OrderItem(drink.name, drink.price, "Drink", 1))
+            currentOrderList.add(OrderItem(drink.name, drink.price, "Drink", 1))
         }
         updateTotalPrice()
     }
 
     fun updateTotalPrice() {
-        _totalPrice.value = orderList.sumOf { (it.price.toDoubleOrNull() ?: 0.0) * it.quantity }
+        _totalPrice.value = currentOrderList.sumOf { (it.price.toDoubleOrNull() ?: 0.0) * it.quantity }
     }
 
     fun resetTotalPrice() {
         _totalPrice.value = 0.0
     }
 
+    fun clearCurrentOrderList() {
+        currentOrderList.clear()
+        updateTotalPrice()
+    }
 
     fun getTableData(tableNumber: Int, onSuccess: (Table) -> Unit, onFailure: (Exception) -> Unit) {
-        val user = auth.currentUser?.email ?: return
-        db.collection("restaurants").document(user).collection("tables").document(tableNumber.toString()).get()
-            .addOnSuccessListener { document ->
-                if (document.exists()) {
-                    val table = document.toObject(Table::class.java)
-                    if (table != null) {
-                        onSuccess(table)
+        viewModelScope.launch {
+            try {
+                val restaurantName = getRestaurantName()
+                println("Restaurant name: $restaurantName")
+                if (restaurantName.isNotEmpty()) {
+                    val documentReference = db.collection("restaurants").document(restaurantName).collection("tables").document(tableNumber.toString())
+                    val documentSnapshot = documentReference.get().await()
+                    if (documentSnapshot.exists()) {
+                        val table = documentSnapshot.toObject(Table::class.java)
+                        if (table != null) {
+                            println("Table data: $table")
+                            onSuccess(table)
+                        } else {
+                            val exception = Exception("Table data is null")
+                            println(exception.message)
+                            onFailure(exception)
+                        }
                     } else {
-                        onFailure(Exception("Table data is null"))
+                        val exception = Exception("Table not found")
+                        println(exception.message)
+                        onFailure(exception)
                     }
                 } else {
-                    onFailure(Exception("Table not found"))
+                    val exception = Exception("Restaurant name is empty")
+                    println(exception.message)
+                    onFailure(exception)
                 }
+            } catch (e: Exception) {
+                println("Error fetching table data: ${e.message}")
+                onFailure(e)
             }
-            .addOnFailureListener { exception ->
-                onFailure(exception)
-            }
+        }
     }
 
     fun addOrderToTable(tableNumber: Int, order: Order) {
@@ -127,13 +155,17 @@ class AddOrderViewModel : ViewModel() {
             }
             tableList.value = updatedTables
         }
+        totalOrderList.addAll(order.items)
     }
 
     fun saveTable(number: Int, code: String, orders: List<OrderItem>) {
-        val tableToSave = Table(number, code, orders.toMutableList())
-        val restaurantsRef = db.collection("restaurants").document(auth.currentUser?.email!!)
-        val tablesCollectionRef = restaurantsRef.collection("tables")
-        tablesCollectionRef.document(number.toString()).set(tableToSave)
+        viewModelScope.launch {
+            val restaurantName = getRestaurantName()
+            if (restaurantName.isNotEmpty()) {
+                val tableToSave = Table(number, code, orders.toMutableList())
+                db.collection("restaurants").document(restaurantName).collection("tables").document(number.toString()).set(tableToSave).await()
+            }
+        }
     }
 
     private fun getTableQuantity(onQuantityReceived: (Int) -> Unit) {
@@ -146,15 +178,14 @@ class AddOrderViewModel : ViewModel() {
     }
 
     fun fetchTables() {
-        val user = auth.currentUser?.email ?: return
-        db.collection("restaurants").document(user).collection("tables").get()
-            .addOnSuccessListener { result ->
+        viewModelScope.launch {
+            val user = auth.currentUser?.email ?: return@launch
+            val restaurantName = getRestaurantName()
+            if (restaurantName.isNotEmpty()) {
+                val result = db.collection("restaurants").document(restaurantName).collection("tables").get().await()
                 val tables = result.mapNotNull { it.toObject(Table::class.java) }
                 tableList.value = tables
             }
-            .addOnFailureListener { e ->
-                // Handle fetch error
-            }
+        }
     }
-
 }

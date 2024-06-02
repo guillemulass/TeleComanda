@@ -7,6 +7,7 @@ import com.example.telecomanda.dataClasses.Drink
 import com.example.telecomanda.dataClasses.OrderItem
 import com.example.telecomanda.dataClasses.Table
 import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.firestore.ListenerRegistration
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
@@ -16,14 +17,19 @@ class ClientOrderViewModel : ViewModel() {
 
     private val db = FirebaseFirestore.getInstance()
 
-    private val _orderList = MutableStateFlow<List<OrderItem>>(emptyList())
-    val orderList: StateFlow<List<OrderItem>> = _orderList
+    private val _currentOrderList = MutableStateFlow<List<OrderItem>>(emptyList())
+    val currentOrderList: StateFlow<List<OrderItem>> = _currentOrderList
+
+    private val _totalOrderList = MutableStateFlow<List<OrderItem>>(emptyList())
+    val totalOrderList: StateFlow<List<OrderItem>> = _totalOrderList
 
     private val _totalPrice = MutableStateFlow(0.0)
     val totalPrice: StateFlow<Double> = _totalPrice
 
     private val _errorMessage = MutableStateFlow<String?>(null)
     val errorMessage: StateFlow<String?> = _errorMessage
+
+    private var orderListenerRegistration: ListenerRegistration? = null
 
     fun getDrinkData(restaurantName: String, onSuccess: (List<Drink>) -> Unit, onFailure: (Exception) -> Unit) {
         viewModelScope.launch {
@@ -53,67 +59,94 @@ class ClientOrderViewModel : ViewModel() {
         }
     }
 
-    fun addDishToList(dish: Dish) {
-        val existingItem = _orderList.value.find { it.name == dish.name && it.type == "Dish" }
+    fun addDishToCurrentList(dish: Dish) {
+        val existingItem = _currentOrderList.value.find { it.name == dish.name && it.type == "Dish" }
         if (existingItem != null) {
-            val updatedList = _orderList.value.map {
+            val updatedList = _currentOrderList.value.map {
                 if (it.name == dish.name && it.type == "Dish") it.copy(quantity = it.quantity + 1) else it
             }
-            _orderList.value = updatedList
+            _currentOrderList.value = updatedList
         } else {
-            _orderList.value = _orderList.value + OrderItem(dish.name, dish.price, "Dish", 1)
+            _currentOrderList.value = _currentOrderList.value + OrderItem(dish.name, dish.price, "Dish", 1)
         }
         updateTotalPrice()
     }
 
-    fun addDrinkToList(drink: Drink) {
-        val existingItem = _orderList.value.find { it.name == drink.name && it.type == "Drink" }
+    fun addDrinkToCurrentList(drink: Drink) {
+        val existingItem = _currentOrderList.value.find { it.name == drink.name && it.type == "Drink" }
         if (existingItem != null) {
-            val updatedList = _orderList.value.map {
+            val updatedList = _currentOrderList.value.map {
                 if (it.name == drink.name && it.type == "Drink") it.copy(quantity = it.quantity + 1) else it
             }
-            _orderList.value = updatedList
+            _currentOrderList.value = updatedList
         } else {
-            _orderList.value = _orderList.value + OrderItem(drink.name, drink.price, "Drink", 1)
+            _currentOrderList.value = _currentOrderList.value + OrderItem(drink.name, drink.price, "Drink", 1)
         }
         updateTotalPrice()
     }
 
     private fun updateTotalPrice() {
-        _totalPrice.value = _orderList.value.sumOf { (it.price.toDoubleOrNull() ?: 0.0) * it.quantity }
+        _totalPrice.value = _currentOrderList.value.sumOf { (it.price.toDoubleOrNull() ?: 0.0) * it.quantity }
     }
 
     fun sendOrderToServer(tableNumber: Int, restaurantName: String, tableCode: String) {
-        val orderItems = _orderList.value
+        val currentOrderItems = _currentOrderList.value
 
         val tableDocument = db.collection("restaurants").document(restaurantName)
             .collection("tables").document(tableNumber.toString())
 
-        tableDocument.get().addOnSuccessListener { document ->
-            if (document.exists()) {
-                val existingTable = document.toObject(Table::class.java)
-                val updatedOrders = existingTable?.orders?.toMutableList() ?: mutableListOf()
-                orderItems.forEach { newItem ->
-                    val existingItem = updatedOrders.find { it.name == newItem.name && it.type == newItem.type }
-                    if (existingItem != null) {
-                        existingItem.quantity += newItem.quantity
-                    } else {
-                        updatedOrders.add(newItem)
+        viewModelScope.launch {
+            try {
+                val document = tableDocument.get().await()
+                if (document.exists()) {
+                    val existingTable = document.toObject(Table::class.java)
+                    val updatedOrders = existingTable?.orders?.toMutableList() ?: mutableListOf()
+                    currentOrderItems.forEach { newItem ->
+                        val existingItem = updatedOrders.find { it.name == newItem.name && it.type == newItem.type }
+                        if (existingItem != null) {
+                            existingItem.quantity += newItem.quantity
+                        } else {
+                            updatedOrders.add(newItem)
+                        }
                     }
+                    tableDocument.update("orders", updatedOrders).await()
+                } else {
+                    val newTable = Table(number = tableNumber, code = tableCode, orders = currentOrderItems.toMutableList())
+                    tableDocument.set(newTable).await()
                 }
-                tableDocument.update("orders", updatedOrders)
-            } else {
-                val newTable = Table(number = tableNumber, code = tableCode, orders = orderItems.toMutableList())
-                tableDocument.set(newTable)
+                clearCurrentOrderList()
+            } catch (e: Exception) {
+                _errorMessage.value = "Error al enviar el pedido: ${e.message}"
             }
-            clearOrderList()
-        }.addOnFailureListener { e ->
-            _errorMessage.value = "Error al enviar el pedido: ${e.message}"
         }
     }
 
-    private fun clearOrderList() {
-        _orderList.value = emptyList()
+    private fun clearCurrentOrderList() {
+        _currentOrderList.value = emptyList()
         updateTotalPrice()
+    }
+
+    fun listenToOrderUpdates(tableNumber: Int, restaurantName: String) {
+        val tableDocument = db.collection("restaurants").document(restaurantName)
+            .collection("tables").document(tableNumber.toString())
+
+        orderListenerRegistration = tableDocument.addSnapshotListener { snapshot, error ->
+            if (error != null) {
+                _errorMessage.value = "Error al escuchar las actualizaciones del pedido: ${error.message}"
+                return@addSnapshotListener
+            }
+
+            if (snapshot != null && snapshot.exists()) {
+                val table = snapshot.toObject(Table::class.java)
+                table?.orders?.let { orders ->
+                    _totalOrderList.value = orders
+                }
+            }
+        }
+    }
+
+    override fun onCleared() {
+        super.onCleared()
+        orderListenerRegistration?.remove()
     }
 }
