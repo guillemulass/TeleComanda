@@ -8,7 +8,10 @@ sealed class Routes(val route : String) {
     object ClientOrderScreenRoute: Routes("ClientOrderScreen")
 
     object AddToMenuScreenRoute: Routes("AddToMenu")
+    object DeleteFromMenuScreenRoute: Routes("DeleteFromMenuScreen")
     object ConfigurationScreenRoute: Routes("ConfigurationScreen")
+    object CloseRegisterScreenRoute: Routes("CloseRegisterScreen")
+
     object LogInAdministratorScreenRoute: Routes("LogInAdministrator")
     object LogInEmployeeScreenRoute: Routes("LogInEmployee")
     object LogInSelectorScreenRoute: Routes("LogInSelector")
@@ -17,6 +20,7 @@ sealed class Routes(val route : String) {
     object EmployeeWorkScreenRoute: Routes("EmployeeWork")
     object MenuScreenRoute: Routes("MenuScreen")
     object AddEmployeeScreenRoute: Routes("AddEmployeeScreen")
+
     object AddOrderScreenRoute: Routes("AddOrderScreen")
     object TableSelecctionScreenRoute: Routes("TableSelectionScreen")
 

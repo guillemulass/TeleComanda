@@ -6,7 +6,6 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.telecomanda.dataClasses.Dish
 import com.example.telecomanda.dataClasses.Drink
-import com.example.telecomanda.dataClasses.Order
 import com.example.telecomanda.dataClasses.OrderItem
 import com.example.telecomanda.dataClasses.Table
 import com.google.firebase.auth.FirebaseAuth
@@ -22,6 +21,7 @@ class EmployeeAddOrderViewModel : ViewModel() {
     val currentOrderList = mutableStateListOf<OrderItem>()
     val totalOrderList = mutableStateListOf<OrderItem>()
     val totalPrice = MutableLiveData<Double>()
+    val totalOrderPrice = MutableLiveData<Double>()
     val tableList = MutableLiveData<List<Table>>()
 
     init {
@@ -113,6 +113,10 @@ class EmployeeAddOrderViewModel : ViewModel() {
         totalPrice.value = currentOrderList.sumOf { (it.price.toDoubleOrNull() ?: 0.0) * it.quantity }
     }
 
+    fun updateTotalOrderPrice() {
+        totalOrderPrice.value = totalOrderList.sumOf { (it.price.toDoubleOrNull() ?: 0.0) * it.quantity }
+    }
+
     fun resetTotalPrice() {
         totalPrice.value = 0.0
     }
@@ -123,15 +127,11 @@ class EmployeeAddOrderViewModel : ViewModel() {
     }
 
     fun addCurrentOrderToTotalOrder() {
-        currentOrderList.forEach { newItem ->
-            val existingItem = totalOrderList.find { it.name == newItem.name && it.type == newItem.type }
-            if (existingItem != null) {
-                existingItem.quantity += newItem.quantity
-            } else {
-                totalOrderList.add(newItem)
-            }
+        currentOrderList.forEach { currentItem ->
+            totalOrderList.add(currentItem)
         }
         clearCurrentOrderList()
+        updateTotalOrderPrice()
     }
 
     fun getTableData(tableNumber: Int, onSuccess: (Table) -> Unit, onFailure: (Exception) -> Unit) {

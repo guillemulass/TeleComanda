@@ -42,7 +42,7 @@ class AddToMenuViewModel : ViewModel() {
 
     private suspend fun getRestaurantName(): String {
         val email = auth.currentUser?.email ?: return ""
-        val document = db.collection("employees").document(email).get().await()
+        val document = db.collection("restaurantsEmail").document(email).get().await()
         return document.getString("restaurantName") ?: ""
     }
 
@@ -96,7 +96,7 @@ class AddToMenuViewModel : ViewModel() {
         }
     }
 
-    fun updateStateText(text: String) {
+    private fun updateStateText(text: String) {
         _stateText.value = text
     }
 }

@@ -23,7 +23,9 @@ import com.example.telecomanda.screens.addToMenu.AddToMenuViewModel
 import com.example.telecomanda.screens.clientScreens.ClientOrderScreen
 import com.example.telecomanda.screens.clientScreens.TableCodeInputScreen
 import com.example.telecomanda.screens.clientScreens.TableCodeInputViewModel
+import com.example.telecomanda.screens.closeRegister.CloseRegisterScreen
 import com.example.telecomanda.screens.configurationScreen.ConfigurationScreen
+import com.example.telecomanda.screens.deleteFromMenu.DeleteFromMenuScreen
 import com.example.telecomanda.screens.employeeScreens.EmployeeAddOrder
 import com.example.telecomanda.screens.employeeScreens.EmployeeAddOrderViewModel
 import com.example.telecomanda.screens.employeeScreens.EmployeeMenuScreen
@@ -156,10 +158,21 @@ class MainActivity : ComponentActivity() {
                             )
                         }
 
+                        composable(Routes.CloseRegisterScreenRoute.route) {
+                            CloseRegisterScreen(
+                                navController
+                            )
+                        }
+
                         composable(Routes.AddToMenuScreenRoute.route) {
                             AddToMenu(
                                 navController,
                                 addToMenuViewModel
+                            )
+                        }
+                        composable(Routes.DeleteFromMenuScreenRoute.route) {
+                            DeleteFromMenuScreen(
+                                navController
                             )
                         }
 

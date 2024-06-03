@@ -25,9 +25,9 @@ class TableQuantityControllerViewModel : ViewModel() {
     fun getTableQuantity(onQuantityReceived: (Int) -> Unit) {
         viewModelScope.launch {
             try {
-                val user = getRestaurantName()
-                if (user.isNotEmpty()) {
-                    val document = db.collection("restaurants").document(user).get().await()
+                val restaurantName = getRestaurantName()
+                if (restaurantName.isNotEmpty()) {
+                    val document = db.collection("restaurants").document(restaurantName).get().await()
                     val tableQuantity = document.getLong("TableQuantity")?.toInt() ?: 0
                     onQuantityReceived(tableQuantity)
                 } else {
@@ -42,21 +42,21 @@ class TableQuantityControllerViewModel : ViewModel() {
     fun editTableQuantity(onQuantityUpdated: (Int) -> Unit) {
         viewModelScope.launch {
             try {
-                val user = getRestaurantName()
-                if (user.isNotEmpty()) {
+                val restaurantName = getRestaurantName()
+                if (restaurantName.isNotEmpty()) {
                     launch {
-                        val currentQuantity = getTableQuantityAsync(user)
+                        val currentQuantity = getTableQuantityAsync(restaurantName)
                         val newQuantity = currentQuantity + 1
-                        val uniqueCode = generateUniqueCodeAsync(user)
+                        val uniqueCode = generateUniqueCodeAsync(restaurantName)
 
                         val newTable = Table(number = newQuantity, code = uniqueCode)
-                        db.collection("restaurants").document(user).collection("tables")
+                        db.collection("restaurants").document(restaurantName).collection("tables")
                             .document(newTable.number.toString()).set(newTable).await()
 
-                        db.collection("restaurants").document(user).update("TableQuantity", newQuantity).await()
+                        db.collection("restaurants").document(restaurantName).update("TableQuantity", newQuantity).await()
 
                         onQuantityUpdated(newQuantity)
-                        fetchTables(user)
+                        fetchTables(restaurantName)
                     }
                 } else {
                     onQuantityUpdated(0)
@@ -67,13 +67,66 @@ class TableQuantityControllerViewModel : ViewModel() {
         }
     }
 
-    private suspend fun getTableQuantityAsync(user: String): Int {
-        val document = db.collection("restaurants").document(user).get().await()
+    fun deleteLastTable(onQuantityUpdated: (Int) -> Unit) {
+        viewModelScope.launch {
+            try {
+                val restaurantName = getRestaurantName()
+                if (restaurantName.isNotEmpty()) {
+                    launch {
+                        val currentQuantity = getTableQuantityAsync(restaurantName)
+                        if (currentQuantity > 0) {
+                            val lastTableNumber = currentQuantity
+                            db.collection("restaurants").document(restaurantName).collection("tables")
+                                .document(lastTableNumber.toString()).delete().await()
+
+                            val newQuantity = currentQuantity - 1
+                            db.collection("restaurants").document(restaurantName).update("TableQuantity", newQuantity).await()
+
+                            onQuantityUpdated(newQuantity)
+                            fetchTables(restaurantName)
+                        }
+                    }
+                } else {
+                    onQuantityUpdated(0)
+                }
+            } catch (e: Exception) {
+                onQuantityUpdated(0)
+            }
+        }
+    }
+
+    fun deleteTable(tableNumber: Int, onQuantityUpdated: (Int) -> Unit) {
+        viewModelScope.launch {
+            try {
+                val restaurantName = getRestaurantName()
+                if (restaurantName.isNotEmpty()) {
+                    launch {
+                        db.collection("restaurants").document(restaurantName).collection("tables")
+                            .document(tableNumber.toString()).delete().await()
+
+                        val currentQuantity = getTableQuantityAsync(restaurantName)
+                        val newQuantity = if (currentQuantity > 0) currentQuantity - 1 else 0
+                        db.collection("restaurants").document(restaurantName).update("TableQuantity", newQuantity).await()
+
+                        onQuantityUpdated(newQuantity)
+                        fetchTables(restaurantName)
+                    }
+                } else {
+                    onQuantityUpdated(0)
+                }
+            } catch (e: Exception) {
+                onQuantityUpdated(0)
+            }
+        }
+    }
+
+    private suspend fun getTableQuantityAsync(restaurantName: String): Int {
+        val document = db.collection("restaurants").document(restaurantName).get().await()
         return document.getLong("TableQuantity")?.toInt() ?: 0
     }
 
-    private suspend fun generateUniqueCodeAsync(user: String): String {
-        val result = db.collection("restaurants").document(user).collection("tables").get().await()
+    private suspend fun generateUniqueCodeAsync(restaurantName: String): String {
+        val result = db.collection("restaurants").document(restaurantName).collection("tables").get().await()
         val existingCodes = result.mapNotNull { it.getString("code") }.toSet()
         var uniqueCode: String
 
@@ -84,8 +137,8 @@ class TableQuantityControllerViewModel : ViewModel() {
         return uniqueCode
     }
 
-    private suspend fun fetchTables(user: String) {
-        val result = db.collection("restaurants").document(user).collection("tables").get().await()
+    private suspend fun fetchTables(restaurantName: String) {
+        val result = db.collection("restaurants").document(restaurantName).collection("tables").get().await()
         val tables = result.mapNotNull { it.toObject(Table::class.java) }
         // Update LiveData or state with the fetched tables if necessary
     }

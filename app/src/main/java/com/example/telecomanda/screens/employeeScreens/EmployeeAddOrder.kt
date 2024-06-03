@@ -17,7 +17,6 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import com.example.telecomanda.dataClasses.Dish
 import com.example.telecomanda.dataClasses.Drink
-import com.example.telecomanda.dataClasses.Order
 import com.example.telecomanda.dataClasses.Table
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.ktx.auth
@@ -28,7 +27,6 @@ fun EmployeeAddOrder(
     tableNumber: Int,
     navController: NavHostController
 ) {
-
     val addOrderViewModel: EmployeeAddOrderViewModel = viewModel()
 
     val auth: FirebaseAuth = Firebase.auth
@@ -36,6 +34,7 @@ fun EmployeeAddOrder(
     var drinkList by remember { mutableStateOf(emptyList<Drink>()) }
     var table by remember { mutableStateOf<Table?>(null) }
     val totalPrice: Double by addOrderViewModel.totalPrice.observeAsState(initial = 0.0)
+    val totalOrderPrice: Double by addOrderViewModel.totalOrderPrice.observeAsState(initial = 0.0)
 
     LaunchedEffect(tableNumber, auth.currentUser?.uid) {
         val userId = auth.currentUser?.uid
@@ -55,6 +54,7 @@ fun EmployeeAddOrder(
                     addOrderViewModel.totalOrderList.clear()
                     addOrderViewModel.totalOrderList.addAll(it.orders)
                     addOrderViewModel.updateTotalPrice()
+                    addOrderViewModel.updateTotalOrderPrice()
                 },
                 onFailure = { println(it) }
             )
@@ -67,6 +67,7 @@ fun EmployeeAddOrder(
             dishList = dishList,
             drinkList = drinkList,
             totalPrice = totalPrice,
+            totalOrderPrice = totalOrderPrice,
             addOrderViewModel = addOrderViewModel,
             navController = navController,
             tableNumber = tableNumber
@@ -80,6 +81,7 @@ fun OrderScreen(
     dishList: List<Dish>,
     drinkList: List<Drink>,
     totalPrice: Double,
+    totalOrderPrice: Double,
     addOrderViewModel: EmployeeAddOrderViewModel,
     navController: NavHostController,
     tableNumber: Int
@@ -158,6 +160,10 @@ fun OrderScreen(
         ) {
             items(addOrderViewModel.totalOrderList) { orderItem ->
                 Text(text = "${orderItem.name} - ${orderItem.price}€ | x${orderItem.quantity}")
+            }
+            item {
+                Spacer(modifier = Modifier.height(16.dp))
+                Text(text = "Total Order Price: ${totalOrderPrice}€")
             }
         }
 

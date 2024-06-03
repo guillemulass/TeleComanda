@@ -24,7 +24,8 @@ fun ClientOrderScreen(
     var dishes by remember { mutableStateOf(listOf<Dish>()) }
     val currentOrderList by clientOrderViewModel.currentOrderList.collectAsState()
     val totalOrderList by clientOrderViewModel.totalOrderList.collectAsState()
-    val totalPrice by clientOrderViewModel.totalPrice.collectAsState()
+    val currentOrderPrice by clientOrderViewModel.currentOrderPrice.collectAsState()
+    val totalOrderPrice by clientOrderViewModel.totalOrderPrice.collectAsState()
     val errorMessage by clientOrderViewModel.errorMessage.collectAsState()
 
     LaunchedEffect(restaurantName) {
@@ -97,7 +98,7 @@ fun ClientOrderScreen(
             }
             item {
                 Spacer(modifier = Modifier.height(16.dp))
-                Text(text = "Total: ${totalPrice}€")
+                Text(text = "Total: ${currentOrderPrice}€")
             }
         }
 
@@ -112,6 +113,22 @@ fun ClientOrderScreen(
             items(totalOrderList) { orderItem ->
                 Text(text = "${orderItem.name} - ${orderItem.price}€ | x${orderItem.quantity}")
             }
+            item {
+                Spacer(modifier = Modifier.height(16.dp))
+                Text(text = "Total Order Price: ${totalOrderPrice}€")
+            }
+        }
+
+        Spacer(modifier = Modifier.height(16.dp))
+
+        Button(onClick = { clientOrderViewModel.clearCurrentOrderList() }) {
+            Text(text = "Eliminar Comanda Actual")
+        }
+
+        Spacer(modifier = Modifier.height(8.dp))
+
+        Button(onClick = { clientOrderViewModel.removeLastItemFromCurrentOrder() }) {
+            Text(text = "Eliminar Último Item Añadido")
         }
 
         Spacer(modifier = Modifier.height(16.dp))

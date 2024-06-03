@@ -17,9 +17,13 @@ class AddOrderViewModel : ViewModel() {
 
     val currentOrderList = mutableStateListOf<OrderItem>()
     val totalOrderList = mutableStateListOf<OrderItem>()
+    val tableList = MutableLiveData<List<Table>>()
+
     private val _totalPrice = MutableLiveData<Double>()
     val totalPrice: MutableLiveData<Double> = _totalPrice
-    val tableList = MutableLiveData<List<Table>>()
+
+    private val _totalOrderPrice = MutableLiveData<Double>()
+    val totalOrderPrice: MutableLiveData<Double> = _totalOrderPrice
 
     init {
         fetchTables()
@@ -91,8 +95,8 @@ class AddOrderViewModel : ViewModel() {
         _totalPrice.value = currentOrderList.sumOf { (it.price.toDoubleOrNull() ?: 0.0) * it.quantity }
     }
 
-    fun resetTotalPrice() {
-        _totalPrice.value = 0.0
+    fun updateTotalOrderPrice() {
+        _totalOrderPrice.value = totalOrderList.sumOf { (it.price.toDoubleOrNull() ?: 0.0) * it.quantity }
     }
 
     fun clearCurrentOrderList() {
@@ -104,58 +108,29 @@ class AddOrderViewModel : ViewModel() {
         viewModelScope.launch {
             try {
                 val restaurantName = getRestaurantName()
-                println("Restaurant name: $restaurantName")
                 if (restaurantName.isNotEmpty()) {
                     val documentReference = db.collection("restaurants").document(restaurantName).collection("tables").document(tableNumber.toString())
                     val documentSnapshot = documentReference.get().await()
                     if (documentSnapshot.exists()) {
                         val table = documentSnapshot.toObject(Table::class.java)
                         if (table != null) {
-                            println("Table data: $table")
+                            totalOrderList.clear()
+                            totalOrderList.addAll(table.orders)
+                            updateTotalOrderPrice() // Actualizar el precio total del pedido
                             onSuccess(table)
                         } else {
-                            val exception = Exception("Table data is null")
-                            println(exception.message)
-                            onFailure(exception)
+                            onFailure(Exception("Table data is null"))
                         }
                     } else {
-                        val exception = Exception("Table not found")
-                        println(exception.message)
-                        onFailure(exception)
+                        onFailure(Exception("Table not found"))
                     }
                 } else {
-                    val exception = Exception("Restaurant name is empty")
-                    println(exception.message)
-                    onFailure(exception)
+                    onFailure(Exception("Restaurant name is empty"))
                 }
             } catch (e: Exception) {
-                println("Error fetching table data: ${e.message}")
                 onFailure(e)
             }
         }
-    }
-
-    fun addOrderToTable(tableNumber: Int, order: Order) {
-        tableList.value?.let { tables ->
-            val updatedTables = tables.map { table ->
-                if (table.number == tableNumber) {
-                    val updatedOrders = table.orders.toMutableList()
-                    order.items.forEach { newItem ->
-                        val existingItem = updatedOrders.find { it.name == newItem.name && it.type == newItem.type }
-                        if (existingItem != null) {
-                            existingItem.quantity += newItem.quantity
-                        } else {
-                            updatedOrders.add(newItem)
-                        }
-                    }
-                    table.copy(orders = updatedOrders)
-                } else {
-                    table
-                }
-            }
-            tableList.value = updatedTables
-        }
-        totalOrderList.addAll(order.items)
     }
 
     fun saveTable(number: Int, code: String, orders: List<OrderItem>) {
@@ -168,15 +143,6 @@ class AddOrderViewModel : ViewModel() {
         }
     }
 
-    private fun getTableQuantity(onQuantityReceived: (Int) -> Unit) {
-        val user = auth.currentUser?.email ?: return
-        db.collection("restaurants").document(user).get().addOnSuccessListener {
-            val tableQuantity = it.get("TableQuantity").toString()
-            val quantity = tableQuantity.toIntOrNull() ?: 0
-            onQuantityReceived(quantity)
-        }
-    }
-
     fun fetchTables() {
         viewModelScope.launch {
             val user = auth.currentUser?.email ?: return@launch
@@ -185,6 +151,41 @@ class AddOrderViewModel : ViewModel() {
                 val result = db.collection("restaurants").document(restaurantName).collection("tables").get().await()
                 val tables = result.mapNotNull { it.toObject(Table::class.java) }
                 tableList.value = tables
+            }
+        }
+    }
+
+    fun closeTable(tableNumber: Int) {
+        viewModelScope.launch {
+            try {
+                val restaurantName = getRestaurantName()
+                if (restaurantName.isNotEmpty()) {
+                    // Obtener datos de la mesa
+                    val tableRef = db.collection("restaurants").document(restaurantName).collection("tables").document(tableNumber.toString())
+                    val tableSnapshot = tableRef.get().await()
+                    val table = tableSnapshot.toObject(Table::class.java)
+
+                    if (table != null) {
+                        // Sumar total de la mesa a todaysTotal
+                        val todaysTotalRef = db.collection("restaurants").document(restaurantName)
+                        val todaysTotalSnapshot = todaysTotalRef.get().await()
+                        var todaysTotal = todaysTotalSnapshot.getDouble("todaysTotal") ?: 0.0
+
+                        val tableTotal = table.orders.sumOf { (it.price.toDoubleOrNull() ?: 0.0) * it.quantity }
+                        todaysTotal += tableTotal
+
+                        todaysTotalRef.update("todaysTotal", todaysTotal).await()
+
+                        // Vaciar comanda de la mesa
+                        tableRef.update("orders", emptyList<OrderItem>()).await()
+
+                        // Actualizar vista
+                        totalOrderList.clear()
+                        updateTotalOrderPrice()
+                    }
+                }
+            } catch (e: Exception) {
+                println("Error al cerrar la mesa: $e")
             }
         }
     }

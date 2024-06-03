@@ -238,22 +238,6 @@ fun textFieldsDish(
 
     Spacer(modifier = Modifier.height(16.dp))
 
-    Text(
-        text = "Alergenos",
-        style = TextStyle(
-            fontWeight = Bold,
-            fontSize = 20.sp)
-    )
-
-    Spacer(modifier = Modifier.height(16.dp))
-
-    Text(
-        text = "LAZY ROW ALERGENOS",
-        style = TextStyle(
-            fontWeight = Bold,
-            fontSize = 30.sp)
-    )
-
     Button(
         onClick = {
             addToMenuViewModel.saveDish(name, price, lastSelectedDishType.toString(), ingredientTexts)

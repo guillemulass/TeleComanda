@@ -23,8 +23,11 @@ class ClientOrderViewModel : ViewModel() {
     private val _totalOrderList = MutableStateFlow<List<OrderItem>>(emptyList())
     val totalOrderList: StateFlow<List<OrderItem>> = _totalOrderList
 
-    private val _totalPrice = MutableStateFlow(0.0)
-    val totalPrice: StateFlow<Double> = _totalPrice
+    private val _currentOrderPrice = MutableStateFlow(0.0)
+    val currentOrderPrice: StateFlow<Double> = _currentOrderPrice
+
+    private val _totalOrderPrice = MutableStateFlow(0.0)
+    val totalOrderPrice: StateFlow<Double> = _totalOrderPrice
 
     private val _errorMessage = MutableStateFlow<String?>(null)
     val errorMessage: StateFlow<String?> = _errorMessage
@@ -69,7 +72,7 @@ class ClientOrderViewModel : ViewModel() {
         } else {
             _currentOrderList.value = _currentOrderList.value + OrderItem(dish.name, dish.price, "Dish", 1)
         }
-        updateTotalPrice()
+        updateCurrentOrderPrice()
     }
 
     fun addDrinkToCurrentList(drink: Drink) {
@@ -82,11 +85,15 @@ class ClientOrderViewModel : ViewModel() {
         } else {
             _currentOrderList.value = _currentOrderList.value + OrderItem(drink.name, drink.price, "Drink", 1)
         }
-        updateTotalPrice()
+        updateCurrentOrderPrice()
     }
 
-    private fun updateTotalPrice() {
-        _totalPrice.value = _currentOrderList.value.sumOf { (it.price.toDoubleOrNull() ?: 0.0) * it.quantity }
+    private fun updateCurrentOrderPrice() {
+        _currentOrderPrice.value = _currentOrderList.value.sumOf { (it.price.toDoubleOrNull() ?: 0.0) * it.quantity }
+    }
+
+    private fun updateTotalOrderPrice() {
+        _totalOrderPrice.value = _totalOrderList.value.sumOf { (it.price.toDoubleOrNull() ?: 0.0) * it.quantity }
     }
 
     fun sendOrderToServer(tableNumber: Int, restaurantName: String, tableCode: String) {
@@ -121,9 +128,16 @@ class ClientOrderViewModel : ViewModel() {
         }
     }
 
-    private fun clearCurrentOrderList() {
+    fun clearCurrentOrderList() {
         _currentOrderList.value = emptyList()
-        updateTotalPrice()
+        updateCurrentOrderPrice()
+    }
+
+    fun removeLastItemFromCurrentOrder() {
+        if (_currentOrderList.value.isNotEmpty()) {
+            _currentOrderList.value = _currentOrderList.value.dropLast(1)
+            updateCurrentOrderPrice()
+        }
     }
 
     fun listenToOrderUpdates(tableNumber: Int, restaurantName: String) {
@@ -140,6 +154,7 @@ class ClientOrderViewModel : ViewModel() {
                 val table = snapshot.toObject(Table::class.java)
                 table?.orders?.let { orders ->
                     _totalOrderList.value = orders
+                    updateTotalOrderPrice() // Actualizar el precio total del pedido
                 }
             }
         }

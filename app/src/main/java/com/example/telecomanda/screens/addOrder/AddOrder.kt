@@ -35,20 +35,13 @@ fun AddOrder(
 
     LaunchedEffect(tableNumber, auth.currentUser?.uid) {
         val userId = auth.currentUser?.uid
-        println("User ID: $userId")
         if (userId != null) {
             addOrderViewModel.getDishData(
-                onSuccess = { dishes ->
-                    dishList = dishes
-                    println("Dishes loaded: $dishes")
-                },
+                onSuccess = { dishList = it },
                 onFailure = { println("Failed to load dishes: $it") }
             )
             addOrderViewModel.getDrinkData(
-                onSuccess = { drinks ->
-                    drinkList = drinks
-                    println("Drinks loaded: $drinks")
-                },
+                onSuccess = { drinkList = it },
                 onFailure = { println("Failed to load drinks: $it") }
             )
             addOrderViewModel.getTableData(
@@ -59,7 +52,6 @@ fun AddOrder(
                     addOrderViewModel.totalOrderList.addAll(it.orders)
                     addOrderViewModel.currentOrderList.clear()
                     addOrderViewModel.updateTotalPrice()
-                    println("Table loaded: $table")
                 },
                 onFailure = { println("Failed to load table data: $it") }
             )
@@ -73,11 +65,9 @@ fun AddOrder(
             drinkList = drinkList,
             totalPrice = totalPrice,
             addOrderViewModel = addOrderViewModel,
-            navController = navController,
-            tableNumber = tableNumber
+            navController = navController
         )
     } ?: run {
-        // Si la mesa es nula, muestra un mensaje de carga
         Box(
             contentAlignment = Alignment.Center,
             modifier = Modifier.fillMaxSize()
@@ -95,8 +85,9 @@ fun OrderScreen(
     totalPrice: Double,
     addOrderViewModel: AddOrderViewModel,
     navController: NavHostController,
-    tableNumber: Int
 ) {
+    val totalOrderPrice: Double by addOrderViewModel.totalOrderPrice.observeAsState(initial = 0.0)
+
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Center,
@@ -117,7 +108,6 @@ fun OrderScreen(
 
         Spacer(modifier = Modifier.height(16.dp))
 
-        // Display available dishes and drinks
         LazyColumn(
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.Top,
@@ -144,7 +134,6 @@ fun OrderScreen(
 
         Spacer(modifier = Modifier.height(16.dp))
 
-        // Display current order
         Text(text = "Current Order")
         LazyColumn(
             horizontalAlignment = Alignment.CenterHorizontally,
@@ -162,7 +151,6 @@ fun OrderScreen(
 
         Spacer(modifier = Modifier.height(16.dp))
 
-        // Display total order
         Text(text = "Total Order")
         LazyColumn(
             horizontalAlignment = Alignment.CenterHorizontally,
@@ -171,6 +159,10 @@ fun OrderScreen(
         ) {
             items(addOrderViewModel.totalOrderList) { orderItem ->
                 Text(text = "${orderItem.name} - ${orderItem.price}€ | x${orderItem.quantity}")
+            }
+            item {
+                Spacer(modifier = Modifier.height(16.dp))
+                Text(text = "Total Order Price: ${totalOrderPrice}€")
             }
         }
 
@@ -189,6 +181,18 @@ fun OrderScreen(
             modifier = Modifier
         ) {
             Text(text = "Confirmar Comanda")
+        }
+
+        Spacer(modifier = Modifier.height(16.dp))
+
+        Button(
+            onClick = {
+                addOrderViewModel.closeTable(table.number)
+                navController.popBackStack()
+            },
+            modifier = Modifier
+        ) {
+            Text(text = "Cerrar Mesa")
         }
     }
 }
