@@ -9,14 +9,13 @@ import androidx.lifecycle.viewModelScope
 import com.google.firebase.Firebase
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.auth
+import com.google.firebase.firestore.FirebaseFirestore
 import kotlinx.coroutines.launch
 
 class LogInViewModel : ViewModel()  {
     var email by mutableStateOf("")
         private set
     var password by mutableStateOf("")
-        private set
-    var userName by mutableStateOf("")
         private set
 
     private val auth: FirebaseAuth = Firebase.auth
@@ -46,4 +45,41 @@ class LogInViewModel : ViewModel()  {
             }
         }
     }
+
+    fun checkAdminEmail(email: String, onResult: (Boolean) -> Unit) {
+        val db = FirebaseFirestore.getInstance()
+        val documentReference = db.collection("restaurantsEmail").document(email)
+
+        documentReference.get()
+            .addOnSuccessListener { document ->
+                if (document.exists()) {
+                    onResult(true)
+                } else {
+                    onResult(false)
+                }
+            }
+            .addOnFailureListener { exception ->
+                exception.printStackTrace()
+                onResult(false)
+            }
+    }
+
+    fun checkEmployeeEmail(email: String, onResult: (Boolean) -> Unit) {
+        val db = FirebaseFirestore.getInstance()
+        val documentReference = db.collection("employeesEmails").document(email)
+
+        documentReference.get()
+            .addOnSuccessListener { document ->
+                if (document.exists()) {
+                    onResult(true)
+                } else {
+                    onResult(false)
+                }
+            }
+            .addOnFailureListener { exception ->
+                exception.printStackTrace()
+                onResult(false)
+            }
+    }
+
 }

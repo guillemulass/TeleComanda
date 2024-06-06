@@ -127,16 +127,35 @@ fun LogInAdministrator(
 
             Spacer(modifier = Modifier.height(60.dp))
 
+            if (text.isNotEmpty()){
+                Text(
+                    text = text,
+                    style = TextStyle(
+                        fontWeight = Bold,
+                        fontSize = 15.sp,
+                        color = Color.Red
+                    )
+                )
+            }
 
             Button(
                 onClick = {
-                    logInAdministratorViewModel.login { navController.navigate(Routes.AdminWorkScreenRoute.route) }
+                    logInAdministratorViewModel.checkAdminEmail(
+                        logInAdministratorViewModel.email,
+                        onResult = { exists ->
+                            if (exists) {
+                                logInAdministratorViewModel.login { navController.navigate(Routes.EmployeeWorkScreenRoute.route) }
+                            } else {
+                                text = "El email del administrador no es correcto o existe"
+                            }
+                        }
+
+                    )
                 },
                 modifier = Modifier
             ) {
                 Text(text = "Iniciar Sesion")
             }
-
 
         }
     }

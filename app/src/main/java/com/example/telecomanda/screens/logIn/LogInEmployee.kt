@@ -127,16 +127,35 @@ fun LogInEmployee(
 
             Spacer(modifier = Modifier.height(60.dp))
 
+            if (text.isNotEmpty()){
+                Text(
+                    text = text,
+                    style = TextStyle(
+                        fontWeight = Bold,
+                        fontSize = 15.sp,
+                        color = Color.Red
+                    )
+                )
+            }
 
             Button(
                 onClick = {
-                    logInEmployeeViewModel.login { navController.navigate(Routes.EmployeeWorkScreenRoute.route) }
+                    logInEmployeeViewModel.checkEmployeeEmail(
+                        logInEmployeeViewModel.email,
+                        onResult = { exists ->
+                            if (exists) {
+                                logInEmployeeViewModel.login { navController.navigate(Routes.EmployeeWorkScreenRoute.route) }
+                            } else {
+                                text = "El email del empleado no es correcto o existe"
+                            }
+                        }
+
+                    )
                 },
                 modifier = Modifier
             ) {
                 Text(text = "Iniciar Sesion")
             }
-
 
         }
     }
