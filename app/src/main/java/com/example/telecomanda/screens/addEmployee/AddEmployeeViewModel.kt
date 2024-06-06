@@ -56,7 +56,7 @@ class AddEmployeeViewModel: ViewModel() {
     }
 
     private suspend fun getRestaurantUID(): String {
-        val document = db.collection("restaurantsInfoList").document(restaurantName).get().await()
+        val document = db.collection("restaurants").document(restaurantName).get().await()
         return document.getString("restaurantId") ?: ""
     }
 
@@ -66,7 +66,7 @@ class AddEmployeeViewModel: ViewModel() {
                 "restaurantName" to restaurantName,
                 "employeeEmail" to employeeEmail
             )
-            firestore.collection("employees").document(employeeEmail).set(userMap).addOnCompleteListener {
+            firestore.collection("employeesEmails").document(employeeEmail).set(userMap).addOnCompleteListener {
                 println("Usuario guardado en base de datos correctamente")
             }.addOnFailureListener {
                 println("Error guardando usuario en base de datos")

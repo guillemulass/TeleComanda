@@ -4,7 +4,10 @@ data class Dish(
     var name: String = "",
     var price: String = "",
     var type: String = "",
-    var ingredients: List<String> = listOf()
+    var ingredients: List<String> = listOf(),
+    var imageUrl: String? = null
 ) {
-    constructor() : this("", "", "", listOf())
+    constructor() : this("", "", "", listOf(), null)
 }
+
+

@@ -1,5 +1,10 @@
+@file:OptIn(ExperimentalPermissionsApi::class)
+
 package com.example.telecomanda.screens.addToMenu
 
+import android.net.Uri
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.ScrollState
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -25,6 +30,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight.Companion.Bold
 import androidx.compose.ui.text.input.KeyboardType
@@ -32,6 +38,9 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import com.example.telecomanda.enumClass.*
+import com.google.accompanist.permissions.ExperimentalPermissionsApi
+import com.google.accompanist.permissions.isGranted
+import com.google.accompanist.permissions.rememberPermissionState
 
 @Composable
 fun AddToMenu(
@@ -114,14 +123,19 @@ fun AddToMenu(
 fun textFieldsDrink(
     navController: NavHostController,
     addToMenuViewModel: AddToMenuViewModel
-){
+) {
     var name by remember { mutableStateOf("") }
     var price by remember { mutableStateOf("") }
     var lastSelectedDrinkType by remember { mutableStateOf(DrinkTypes.Otro) }
+    var imageUri by remember { mutableStateOf<Uri?>(null) }
+
+    val permissionState = rememberPermissionState(
+        android.Manifest.permission.READ_EXTERNAL_STORAGE
+    )
 
     TextField(
         value = name,
-        onValueChange = { name = it},
+        onValueChange = { name = it },
         label = { Text("Nombre") },
     )
 
@@ -151,17 +165,46 @@ fun textFieldsDrink(
 
     Spacer(modifier = Modifier.height(16.dp))
 
+    val context = LocalContext.current
+    val pickImageLauncher = rememberLauncherForActivityResult(
+        contract = ActivityResultContracts.GetContent()
+    ) { uri: Uri? ->
+        imageUri = uri
+    }
+
     Button(
         onClick = {
-            addToMenuViewModel.saveDrink(name, price, lastSelectedDrinkType.toString())
-            name = ""
-            price = ""
+            if (permissionState.status.isGranted) {
+                pickImageLauncher.launch("image/*")
+            } else {
+                permissionState.launchPermissionRequest()
+            }
         },
         modifier = Modifier
     ) {
-        Text(text = "Añadir Bebida" )
+        Text(text = "Seleccionar Imagen")
+    }
+
+    imageUri?.let {
+        Spacer(modifier = Modifier.height(16.dp))
+        Text(text = "Imagen seleccionada: ${it.path}")
+    }
+
+    Spacer(modifier = Modifier.height(16.dp))
+
+    Button(
+        onClick = {
+            addToMenuViewModel.saveDrink(name, price, lastSelectedDrinkType.toString(), imageUri)
+            name = ""
+            price = ""
+            imageUri = null
+        },
+        modifier = Modifier
+    ) {
+        Text(text = "Añadir Bebida")
     }
 }
+
 
 @Composable
 fun textFieldsDish(
@@ -173,6 +216,7 @@ fun textFieldsDish(
     var lastSelectedDishType by remember { mutableStateOf(DishTypes.Segundo) }
     var ingredientsNumber by remember { mutableStateOf("0") }
     var ingredientTexts by remember { mutableStateOf(List(0) { "" }) }
+    var imageUri by remember { mutableStateOf<Uri?>(null) }
 
     TextField(
         value = name,
@@ -238,15 +282,42 @@ fun textFieldsDish(
 
     Spacer(modifier = Modifier.height(16.dp))
 
+    // Implement image picker button
+    val context = LocalContext.current
+    val pickImageLauncher = rememberLauncherForActivityResult(
+        contract = ActivityResultContracts.GetContent()
+    ) { uri: Uri? ->
+        imageUri = uri
+    }
+
     Button(
         onClick = {
-            addToMenuViewModel.saveDish(name, price, lastSelectedDishType.toString(), ingredientTexts)
-            name = ""
-            price = ""
-            ingredientTexts = List(0) { "" }
+            pickImageLauncher.launch("image/*")
         },
         modifier = Modifier
     ) {
-        Text(text = "Añadir Plato" )
+        Text(text = "Seleccionar Imagen")
+    }
+
+    imageUri?.let {
+        Spacer(modifier = Modifier.height(16.dp))
+        Text(text = "Imagen seleccionada: ${it.path}")
+    }
+
+    Spacer(modifier = Modifier.height(16.dp))
+
+    Button(
+        onClick = {
+            addToMenuViewModel.saveDish(name, price, lastSelectedDishType.toString(), ingredientTexts, imageUri)
+            name = ""
+            price = ""
+            ingredientsNumber = "0"
+            ingredientTexts = List(0) { "" }
+            imageUri = null
+        },
+        modifier = Modifier
+    ) {
+        Text(text = "Añadir Plato")
     }
 }
+

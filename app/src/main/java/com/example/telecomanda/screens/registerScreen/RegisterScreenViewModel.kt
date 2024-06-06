@@ -33,7 +33,7 @@ class RegisterScreenViewModel : ViewModel() {
         viewModelScope.launch {
             try {
                 // Verificar si el nombre del restaurante ya está en uso
-                firestore.collection("restaurantsInfoList").document(restaurantName).get()
+                firestore.collection("restaurants").document(restaurantName).get()
                     .addOnSuccessListener { document ->
                         if (document.exists()) {
                             // El nombre del restaurante ya está en uso
@@ -46,7 +46,6 @@ class RegisterScreenViewModel : ViewModel() {
                                     if (task.isSuccessful) {
                                         val user = task.result.user
                                         user?.let {
-                                            saveUser(UserModel(restaurantEmail, restaurantName))
                                             saveRestaurantInfoList(it.uid)
                                             saveRestaurantEmail(restaurantEmail, restaurantName) // Guardar el nombre del restaurante en la ruta especificada
                                             onSuccess()
@@ -70,18 +69,9 @@ class RegisterScreenViewModel : ViewModel() {
         }
     }
 
-    private fun saveUser(userToAdd: UserModel) {
-        viewModelScope.launch {
-            firestore.collection("restaurants").document(restaurantName).set(userToAdd).addOnCompleteListener {
-                println("Restaurante guardado en base de datos correctamente")
-            }.addOnFailureListener {
-                println("Error guardando restaurante en base de datos")
-            }
-        }
-    }
 
     private fun saveRestaurantInfoList(uid: String) {
-        val restaurantInfoRef = db.collection("restaurantsInfoList").document(restaurantName)
+        val restaurantInfoRef = db.collection("restaurants").document(restaurantName)
 
         val data = hashMapOf(
             "restaurantName" to restaurantName,

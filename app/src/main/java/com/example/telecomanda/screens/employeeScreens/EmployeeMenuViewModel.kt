@@ -16,7 +16,7 @@ class EmployeeMenuViewModel : ViewModel()  {
 
     private suspend fun getRestaurantName(): String {
         val email = auth.currentUser?.email ?: return ""
-        val document = db.collection("employees").document(email).get().await()
+        val document = db.collection("employeesEmails").document(email).get().await()
         return document.getString("restaurantName") ?: ""
     }
 

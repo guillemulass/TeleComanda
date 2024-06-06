@@ -1,5 +1,6 @@
 package com.example.telecomanda.screens.menuScreen
 
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
@@ -12,6 +13,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
+import coil.compose.rememberImagePainter
 import com.example.telecomanda.dataClasses.Dish
 import com.example.telecomanda.dataClasses.Drink
 import com.google.firebase.auth.FirebaseAuth
@@ -27,7 +29,6 @@ fun MenuScreen(
     var dishList by remember { mutableStateOf(emptyList<Dish>()) }
     var drinkList by remember { mutableStateOf(emptyList<Drink>()) }
 
-    // LaunchedEffect es como un init, al iniciarse la pantalla se ejecuta lo que haya dentro
     LaunchedEffect(Unit) {
         val userId = auth.currentUser?.uid
         if (userId != null) {
@@ -83,7 +84,7 @@ fun MenuScreen(
             }
 
             items(dishList) { dish ->
-                Text(text = "${dish.name} - ${dish.price} - ${dish.type}\n${dish.ingredients}")
+                DishItem(dish)
             }
 
             item {
@@ -91,8 +92,56 @@ fun MenuScreen(
             }
 
             items(drinkList) { drink ->
-                Text(text = "${drink.name} - ${drink.price} - ${drink.type}")
+                DrinkItem(drink)
             }
+        }
+    }
+}
+
+@Composable
+fun DishItem(dish: Dish) {
+    Column(
+        horizontalAlignment = Alignment.CenterHorizontally,
+        verticalArrangement = Arrangement.Top,
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(16.dp)
+    ) {
+        Text(text = "${dish.name} - ${dish.price} - ${dish.type}\n${dish.ingredients}")
+
+        dish.imageUrl?.let { imageUrl ->
+            Spacer(modifier = Modifier.height(8.dp))
+            Image(
+                painter = rememberImagePainter(data = imageUrl),
+                contentDescription = "Dish Image",
+                modifier = Modifier
+                    .height(200.dp)
+                    .fillMaxWidth()
+            )
+        }
+    }
+}
+
+@Composable
+fun DrinkItem(drink: Drink) {
+    Column(
+        horizontalAlignment = Alignment.CenterHorizontally,
+        verticalArrangement = Arrangement.Top,
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(16.dp)
+    ) {
+        Text(text = "${drink.name} - ${drink.price} - ${drink.type}")
+
+        drink.imageUrl?.let { imageUrl ->
+            Spacer(modifier = Modifier.height(8.dp))
+            Image(
+                painter = rememberImagePainter(data = imageUrl),
+                contentDescription = "Drink Image",
+                modifier = Modifier
+                    .height(200.dp)
+                    .fillMaxWidth()
+            )
         }
     }
 }

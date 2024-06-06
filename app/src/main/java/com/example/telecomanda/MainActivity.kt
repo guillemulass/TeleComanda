@@ -27,7 +27,6 @@ import com.example.telecomanda.screens.closeRegister.CloseRegisterScreen
 import com.example.telecomanda.screens.configurationScreen.ConfigurationScreen
 import com.example.telecomanda.screens.deleteFromMenu.DeleteFromMenuScreen
 import com.example.telecomanda.screens.employeeScreens.EmployeeAddOrder
-import com.example.telecomanda.screens.employeeScreens.EmployeeAddOrderViewModel
 import com.example.telecomanda.screens.employeeScreens.EmployeeMenuScreen
 import com.example.telecomanda.screens.employeeScreens.EmployeeMenuViewModel
 import com.example.telecomanda.screens.employeeScreens.EmployeeTableSelectionScreen
