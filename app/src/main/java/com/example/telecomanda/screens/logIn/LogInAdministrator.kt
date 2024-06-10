@@ -41,7 +41,7 @@ fun LogInAdministrator(
     navController: NavHostController,
     logInAdministratorViewModel: LogInViewModel
 ) {
-
+    
     var text by remember { mutableStateOf("") }
 
     Box (
@@ -100,7 +100,6 @@ fun LogInAdministrator(
                     Icon(imageVector = Icons.Default.Email, contentDescription = null)
                 },
                 singleLine = true
-
             )
 
             TextField(
@@ -144,7 +143,7 @@ fun LogInAdministrator(
                         logInAdministratorViewModel.email,
                         onResult = { exists ->
                             if (exists) {
-                                logInAdministratorViewModel.login { navController.navigate(Routes.EmployeeWorkScreenRoute.route) }
+                                logInAdministratorViewModel.login { navController.navigate(Routes.AdminWorkScreenRoute.route) }
                             } else {
                                 text = "El email del administrador no es correcto o existe"
                             }
