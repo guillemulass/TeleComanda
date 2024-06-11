@@ -1,5 +1,6 @@
 package com.example.telecomanda.screens.clientScreens
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
@@ -8,13 +9,23 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.navigation.NavHostController
+import com.example.telecomanda.botonbig24sp.BotonBig24sp
+import com.example.telecomanda.botonbig32sp.BotonBig32sp
 import com.example.telecomanda.dataClasses.Dish
 import com.example.telecomanda.dataClasses.Drink
+import com.example.telecomanda.footer.Footer
+import com.example.telecomanda.header.Header
+import com.example.telecomanda.logo.Logo
 
 @Composable
 fun ClientOrderScreen(
+    navController: NavHostController,
     tableNumber: String,
     restaurantName: String,
     tableCode: String
@@ -50,97 +61,178 @@ fun ClientOrderScreen(
         clientOrderViewModel.listenToOrderUpdates(tableNumber.toInt(), restaurantName)
     }
 
-    Column(
+    Box(
         modifier = Modifier
             .fillMaxSize()
-            .padding(16.dp),
-        horizontalAlignment = Alignment.CenterHorizontally
+            .background(Color(0xFF161618))
+            .padding(top = 35.dp)
+
     ) {
-        Text(text = "Table Number: $tableNumber")
-        Text(text = "Restaurant Name: $restaurantName")
+        Spacer(modifier = Modifier.height(40.dp))
 
-        Spacer(modifier = Modifier.height(16.dp))
+        Header(
+            modifier = Modifier
+                .width(430.dp)
+                .height(60.dp)
+                .background(Color(0xFF161618))
+            ,
+            onClick = { navController.popBackStack() }
+        )
+        LazyColumn(
+            horizontalAlignment = Alignment.CenterHorizontally,
+            verticalArrangement = Arrangement.Top,
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(top = 60.dp)
+        ) {
 
-        errorMessage?.let {
-            Text(text = "Error: $it")
-        }
+            item {
+                Spacer(modifier = Modifier.height(32.dp))
+            }
 
-        if (drinks.isNotEmpty() || dishes.isNotEmpty()) {
-            LazyColumn(
-                modifier = Modifier.fillMaxHeight(0.3f)
-            ) {
+            item {
+                Text(
+                    text = "Table Number: $tableNumber",
+                    style = TextStyle(color = Color.White, fontSize = 32.sp)
+                )
+
+                Text(
+                    text = "Restaurant Name: $restaurantName",
+                    style = TextStyle(color = Color.White, fontSize = 32.sp)
+                )
+            }
+
+            item {
+                Spacer(modifier = Modifier.height(16.dp))
+            }
+
+            item {
+                errorMessage?.let {
+                    Text(
+                        text = "Error: $it",
+                        style = TextStyle(color = Color.Red, fontSize = 24.sp),
+                    )
+                }
+            }
+
+            if (drinks.isNotEmpty() || dishes.isNotEmpty()) {
                 items(drinks) { drink ->
-                    Button(onClick = { clientOrderViewModel.addDrinkToCurrentList(drink) }) {
-                        Text(text = drink.name)
-                    }
+                    Spacer(modifier = Modifier.height(8.dp))
+                    BotonBig24sp(
+                        onClick = { clientOrderViewModel.addDrinkToCurrentList(drink) },
+                        text = drink.name
+                    )
                 }
 
                 items(dishes) { dish ->
-                    Button(onClick = { clientOrderViewModel.addDishToCurrentList(dish) }) {
-                        Text(text = dish.name)
-                    }
+                    Spacer(modifier = Modifier.height(8.dp))
+                    BotonBig24sp(
+                        onClick = { clientOrderViewModel.addDishToCurrentList(dish) },
+                        text = dish.name
+                    )
+                }
+            } else {
+                item {
+                    Text(text = "No drinks or dishes available",
+                        style = TextStyle(color = Color.Red, fontSize = 24.sp),
+                    )
                 }
             }
-        } else {
-            Text(text = "No drinks or dishes available")
-        }
 
-        Spacer(modifier = Modifier.height(16.dp))
+            item {
+                Spacer(modifier = Modifier.height(16.dp))
+            }
 
-        Text(text = "Current Order")
-        LazyColumn(
-            horizontalAlignment = Alignment.CenterHorizontally,
-            verticalArrangement = Arrangement.Top,
-            modifier = Modifier.fillMaxHeight(0.3f)
-        ) {
+            item {
+                Text(text = "Comanda Actual",
+                    style = TextStyle(color = Color.White, fontSize = 24.sp),
+                )
+            }
+
             items(currentOrderList) { orderItem ->
-                Text(text = "${orderItem.name} - ${orderItem.price}€ | x${orderItem.quantity}")
+                Text(text = "${orderItem.name} - ${orderItem.price}€ | x${orderItem.quantity}",
+                    style = TextStyle(color = Color.White, fontSize = 24.sp),
+                )
             }
+
+            item {
+                Text(text = "Total: ${currentOrderPrice}€",
+                    style = TextStyle(color = Color.White, fontSize = 24.sp),
+                )
+            }
+
             item {
                 Spacer(modifier = Modifier.height(16.dp))
-                Text(text = "Total: ${currentOrderPrice}€")
             }
-        }
 
-        Spacer(modifier = Modifier.height(16.dp))
+            item {
+                Text(text = "Comanda Completa",
+                    style = TextStyle(color = Color.White, fontSize = 24.sp),
+                )
+            }
 
-        Text(text = "Total Order")
-        LazyColumn(
-            horizontalAlignment = Alignment.CenterHorizontally,
-            verticalArrangement = Arrangement.Top,
-            modifier = Modifier.fillMaxHeight(0.3f)
-        ) {
             items(totalOrderList) { orderItem ->
-                Text(text = "${orderItem.name} - ${orderItem.price}€ | x${orderItem.quantity}")
+                Text(
+                    text = "${orderItem.name} - ${orderItem.price}€ | x${orderItem.quantity}",
+                    style = TextStyle(color = Color.White, fontSize = 24.sp),
+                )
             }
+
             item {
                 Spacer(modifier = Modifier.height(16.dp))
-                Text(text = "Total Order Price: ${totalOrderPrice}€")
+                Text(
+                    text = "Total: ${totalOrderPrice}€",
+                    style = TextStyle(color = Color.White, fontSize = 24.sp),
+                )
             }
+
+            item {
+                Spacer(modifier = Modifier.height(16.dp))
+            }
+
+            item {
+                BotonBig24sp(
+                    onClick = { clientOrderViewModel.clearCurrentOrderList() },
+                    text = "Vaciar Comanda Actual"
+                )
+            }
+
+            item {
+                Spacer(modifier = Modifier.height(16.dp))
+            }
+
+            item {
+                BotonBig24sp(
+                    onClick = {
+                        clientOrderViewModel.sendOrderToServer(
+                            tableNumber.toInt(),
+                            restaurantName,
+                            tableCode
+                        )
+                    },
+                    text = "Confirmar Comanda"
+                )
+
+            }
+
+            item {
+                Spacer(modifier = Modifier.height(60.dp))
+            }
+
         }
+        Column(
+            horizontalAlignment = Alignment.CenterHorizontally,
+            verticalArrangement = Arrangement.Bottom,
+            modifier = Modifier
+                .fillMaxSize()
 
-        Spacer(modifier = Modifier.height(16.dp))
-
-        Button(onClick = { clientOrderViewModel.clearCurrentOrderList() }) {
-            Text(text = "Eliminar Comanda Actual")
-        }
-
-        Spacer(modifier = Modifier.height(8.dp))
-
-        Button(onClick = { clientOrderViewModel.removeLastItemFromCurrentOrder() }) {
-            Text(text = "Eliminar Último Item Añadido")
-        }
-
-        Spacer(modifier = Modifier.height(16.dp))
-
-        Button(onClick = {
-            clientOrderViewModel.sendOrderToServer(
-                tableNumber.toInt(),
-                restaurantName,
-                tableCode
+        ) {
+            Footer(
+                modifier = Modifier
+                    .width(430.dp)
+                    .height(54.dp)
+                    .background(Color(0xFF161618))
             )
-        }) {
-            Text(text = "Confirmar Comanda")
         }
     }
 }

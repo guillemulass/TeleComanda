@@ -1,0 +1,133 @@
+{
+  "name": "footer",
+  "version": 33,
+  "source-key": {
+    "type": "figma",
+    "file": "nosByj6i2Xg6s3qmGLrKUh",
+    "node": "138:108",
+    "version": "5975718149",
+    "component-id": "c3802d9e1aca800fe4e2b10e46497479b5304088"
+  },
+  "default": "Footer",
+  "design": {
+    "atoms": [
+      {
+        "type": "group",
+        "id": "top_level",
+        "root": "true"
+      },
+      {
+        "type": "text",
+        "id": "FooterTextCopyR"
+      },
+      {
+        "type": "vector",
+        "id": "FooterSeparator"
+      }
+    ],
+    "modes": {
+      "Footer": {
+        "rules": [
+          {
+            "id": "top_level",
+            "is-structured": false,
+            "children": [
+              "FooterTextCopyR",
+              "FooterSeparator"
+            ],
+            "clip-content": false
+          },
+          {
+            "id": "FooterTextCopyR",
+            "alignment": {
+              "horizontal": {
+                "attachment": "center",
+                "offset": 0.5
+              },
+              "vertical": {
+                "attachment": "center",
+                "offset": 13.0
+              }
+            },
+            "font-weight": 600.0,
+            "annotated-text-content": {
+              "text": "TeleComanda 2024 ©",
+              "annotated-text-span-list": [
+                {
+                  "span-start": 0,
+                  "span-length": 4,
+                  "annotated-text-style": {
+                    "font-weight": 700.0,
+                    "text-size": 24.0,
+                    "typeface": "Roboto",
+                    "color": {
+                      "alpha": 1.0,
+                      "hue": 198.00000000000003,
+                      "saturation": 0.5405405405405406,
+                      "value": 0.8705882352941177
+                    }
+                  }
+                },
+                {
+                  "span-start": 4,
+                  "span-length": 14,
+                  "annotated-text-style": {
+                    "font-weight": 700.0,
+                    "text-size": 24.0,
+                    "typeface": "Roboto",
+                    "color": {
+                      "alpha": 1.0,
+                      "hue": 0.0,
+                      "saturation": 0.0,
+                      "value": 1.0
+                    }
+                  }
+                }
+              ]
+            },
+            "overflow": "visible",
+            "text-align": "left",
+            "text-size": 24.0,
+            "line-height": 1.171875
+          },
+          {
+            "id": "FooterSeparator",
+            "alignment": {
+              "horizontal": {
+                "attachment": "center",
+                "offset": 0.0
+              },
+              "vertical": {
+                "attachment": "center",
+                "offset": -25.0
+              }
+            },
+            "size-constraints": {
+              "width-constraints": {
+                "sizing-mode": "fixed",
+                "value": 430.0
+              },
+              "height-constraints": {
+                "sizing-mode": "fixed",
+                "value": 4.0
+              }
+            },
+            "vector-content": "footer_separator.svg"
+          }
+        ]
+      }
+    }
+  },
+  "previews": [
+    {
+      "design": "Footer",
+      "size": {
+        "width": 430.0,
+        "height": 54.0
+      }
+    }
+  ],
+  "adin-component-search-paths": [],
+  "image-search-paths": [],
+  "vector-search-paths": []
+}

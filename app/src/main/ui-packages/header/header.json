@@ -1,0 +1,165 @@
+{
+  "name": "header",
+  "version": 33,
+  "source-key": {
+    "type": "figma",
+    "file": "nosByj6i2Xg6s3qmGLrKUh",
+    "node": "138:104",
+    "version": "5976094160",
+    "component-id": "8623ed90617a9510b508ca07ae26c6b6f4f13281"
+  },
+  "default": "Header",
+  "design": {
+    "atoms": [
+      {
+        "type": "group",
+        "id": "top_level",
+        "root": "true"
+      },
+      {
+        "type": "vector",
+        "id": "SeparatorBot"
+      },
+      {
+        "type": "text",
+        "id": "TeleComandaa"
+      },
+      {
+        "type": "vector",
+        "id": "ArrowBack"
+      }
+    ],
+    "modes": {
+      "Header": {
+        "rules": [
+          {
+            "id": "top_level",
+            "tap-handler": "$onClick",
+            "is-structured": false,
+            "children": [
+              "SeparatorBot",
+              "TeleComandaa",
+              "ArrowBack"
+            ],
+            "clip-content": false
+          },
+          {
+            "id": "SeparatorBot",
+            "margin": {
+              "top": 56.0
+            },
+            "size-constraints": {
+              "width-constraints": {
+                "sizing-mode": "proportional",
+                "value": 1.0
+              },
+              "height-constraints": {
+                "sizing-mode": "proportional",
+                "value": 1.0
+              }
+            },
+            "vector-content": "separator_bot.svg"
+          },
+          {
+            "id": "TeleComandaa",
+            "margin": {
+              "left": 91.0,
+              "top": 4.0,
+              "right": 69.0,
+              "bottom": 9.0
+            },
+            "size-constraints": {
+              "width-constraints": {
+                "sizing-mode": "proportional",
+                "value": 1.0
+              },
+              "height-constraints": {
+                "sizing-mode": "proportional",
+                "value": 1.0
+              }
+            },
+            "font-weight": 600.0,
+            "annotated-text-content": {
+              "text": "TeleComandaa",
+              "annotated-text-span-list": [
+                {
+                  "span-start": 0,
+                  "span-length": 4,
+                  "annotated-text-style": {
+                    "text-size": 40.0,
+                    "color": {
+                      "alpha": 1.0,
+                      "hue": 198.00000000000003,
+                      "saturation": 0.5405405405405406,
+                      "value": 0.8705882352941177
+                    }
+                  }
+                },
+                {
+                  "span-start": 4,
+                  "span-length": 8,
+                  "annotated-text-style": {
+                    "text-size": 40.0,
+                    "color": {
+                      "alpha": 1.0,
+                      "hue": 0.0,
+                      "saturation": 0.0,
+                      "value": 1.0
+                    }
+                  }
+                }
+              ]
+            },
+            "overflow": "visible",
+            "text-align": "left",
+            "text-size": 40.0,
+            "line-height": 1.171875
+          },
+          {
+            "id": "ArrowBack",
+            "alignment": {
+              "horizontal": {
+                "attachment": "center",
+                "offset": -174.0
+              },
+              "vertical": {
+                "attachment": "center",
+                "offset": -1.8891983032226562
+              }
+            },
+            "size-constraints": {
+              "width-constraints": {
+                "sizing-mode": "fixed",
+                "value": 32.22184753417969
+              },
+              "height-constraints": {
+                "sizing-mode": "fixed",
+                "value": 40.0
+              }
+            },
+            "vector-content": "arrow_back.svg"
+          }
+        ]
+      }
+    }
+  },
+  "parameters": {
+    "onClick": {
+      "data-type": "void-callback",
+      "required": false,
+      "description": ""
+    }
+  },
+  "previews": [
+    {
+      "design": "Header",
+      "size": {
+        "width": 430.0,
+        "height": 60.0
+      }
+    }
+  ],
+  "adin-component-search-paths": [],
+  "image-search-paths": [],
+  "vector-search-paths": []
+}

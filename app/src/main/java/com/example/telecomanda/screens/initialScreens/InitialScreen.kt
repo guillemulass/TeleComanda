@@ -16,6 +16,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import com.example.telecomanda.botonbig32sp.BotonBig32sp
+import com.example.telecomanda.footer.Footer
 import com.example.telecomanda.logo.Logo
 import com.example.telecomanda.mainheader.MainHeader
 import com.example.telecomanda.routes.Routes
@@ -39,9 +40,7 @@ fun InitialScreen(
                 .padding(top = 35.dp)
         ) {
 
-            Box (
-                Modifier
-            ){
+            Box{
                 MainHeader(
                     modifier = Modifier
                         .width(430.dp)
@@ -53,11 +52,13 @@ fun InitialScreen(
 
             Logo(
                 modifier = Modifier
-                .width(199.dp)
-                .height(232.dp)
+                    .width(199.dp)
+                    .height(232.dp)
             )
 
             Spacer(modifier = Modifier.height(32.dp))
+
+            //////
 
             BotonBig32sp(
                 onClick = {
@@ -74,6 +75,22 @@ fun InitialScreen(
                 },
                 text = "Cliente"
             )
+
+            /////
+
+        }
+        Column(
+            horizontalAlignment = Alignment.CenterHorizontally,
+            verticalArrangement = Arrangement.Bottom,
+            modifier = Modifier
+                .fillMaxSize()
+        ) {
+            Footer(
+                modifier = Modifier
+                    .width(430.dp)
+                    .height(54.dp)
+            )
+            Spacer(modifier = Modifier.height(16.dp))
         }
     }
 }

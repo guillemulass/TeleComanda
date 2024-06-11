@@ -109,7 +109,7 @@ class MainActivity : ComponentActivity() {
                             val tableNumber = backStackEntry.arguments?.getString("tableNumber") ?: ""
                             val restaurantName = backStackEntry.arguments?.getString("restaurantName") ?: ""
                             val tableCode = backStackEntry.arguments?.getString("tableCode") ?: ""
-                            ClientOrderScreen(tableNumber, restaurantName, tableCode)
+                            ClientOrderScreen(navController, tableNumber, restaurantName, tableCode)
                         }
 
                         composable(Routes.RegisterScreenRoute.route) {
