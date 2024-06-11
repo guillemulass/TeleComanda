@@ -7,7 +7,11 @@ color purple_700
 color teal_200
 color teal_700
 color white
+drawable boton_big24sp_boton_big24sp_background
 drawable boton_big32sp_boton_big32sp_background
+drawable footer_footer_separator
+drawable header_arrow_back
+drawable header_separator_bot
 drawable ic_launcher_background
 drawable ic_launcher_foreground
 drawable logo_logo_img

@@ -58,8 +58,6 @@ fun InitialScreen(
 
             Spacer(modifier = Modifier.height(32.dp))
 
-            //////
-
             BotonBig32sp(
                 onClick = {
                     navController.navigate(Routes.WorkerSelectionScreenRoute.route)
@@ -76,7 +74,6 @@ fun InitialScreen(
                 text = "Cliente"
             )
 
-            /////
 
         }
         Column(

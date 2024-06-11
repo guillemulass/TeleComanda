@@ -99,6 +99,7 @@ dimen notification_subtext_size
 dimen notification_top_pad
 dimen notification_top_pad_large_text
 drawable abc_vector_test
+drawable boton_big24sp_boton_big24sp_background
 drawable boton_big32sp_boton_big32sp_background
 drawable common_full_open_on_phone
 drawable common_google_signin_btn_icon_dark
@@ -119,8 +120,11 @@ drawable common_google_signin_btn_text_light
 drawable common_google_signin_btn_text_light_focused
 drawable common_google_signin_btn_text_light_normal
 drawable common_google_signin_btn_text_light_normal_background
+drawable footer_footer_separator
 drawable googleg_disabled_color_18
 drawable googleg_standard_color_18
+drawable header_arrow_back
+drawable header_separator_bot
 drawable ic_call_answer
 drawable ic_call_answer_low
 drawable ic_call_answer_video

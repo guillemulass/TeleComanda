@@ -4,16 +4,32 @@
         "source": "C:\\Users\\mrano\\.gradle\\daemon\\8.2\\com.example.telecomanda.app-main-66:\\mipmap-hdpi\\ic_launcher.webp"
     },
     {
+        "merged": "C:\\Users\\mrano\\.gradle\\daemon\\8.2\\com.example.telecomanda.app-merged_res-64:\\drawable-nodpi_main_header_main_header_separator_bot.xml.flat",
+        "source": "C:\\Users\\mrano\\.gradle\\daemon\\8.2\\com.example.telecomanda.app-relay-60:\\drawable-nodpi\\main_header_main_header_separator_bot.xml"
+    },
+    {
+        "merged": "com.example.telecomanda.app-merged_res-64:/drawable-nodpi_header_arrow_back.xml.flat",
+        "source": "com.example.telecomanda.app-relay-60:/drawable-nodpi/header_arrow_back.xml"
+    },
+    {
         "merged": "C:\\Users\\mrano\\.gradle\\daemon\\8.2\\com.example.telecomanda.app-merged_res-64:\\mipmap-xxxhdpi_ic_launcher.webp.flat",
         "source": "C:\\Users\\mrano\\.gradle\\daemon\\8.2\\com.example.telecomanda.app-main-66:\\mipmap-xxxhdpi\\ic_launcher.webp"
     },
     {
-        "merged": "com.example.telecomanda.app-merged_res-64:/drawable-nodpi_boton_big32sp_boton_big32sp_background.xml.flat",
-        "source": "com.example.telecomanda.app-relay-60:/drawable-nodpi/boton_big32sp_boton_big32sp_background.xml"
+        "merged": "C:\\Users\\mrano\\.gradle\\daemon\\8.2\\com.example.telecomanda.app-merged_res-64:\\drawable-nodpi_logo_logo_img.png.flat",
+        "source": "C:\\Users\\mrano\\.gradle\\daemon\\8.2\\com.example.telecomanda.app-relay-60:\\drawable-nodpi\\logo_logo_img.png"
     },
     {
         "merged": "C:\\Users\\mrano\\.gradle\\daemon\\8.2\\com.example.telecomanda.app-merged_res-64:\\mipmap-xxhdpi_ic_launcher_round.webp.flat",
         "source": "C:\\Users\\mrano\\.gradle\\daemon\\8.2\\com.example.telecomanda.app-main-66:\\mipmap-xxhdpi\\ic_launcher_round.webp"
+    },
+    {
+        "merged": "com.example.telecomanda.app-merged_res-64:/drawable-nodpi_header_separator_bot.xml.flat",
+        "source": "com.example.telecomanda.app-relay-60:/drawable-nodpi/header_separator_bot.xml"
+    },
+    {
+        "merged": "C:\\Users\\mrano\\.gradle\\daemon\\8.2\\com.example.telecomanda.app-merged_res-64:\\drawable-nodpi_boton_big32sp_boton_big32sp_background.xml.flat",
+        "source": "C:\\Users\\mrano\\.gradle\\daemon\\8.2\\com.example.telecomanda.app-relay-60:\\drawable-nodpi\\boton_big32sp_boton_big32sp_background.xml"
     },
     {
         "merged": "C:\\Users\\mrano\\.gradle\\daemon\\8.2\\com.example.telecomanda.app-merged_res-64:\\mipmap-anydpi-v26_ic_launcher.xml.flat",
@@ -24,8 +40,8 @@
         "source": "C:\\Users\\mrano\\.gradle\\daemon\\8.2\\com.example.telecomanda.app-main-66:\\xml\\backup_rules.xml"
     },
     {
-        "merged": "com.example.telecomanda.app-merged_res-64:/drawable-nodpi_logo_logo_img.png.flat",
-        "source": "com.example.telecomanda.app-relay-60:/drawable-nodpi/logo_logo_img.png"
+        "merged": "C:\\Users\\mrano\\.gradle\\daemon\\8.2\\com.example.telecomanda.app-merged_res-64:\\drawable-nodpi_boton_big24sp_boton_big24sp_background.xml.flat",
+        "source": "C:\\Users\\mrano\\.gradle\\daemon\\8.2\\com.example.telecomanda.app-relay-60:\\drawable-nodpi\\boton_big24sp_boton_big24sp_background.xml"
     },
     {
         "merged": "C:\\Users\\mrano\\.gradle\\daemon\\8.2\\com.example.telecomanda.app-merged_res-64:\\mipmap-anydpi-v26_ic_launcher_round.xml.flat",
@@ -34,6 +50,10 @@
     {
         "merged": "C:\\Users\\mrano\\.gradle\\daemon\\8.2\\com.example.telecomanda.app-merged_res-64:\\mipmap-hdpi_ic_launcher_round.webp.flat",
         "source": "C:\\Users\\mrano\\.gradle\\daemon\\8.2\\com.example.telecomanda.app-main-66:\\mipmap-hdpi\\ic_launcher_round.webp"
+    },
+    {
+        "merged": "C:\\Users\\mrano\\.gradle\\daemon\\8.2\\com.example.telecomanda.app-merged_res-64:\\drawable-nodpi_footer_footer_separator.xml.flat",
+        "source": "C:\\Users\\mrano\\.gradle\\daemon\\8.2\\com.example.telecomanda.app-relay-60:\\drawable-nodpi\\footer_footer_separator.xml"
     },
     {
         "merged": "C:\\Users\\mrano\\.gradle\\daemon\\8.2\\com.example.telecomanda.app-merged_res-64:\\mipmap-xxhdpi_ic_launcher.webp.flat",
@@ -50,10 +70,6 @@
     {
         "merged": "C:\\Users\\mrano\\.gradle\\daemon\\8.2\\com.example.telecomanda.app-merged_res-64:\\mipmap-xhdpi_ic_launcher.webp.flat",
         "source": "C:\\Users\\mrano\\.gradle\\daemon\\8.2\\com.example.telecomanda.app-main-66:\\mipmap-xhdpi\\ic_launcher.webp"
-    },
-    {
-        "merged": "com.example.telecomanda.app-merged_res-64:/drawable-nodpi_main_header_main_header_separator_bot.xml.flat",
-        "source": "com.example.telecomanda.app-relay-60:/drawable-nodpi/main_header_main_header_separator_bot.xml"
     },
     {
         "merged": "C:\\Users\\mrano\\.gradle\\daemon\\8.2\\com.example.telecomanda.app-merged_res-64:\\xml_data_extraction_rules.xml.flat",

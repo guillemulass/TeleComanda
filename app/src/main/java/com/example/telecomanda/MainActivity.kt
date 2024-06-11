@@ -31,6 +31,7 @@ import com.example.telecomanda.screens.employeeScreens.EmployeeMenuScreen
 import com.example.telecomanda.screens.employeeScreens.EmployeeMenuViewModel
 import com.example.telecomanda.screens.employeeScreens.EmployeeTableSelectionScreen
 import com.example.telecomanda.screens.initialScreens.InitialScreen
+import com.example.telecomanda.screens.initialScreens.RegisterSelectionScreen
 import com.example.telecomanda.screens.initialScreens.WorkerSelectionScreen
 import com.example.telecomanda.screens.logIn.LogInAdministrator
 import com.example.telecomanda.screens.logIn.LogInEmployee
@@ -86,18 +87,18 @@ class MainActivity : ComponentActivity() {
                         startDestination = Routes.InitialScreenRoute.route
                     ) {
 
-
-
                         composable(Routes.InitialScreenRoute.route) {
                             InitialScreen(
                                 navController
                             )
                         }
+
                         composable(Routes.WorkerSelectionScreenRoute.route) {
                             WorkerSelectionScreen(
                                 navController
                             )
                         }
+
                         composable(Routes.TableCodeInputScreenRoute.route) {
                             TableCodeInputScreen(
                                 navController,
@@ -110,6 +111,12 @@ class MainActivity : ComponentActivity() {
                             val restaurantName = backStackEntry.arguments?.getString("restaurantName") ?: ""
                             val tableCode = backStackEntry.arguments?.getString("tableCode") ?: ""
                             ClientOrderScreen(navController, tableNumber, restaurantName, tableCode)
+                        }
+
+                        composable(Routes.RegisterSelectionScreenRoute.route) {
+                            RegisterSelectionScreen(
+                                navController,
+                            )
                         }
 
                         composable(Routes.RegisterScreenRoute.route) {

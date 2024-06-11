@@ -6,6 +6,7 @@ sealed class Routes(val route : String) {
     object WorkerSelectionScreenRoute: Routes("WorkerSelectionScreen")
     object TableCodeInputScreenRoute: Routes("TableCodeInputScreen")
     object ClientOrderScreenRoute: Routes("ClientOrderScreen")
+    object RegisterSelectionScreenRoute: Routes("RegisterSelectionScreen")
 
     object AddToMenuScreenRoute: Routes("AddToMenu")
     object DeleteFromMenuScreenRoute: Routes("DeleteFromMenuScreen")
