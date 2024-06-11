@@ -47,7 +47,7 @@ fun MainHeader(modifier: Modifier = Modifier) {
                 alignment = Alignment.Center,
                 offset = DpOffset(
                     x = 0.0.dp,
-                    y = -2.0.dp
+                    y = -0.5.dp
                 )
             )
         )
@@ -83,7 +83,8 @@ fun MainHeaderTeleComanda(modifier: Modifier = Modifier) {
                         red = 102,
                         green = 186,
                         blue = 222
-                    )
+                    ),
+                    fontSize = 40.0.sp
                 )
             ) {
                 append("Tele")
@@ -95,13 +96,14 @@ fun MainHeaderTeleComanda(modifier: Modifier = Modifier) {
                         red = 255,
                         green = 255,
                         blue = 255
-                    )
+                    ),
+                    fontSize = 40.0.sp
                 )
             ) {
                 append("Comanda")
             }
         },
-        fontSize = 48.0.sp,
+        fontSize = 40.0.sp,
         height = 1.171875.em,
         textAlign = TextAlign.Left,
         fontWeight = FontWeight(600.0.toInt()),

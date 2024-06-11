@@ -5,7 +5,7 @@
     "type": "figma",
     "file": "nosByj6i2Xg6s3qmGLrKUh",
     "node": "138:103",
-    "version": "5975718149",
+    "version": "5976229562",
     "component-id": "d7c7bd21a54685f8adb43f81a27af466c9194f63"
   },
   "default": "MainHeader",
@@ -70,7 +70,7 @@
               },
               "vertical": {
                 "attachment": "center",
-                "offset": -2.0
+                "offset": -0.5
               }
             },
             "font-weight": 600.0,
@@ -81,6 +81,7 @@
                   "span-start": 0,
                   "span-length": 4,
                   "annotated-text-style": {
+                    "text-size": 40.0,
                     "color": {
                       "alpha": 1.0,
                       "hue": 198.00000000000003,
@@ -93,6 +94,7 @@
                   "span-start": 4,
                   "span-length": 7,
                   "annotated-text-style": {
+                    "text-size": 40.0,
                     "color": {
                       "alpha": 1.0,
                       "hue": 0.0,
@@ -105,7 +107,7 @@
             },
             "overflow": "visible",
             "text-align": "left",
-            "text-size": 48.0,
+            "text-size": 40.0,
             "line-height": 1.171875
           }
         ]

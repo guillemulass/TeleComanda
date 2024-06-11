@@ -1,0 +1,104 @@
+{
+  "name": "table_number_text",
+  "version": 33,
+  "source-key": {
+    "type": "figma",
+    "file": "nosByj6i2Xg6s3qmGLrKUh",
+    "node": "138:112",
+    "version": "5976229562",
+    "component-id": "fe653f40661a1eff5e8d2e7b5dc0534c4b163c8f"
+  },
+  "default": "TableNumberText",
+  "design": {
+    "atoms": [
+      {
+        "type": "group",
+        "id": "top_level",
+        "root": "true"
+      },
+      {
+        "type": "text",
+        "id": "Numero de Mesas"
+      },
+      {
+        "type": "text",
+        "id": "27"
+      }
+    ],
+    "modes": {
+      "TableNumberText": {
+        "rules": [
+          {
+            "id": "top_level",
+            "size-constraints": {
+              "width-constraints": {
+                "sizing-mode": "shrink"
+              },
+              "height-constraints": {
+                "sizing-mode": "shrink"
+              }
+            },
+            "children": [
+              "Numero de Mesas",
+              "27"
+            ],
+            "item-spacing": 8.0,
+            "clip-content": false
+          },
+          {
+            "id": "Numero de Mesas",
+            "font-weight": 600.0,
+            "color": {
+              "alpha": 1.0,
+              "hue": 0.0,
+              "saturation": 0.0,
+              "value": 1.0
+            },
+            "text-content": "Numero de Mesas",
+            "overflow": "visible",
+            "text-align-vertical": "center",
+            "text-size": 32.0,
+            "line-height": 1.171875
+          },
+          {
+            "id": "27",
+            "font-weight": 600.0,
+            "color": {
+              "alpha": 1.0,
+              "hue": 198.00000000000003,
+              "saturation": 0.5405405405405406,
+              "value": 0.8705882352941177
+            },
+            "text-content": "$tableQuantityText",
+            "overflow": "visible",
+            "text-align-vertical": "center",
+            "text-size": 32.0,
+            "line-height": 1.171875
+          }
+        ]
+      }
+    }
+  },
+  "parameters": {
+    "tableQuantityText": {
+      "data-type": "text",
+      "required": false,
+      "description": ""
+    }
+  },
+  "previews": [
+    {
+      "design": "TableNumberText",
+      "size": {
+        "width": 262.0,
+        "height": 84.0
+      },
+      "parameters": {
+        "tableQuantityText": "27"
+      }
+    }
+  ],
+  "adin-component-search-paths": [],
+  "image-search-paths": [],
+  "vector-search-paths": []
+}
