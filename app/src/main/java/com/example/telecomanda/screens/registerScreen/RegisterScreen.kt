@@ -130,7 +130,7 @@ fun RegisterScreen(
                             registerScreenViewModel.changePassw(passwordConfirmation)
                             warningText = ""
                             registerScreenViewModel.registerRestaurant(
-                                onSuccess = { navController.navigate(Routes.ConfigurationScreenRoute.route) },
+                                onSuccess = { navController.navigate(Routes.AdminWorkScreenRoute.route) },
                                 onFailure = { Toast.makeText(context, "Error al crear la cuenta, intentelo de nuevo", Toast.LENGTH_SHORT).show() }
                             )
                         } else {
