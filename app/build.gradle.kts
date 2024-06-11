@@ -2,7 +2,7 @@ plugins {
     id("com.android.application")
     id("org.jetbrains.kotlin.android")
     id("kotlin-android")
-    id("com.google.relay") version "0.3.02"
+    id("com.google.relay") version "0.3.12"
     id("com.google.gms.google-services")
 }
 
