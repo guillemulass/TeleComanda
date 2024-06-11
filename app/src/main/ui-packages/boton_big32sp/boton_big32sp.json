@@ -1,0 +1,122 @@
+{
+  "name": "boton_big32sp",
+  "version": 33,
+  "source-key": {
+    "type": "figma",
+    "file": "nosByj6i2Xg6s3qmGLrKUh",
+    "node": "138:106",
+    "version": "5974430021",
+    "component-id": "6665e0fd533c1d2761961f7d0f8d70627e3d9e93"
+  },
+  "default": "BotonBig32sp",
+  "design": {
+    "atoms": [
+      {
+        "type": "group",
+        "id": "top_level",
+        "root": "true"
+      },
+      {
+        "type": "vector",
+        "id": "BotonBig32spBackground"
+      },
+      {
+        "type": "text",
+        "id": "BotonBig32spText"
+      }
+    ],
+    "modes": {
+      "BotonBig32sp": {
+        "rules": [
+          {
+            "id": "top_level",
+            "tap-handler": "$OnClick",
+            "is-structured": false,
+            "children": [
+              "BotonBig32spBackground",
+              "BotonBig32spText"
+            ],
+            "clip-content": false
+          },
+          {
+            "id": "BotonBig32spBackground",
+            "border-radius": 16.0,
+            "alignment": {
+              "horizontal": {
+                "attachment": "center",
+                "offset": 0.0
+              },
+              "vertical": {
+                "attachment": "center",
+                "offset": 0.0
+              }
+            },
+            "size-constraints": {
+              "width-constraints": {
+                "sizing-mode": "fixed",
+                "value": 266.0
+              },
+              "height-constraints": {
+                "sizing-mode": "fixed",
+                "value": 53.0
+              }
+            },
+            "vector-content": "boton_big32sp_background.svg"
+          },
+          {
+            "id": "BotonBig32spText",
+            "alignment": {
+              "horizontal": {
+                "attachment": "center",
+                "offset": 0.0
+              },
+              "vertical": {
+                "attachment": "center",
+                "offset": -0.5
+              }
+            },
+            "font-weight": 700.0,
+            "color": {
+              "alpha": 1.0,
+              "hue": 0.0,
+              "saturation": 0.0,
+              "value": 1.0
+            },
+            "text-content": "$Text",
+            "overflow": "visible",
+            "text-align": "left",
+            "text-size": 32.0,
+            "line-height": 1.171875
+          }
+        ]
+      }
+    }
+  },
+  "parameters": {
+    "OnClick": {
+      "data-type": "void-callback",
+      "required": false,
+      "description": ""
+    },
+    "Text": {
+      "data-type": "text",
+      "required": false,
+      "description": ""
+    }
+  },
+  "previews": [
+    {
+      "design": "BotonBig32sp",
+      "size": {
+        "width": 266.0,
+        "height": 53.0
+      },
+      "parameters": {
+        "Text": "Cliente"
+      }
+    }
+  ],
+  "adin-component-search-paths": [],
+  "image-search-paths": [],
+  "vector-search-paths": []
+}

@@ -1,0 +1,127 @@
+{
+  "name": "main_header",
+  "version": 33,
+  "source-key": {
+    "type": "figma",
+    "file": "nosByj6i2Xg6s3qmGLrKUh",
+    "node": "138:103",
+    "version": "5974430021",
+    "component-id": "d7c7bd21a54685f8adb43f81a27af466c9194f63"
+  },
+  "default": "MainHeader",
+  "design": {
+    "atoms": [
+      {
+        "type": "group",
+        "id": "top_level",
+        "root": "true"
+      },
+      {
+        "type": "vector",
+        "id": "MainHeaderSeparatorBot"
+      },
+      {
+        "type": "text",
+        "id": "MainHeaderTeleComanda"
+      }
+    ],
+    "modes": {
+      "MainHeader": {
+        "rules": [
+          {
+            "id": "top_level",
+            "is-structured": false,
+            "children": [
+              "MainHeaderSeparatorBot",
+              "MainHeaderTeleComanda"
+            ],
+            "clip-content": false
+          },
+          {
+            "id": "MainHeaderSeparatorBot",
+            "alignment": {
+              "horizontal": {
+                "attachment": "center",
+                "offset": 0.0
+              },
+              "vertical": {
+                "attachment": "center",
+                "offset": 28.0
+              }
+            },
+            "size-constraints": {
+              "width-constraints": {
+                "sizing-mode": "fixed",
+                "value": 430.0
+              },
+              "height-constraints": {
+                "sizing-mode": "fixed",
+                "value": 4.0
+              }
+            },
+            "vector-content": "main_header_separator_bot.svg"
+          },
+          {
+            "id": "MainHeaderTeleComanda",
+            "alignment": {
+              "horizontal": {
+                "attachment": "center",
+                "offset": 0.0
+              },
+              "vertical": {
+                "attachment": "center",
+                "offset": -2.0
+              }
+            },
+            "font-weight": 600.0,
+            "annotated-text-content": {
+              "text": "TeleComanda",
+              "annotated-text-span-list": [
+                {
+                  "span-start": 0,
+                  "span-length": 4,
+                  "annotated-text-style": {
+                    "color": {
+                      "alpha": 1.0,
+                      "hue": 198.00000000000003,
+                      "saturation": 0.5405405405405406,
+                      "value": 0.8705882352941177
+                    }
+                  }
+                },
+                {
+                  "span-start": 4,
+                  "span-length": 7,
+                  "annotated-text-style": {
+                    "color": {
+                      "alpha": 1.0,
+                      "hue": 0.0,
+                      "saturation": 0.0,
+                      "value": 1.0
+                    }
+                  }
+                }
+              ]
+            },
+            "overflow": "visible",
+            "text-align": "left",
+            "text-size": 48.0,
+            "line-height": 1.171875
+          }
+        ]
+      }
+    }
+  },
+  "previews": [
+    {
+      "design": "MainHeader",
+      "size": {
+        "width": 430.0,
+        "height": 60.0
+      }
+    }
+  ],
+  "adin-component-search-paths": [],
+  "image-search-paths": [],
+  "vector-search-paths": []
+}
