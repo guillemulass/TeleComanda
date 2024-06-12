@@ -133,13 +133,6 @@ class ClientOrderViewModel : ViewModel() {
         updateCurrentOrderPrice()
     }
 
-    fun removeLastItemFromCurrentOrder() {
-        if (_currentOrderList.value.isNotEmpty()) {
-            _currentOrderList.value = _currentOrderList.value.dropLast(1)
-            updateCurrentOrderPrice()
-        }
-    }
-
     fun listenToOrderUpdates(tableNumber: Int, restaurantName: String) {
         val tableDocument = db.collection("restaurants").document(restaurantName)
             .collection("tables").document(tableNumber.toString())

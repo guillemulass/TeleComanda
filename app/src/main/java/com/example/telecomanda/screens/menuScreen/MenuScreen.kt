@@ -1,18 +1,37 @@
 package com.example.telecomanda.screens.menuScreen
 
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
-import androidx.compose.material3.*
-import androidx.compose.runtime.*
+import androidx.compose.material3.DropdownMenuItem
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.ExposedDropdownMenuBox
+import androidx.compose.material3.ExposedDropdownMenuDefaults
+import androidx.compose.material3.Text
+import androidx.compose.material3.TextField
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import coil.compose.rememberAsyncImagePainter
+import com.example.telecomanda.buttonsmallmenu.ButtonSmallMenu
 import com.example.telecomanda.dataClasses.Dish
 import com.example.telecomanda.dataClasses.Drink
 import com.example.telecomanda.enumClass.DishTypes
@@ -20,7 +39,6 @@ import com.example.telecomanda.enumClass.DrinkTypes
 import com.example.telecomanda.footer.Footer
 import com.example.telecomanda.header.Header
 import com.example.telecomanda.menuitemshow.MenuItemShow
-import com.example.telecomanda.smallbutton.SmallButton
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
@@ -38,6 +56,10 @@ fun MenuScreen(
     var selectedCategory by remember { mutableStateOf("Platos") }
     var selectedType by remember { mutableStateOf("") }
     var expanded by remember { mutableStateOf(false) }
+
+    val filteredDishes = dishList.filter { it.type.contains(selectedType, ignoreCase = true) }
+    val filteredDrinks = drinkList.filter { it.type.contains(selectedType, ignoreCase = true) }
+
 
     LaunchedEffect(Unit) {
         val userId = auth.currentUser?.uid
@@ -89,11 +111,13 @@ fun MenuScreen(
         ) {
 
             item {
+                Spacer(modifier = Modifier.height(8.dp))
                 LazyRow {
                     item {
-                        SmallButton(
+                        ButtonSmallMenu(
                             onClick = { selectedCategory = "Platos" },
-                            text = "Platos"
+                            text = "Platos",
+                            textColor = if (selectedCategory == "Platos") Color.White else Color.Gray
                         )
                     }
 
@@ -102,9 +126,10 @@ fun MenuScreen(
                     }
 
                     item {
-                        SmallButton(
+                        ButtonSmallMenu(
                             onClick = { selectedCategory = "Bebidas" },
-                            text = "Bebidas"
+                            text = "Bebidas",
+                            textColor = if (selectedCategory == "Bebidas") Color.White else Color.Gray
                         )
                     }
                 }
@@ -150,9 +175,7 @@ fun MenuScreen(
                 }
             }
 
-            val filteredDishes = dishList.filter { it.type.contains(selectedType, ignoreCase = true) }
-            val filteredDrinks = drinkList.filter { it.type.contains(selectedType, ignoreCase = true) }
-
+            
             if (selectedCategory == "Platos") {
                 items(filteredDishes) { dish ->
                     DishItem(dish)

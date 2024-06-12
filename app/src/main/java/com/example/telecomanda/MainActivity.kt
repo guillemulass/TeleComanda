@@ -9,6 +9,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Modifier
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
@@ -20,6 +21,7 @@ import com.example.telecomanda.screens.addOrder.AddOrderViewModel
 import com.example.telecomanda.screens.addOrder.TableSelectionScreen
 import com.example.telecomanda.screens.addToMenu.AddToMenu
 import com.example.telecomanda.screens.addToMenu.AddToMenuViewModel
+import com.example.telecomanda.screens.clientScreens.ClientMenuScreen
 import com.example.telecomanda.screens.clientScreens.ClientOrderScreen
 import com.example.telecomanda.screens.clientScreens.TableCodeInputScreen
 import com.example.telecomanda.screens.clientScreens.TableCodeInputViewModel
@@ -112,6 +114,19 @@ class MainActivity : ComponentActivity() {
                             val tableCode = backStackEntry.arguments?.getString("tableCode") ?: ""
                             ClientOrderScreen(navController, tableNumber, restaurantName, tableCode)
                         }
+
+
+
+
+                        composable("client_menu_screen/{restaurantName}") { backStackEntry ->
+                            val restaurantName = backStackEntry.arguments?.getString("restaurantName") ?: ""
+                            ClientMenuScreen(
+                                navController = navController,
+                                clientOrderViewModel = viewModel(),
+                                restaurantName = restaurantName
+                            )
+                        }
+
 
                         composable(Routes.RegisterSelectionScreenRoute.route) {
                             RegisterSelectionScreen(
