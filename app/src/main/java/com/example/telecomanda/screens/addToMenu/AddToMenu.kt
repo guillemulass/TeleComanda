@@ -5,7 +5,6 @@ package com.example.telecomanda.screens.addToMenu
 import android.net.Uri
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
-import androidx.compose.foundation.ScrollState
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -14,13 +13,13 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.lazy.LazyRow
-import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.grid.GridCells
+import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.text.KeyboardOptions
-import androidx.compose.foundation.verticalScroll
-import androidx.compose.material3.Button
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
@@ -38,16 +37,17 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import com.example.telecomanda.botonbig24sp.BotonBig24sp
-import com.example.telecomanda.botonbig32sp.BotonBig32sp
 import com.example.telecomanda.buttonmid.ButtonMid
 import com.example.telecomanda.buttonsmallmenu.ButtonSmallMenu
-import com.example.telecomanda.enumClass.*
+import com.example.telecomanda.enumClass.DishTypes
+import com.example.telecomanda.enumClass.DrinkTypes
 import com.example.telecomanda.footer.Footer
 import com.example.telecomanda.header.Header
 import com.example.telecomanda.logo.Logo
 import com.google.accompanist.permissions.ExperimentalPermissionsApi
 import com.google.accompanist.permissions.isGranted
 import com.google.accompanist.permissions.rememberPermissionState
+
 
 @Composable
 fun AddToMenu(
@@ -63,77 +63,64 @@ fun AddToMenu(
             .fillMaxSize()
             .background(Color(0xFF161618))
     ) {
-
-        Box(
+        // Header and Logo are fixed at the top
+        Column(
             modifier = Modifier
-                .background(Color(0xFF161618))
-                .padding(top = 35.dp)
-
-        ){
-
+                .fillMaxWidth()
+                .padding(top = 35.dp),
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
             Header(
                 modifier = Modifier
                     .width(450.dp)
                     .height(60.dp),
-                onClick = {navController.popBackStack()}
+                onClick = { navController.popBackStack() }
             )
 
-            Column(
-                horizontalAlignment = Alignment.CenterHorizontally,
-                verticalArrangement = Arrangement.Top,
+            Spacer(modifier = Modifier.height(32.dp))
+
+            Logo(
                 modifier = Modifier
-                    .fillMaxSize()
-                    .verticalScroll(ScrollState(0))
-                    .padding(top = 35.dp)
-            ) {
-                Spacer(modifier = Modifier.height(32.dp))
-
-                Logo(
-                    modifier = Modifier
-                        .width(136.dp)
-                        .height(159.dp)
-                )
-            }
-
+                    .width(136.dp)
+                    .height(159.dp)
+            )
         }
 
-        Column(
+        LazyColumn(
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.Top,
             modifier = Modifier
                 .fillMaxSize()
-                .verticalScroll(ScrollState(0))
-                .padding(top = 270.dp)
+                .padding(top = 300.dp, bottom = 70.dp) // Adjust padding to account for fixed elements
         ) {
+            item {
 
-            ButtonMid(
-                onClick = {
-                    addToMenuViewModel.drinkOrDishAlternator()
-                },
-                text = drinkOrDishText
-            )
-
-
-            Spacer(modifier = Modifier.height(16.dp))
-
-            if (isDrink){
-                TextFieldsDrink(
-                    addToMenuViewModel
-                )
-            } else
-                TextFieldsDish(
-                    addToMenuViewModel
+                ButtonMid(
+                    onClick = {
+                        addToMenuViewModel.drinkOrDishAlternator()
+                    },
+                    text = drinkOrDishText
                 )
 
-            Spacer(modifier = Modifier.height(16.dp))
+                Spacer(modifier = Modifier.height(16.dp))
 
-            if (stateText.isNotEmpty()) {
-                Text(text = stateText, color = Color.Red)
+                if (isDrink) {
+                    TextFieldsDrink(addToMenuViewModel)
+                } else {
+                    TextFieldsDish(addToMenuViewModel)
+                }
+
+                Spacer(modifier = Modifier.height(16.dp))
+
+                if (stateText.isNotEmpty()) {
+                    Text(text = stateText, color = Color.Red)
+                }
+
+                Spacer(modifier = Modifier.height(58.dp))
             }
-
-            Spacer(modifier = Modifier.height(58.dp))
-
         }
+
+        // Footer fixed at the bottom
         Column(
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.Bottom,
@@ -182,18 +169,25 @@ fun TextFieldsDrink(
 
     Spacer(modifier = Modifier.height(16.dp))
 
-    LazyRow {
-        items(addToMenuViewModel.drinkTypesArray) { drinkType ->
+    LazyVerticalGrid(
+        columns = GridCells.Fixed(2),
+        modifier = Modifier
+            .fillMaxWidth()
+            .heightIn(max = 200.dp)
+    ) {
+        items(addToMenuViewModel.drinkTypesArray.size) { index ->
+            val drinkType = addToMenuViewModel.drinkTypesArray[index]
             Spacer(modifier = Modifier.width(8.dp))
             ButtonSmallMenu(
                 onClick = {
                     lastSelectedDrinkType = drinkType
                 },
                 text = drinkType.toString(),
-                textColor = if (drinkType == lastSelectedDrinkType) Color.White else Color(0xFF161618)
+                textColor = if (drinkType == lastSelectedDrinkType) Color.White else Color(0xFF161618),
             )
         }
     }
+
 
     Spacer(modifier = Modifier.height(16.dp))
 
@@ -214,12 +208,11 @@ fun TextFieldsDrink(
         text = "Seleccionar Imagen"
     )
 
-
     imageUri?.let {
         Spacer(modifier = Modifier.height(16.dp))
         Text(
             text = "Imagen seleccionada: ${it.path}",
-            style = TextStyle(color = Color.White, fontSize = 32.sp)
+            style = TextStyle(color = Color.White, fontSize = 24.sp)
         )
     }
 
@@ -234,13 +227,12 @@ fun TextFieldsDrink(
         },
         text = "Añadir Bebida"
     )
-
 }
 
 @Composable
 fun TextFieldsDish(
     addToMenuViewModel: AddToMenuViewModel
-){
+) {
     var name by remember { mutableStateOf("") }
     var price by remember { mutableStateOf("") }
     var lastSelectedDishType by remember { mutableStateOf(DishTypes.Segundo) }
@@ -250,7 +242,7 @@ fun TextFieldsDish(
 
     TextField(
         value = name,
-        onValueChange = { name = it},
+        onValueChange = { name = it },
         label = { Text("Nombre") },
     )
 
@@ -275,7 +267,7 @@ fun TextFieldsDish(
             }
             ingredientTexts = List(ingredientsNumber.toInt()) { "" }
         },
-        label = { Text("Numero de Ingredientes") },
+        label = { Text("Número de Ingredientes") },
         keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number)
     )
 
@@ -297,8 +289,14 @@ fun TextFieldsDish(
 
     Spacer(modifier = Modifier.height(16.dp))
 
-    LazyRow {
-        items(addToMenuViewModel.dishTypesArray) { dishType ->
+    LazyVerticalGrid(
+        columns = GridCells.Fixed(3),
+        modifier = Modifier
+            .fillMaxWidth()
+            .heightIn(max = 200.dp)  // Adjust height as needed to avoid infinite height issue
+    ) {
+        items(addToMenuViewModel.dishTypesArray.size) { index ->
+            val dishType = addToMenuViewModel.dishTypesArray[index]
             Spacer(modifier = Modifier.width(8.dp))
             ButtonSmallMenu(
                 onClick = {
@@ -325,10 +323,12 @@ fun TextFieldsDish(
         text = "Seleccionar Imagen"
     )
 
-
     imageUri?.let {
         Spacer(modifier = Modifier.height(16.dp))
-        Text(text = "Imagen seleccionada: ${it.path}")
+        Text(
+            text = "Imagen seleccionada: ${it.path}",
+            style = TextStyle(color = Color.White, fontSize = 32.sp)
+        )
     }
 
     Spacer(modifier = Modifier.height(16.dp))
@@ -345,4 +345,7 @@ fun TextFieldsDish(
         text = "Añadir Plato"
     )
 }
+
+
+
 

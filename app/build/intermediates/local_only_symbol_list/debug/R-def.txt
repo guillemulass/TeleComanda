@@ -11,6 +11,7 @@ drawable boton_big24sp_boton_big24sp_background
 drawable boton_big32sp_boton_big32sp_background
 drawable button_mid_rectangle_2
 drawable button_small_menu_rectangle_2
+drawable delete_item_card_delete
 drawable footer_footer_separator
 drawable header_arrow_back
 drawable header_separator_bot

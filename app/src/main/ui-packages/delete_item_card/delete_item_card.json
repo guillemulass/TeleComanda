@@ -1,0 +1,165 @@
+{
+  "name": "delete_item_card",
+  "version": 33,
+  "source-key": {
+    "type": "figma",
+    "file": "nosByj6i2Xg6s3qmGLrKUh",
+    "node": "255:2",
+    "version": "5984898627",
+    "component-id": "49b051ea89ab6933a09717abf02b680bb9ec6fe3"
+  },
+  "default": "DeleteItemCard",
+  "design": {
+    "atoms": [
+      {
+        "type": "group",
+        "id": "top_level",
+        "root": "true"
+      },
+      {
+        "type": "image",
+        "id": "Delete"
+      },
+      {
+        "type": "text",
+        "id": "Nombre"
+      },
+      {
+        "type": "text",
+        "id": "Precio"
+      }
+    ],
+    "modes": {
+      "DeleteItemCard": {
+        "rules": [
+          {
+            "id": "top_level",
+            "border-radius": 16.0,
+            "is-structured": false,
+            "children": [
+              "Delete",
+              "Nombre",
+              "Precio"
+            ],
+            "background-color": {
+              "alpha": 1.0,
+              "hue": 198.00000000000003,
+              "saturation": 0.5405405405405406,
+              "value": 0.8705882352941177
+            },
+            "clip-content": false
+          },
+          {
+            "id": "Delete",
+            "alignment": {
+              "horizontal": {
+                "attachment": "center",
+                "offset": 0.0
+              },
+              "vertical": {
+                "attachment": "center",
+                "offset": 53.0
+              }
+            },
+            "tap-handler": "$onClickDelete",
+            "size-constraints": {
+              "width-constraints": {
+                "sizing-mode": "fixed",
+                "value": 63.0
+              },
+              "height-constraints": {
+                "sizing-mode": "fixed",
+                "value": 63.0
+              }
+            },
+            "image-content": "delete.png",
+            "scale": "contain"
+          },
+          {
+            "id": "Nombre",
+            "alignment": {
+              "horizontal": {
+                "attachment": "center",
+                "offset": 0.0
+              },
+              "vertical": {
+                "attachment": "center",
+                "offset": -70.5
+              }
+            },
+            "font-weight": 600.0,
+            "color": {
+              "alpha": 1.0,
+              "hue": 0.0,
+              "saturation": 0.0,
+              "value": 1.0
+            },
+            "text-content": "$ItemName",
+            "overflow": "visible",
+            "text-align": "left",
+            "text-size": 24.0,
+            "line-height": 1.171875
+          },
+          {
+            "id": "Precio",
+            "alignment": {
+              "horizontal": {
+                "attachment": "center",
+                "offset": 0.0
+              },
+              "vertical": {
+                "attachment": "center",
+                "offset": -17.5
+              }
+            },
+            "font-weight": 600.0,
+            "color": {
+              "alpha": 1.0,
+              "hue": 0.0,
+              "saturation": 0.0,
+              "value": 1.0
+            },
+            "text-content": "$ItemPrice",
+            "overflow": "visible",
+            "text-align": "left",
+            "text-size": 24.0,
+            "line-height": 1.171875
+          }
+        ]
+      }
+    }
+  },
+  "parameters": {
+    "onClickDelete": {
+      "data-type": "void-callback",
+      "required": false,
+      "description": ""
+    },
+    "ItemName": {
+      "data-type": "text",
+      "required": false,
+      "description": ""
+    },
+    "ItemPrice": {
+      "data-type": "text",
+      "required": false,
+      "description": ""
+    }
+  },
+  "previews": [
+    {
+      "design": "DeleteItemCard",
+      "size": {
+        "width": 167.0,
+        "height": 254.0
+      },
+      "parameters": {
+        "ItemName": "Nombre",
+        "ItemPrice": "Precio"
+      }
+    }
+  ],
+  "adin-component-search-paths": [],
+  "image-search-paths": [],
+  "vector-search-paths": []
+}

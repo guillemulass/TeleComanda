@@ -97,6 +97,8 @@ dependencies {
 
     // Accompanist permissions
     implementation("com.google.accompanist:accompanist-permissions:0.29.1-alpha")
+    implementation("com.google.accompanist:accompanist-flowlayout:0.24.13-rc")
+
 
     // Imagenes
     implementation("io.coil-kt:coil-compose:2.0.0")
