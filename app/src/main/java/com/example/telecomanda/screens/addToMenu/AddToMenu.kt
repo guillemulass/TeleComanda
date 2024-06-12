@@ -116,7 +116,6 @@ fun AddToMenu(
                     Text(text = stateText, color = Color.Red)
                 }
 
-                Spacer(modifier = Modifier.height(58.dp))
             }
         }
 
@@ -177,7 +176,7 @@ fun TextFieldsDrink(
     ) {
         items(addToMenuViewModel.drinkTypesArray.size) { index ->
             val drinkType = addToMenuViewModel.drinkTypesArray[index]
-            Spacer(modifier = Modifier.width(8.dp))
+            Spacer(modifier = Modifier.width(8.dp).height(70.dp))
             ButtonSmallMenu(
                 onClick = {
                     lastSelectedDrinkType = drinkType

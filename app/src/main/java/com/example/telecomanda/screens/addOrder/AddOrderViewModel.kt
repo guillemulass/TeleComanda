@@ -1,12 +1,15 @@
 package com.example.telecomanda.screens.addOrder
 
-import androidx.lifecycle.ViewModel
+import androidx.compose.runtime.mutableStateListOf
 import androidx.lifecycle.MutableLiveData
-import com.example.telecomanda.dataClasses.*
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
+import com.example.telecomanda.dataClasses.Dish
+import com.example.telecomanda.dataClasses.Drink
+import com.example.telecomanda.dataClasses.OrderItem
+import com.example.telecomanda.dataClasses.Table
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
-import androidx.compose.runtime.mutableStateListOf
-import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.tasks.await
 
@@ -95,7 +98,7 @@ class AddOrderViewModel : ViewModel() {
         _totalPrice.value = currentOrderList.sumOf { (it.price.toDoubleOrNull() ?: 0.0) * it.quantity }
     }
 
-    fun updateTotalOrderPrice() {
+    private fun updateTotalOrderPrice() {
         _totalOrderPrice.value = totalOrderList.sumOf { (it.price.toDoubleOrNull() ?: 0.0) * it.quantity }
     }
 
@@ -145,7 +148,6 @@ class AddOrderViewModel : ViewModel() {
 
     fun fetchTables() {
         viewModelScope.launch {
-            val user = auth.currentUser?.email ?: return@launch
             val restaurantName = getRestaurantName()
             if (restaurantName.isNotEmpty()) {
                 val result = db.collection("restaurants").document(restaurantName).collection("tables").get().await()

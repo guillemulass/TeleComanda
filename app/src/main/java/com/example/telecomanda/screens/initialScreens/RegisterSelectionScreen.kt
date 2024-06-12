@@ -18,7 +18,6 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import com.example.telecomanda.botonbig24sp.BotonBig24sp
-import com.example.telecomanda.botonbig32sp.BotonBig32sp
 import com.example.telecomanda.footer.Footer
 import com.example.telecomanda.header.Header
 import com.example.telecomanda.logo.Logo
@@ -65,14 +64,16 @@ fun RegisterSelectionScreen(
 
             BotonBig24sp(
                 onClick = { navController.navigate(Routes.RegisterScreenRoute.route) },
-                text = "Registrar Restaurante"
+                text = "Registrar Restaurante",
+                modifier = Modifier.width(266.dp).height(52.dp)
             )
 
             Spacer(modifier = Modifier.height(16.dp))
 
             BotonBig24sp(
                 onClick = { navController.navigate(Routes.AddEmployeeScreenRoute.route) },
-                text = "Registrar Empleado"
+                text = "Registrar Empleado",
+                modifier = Modifier.width(266.dp).height(52.dp)
             )
 
         }

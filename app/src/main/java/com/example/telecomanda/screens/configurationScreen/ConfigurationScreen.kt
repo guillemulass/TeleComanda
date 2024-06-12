@@ -11,19 +11,13 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material3.Button
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.text.TextStyle
-import androidx.compose.ui.text.font.FontWeight.Companion.Bold
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import com.example.telecomanda.botonbig24sp.BotonBig24sp
-import com.example.telecomanda.botonbig32sp.BotonBig32sp
 import com.example.telecomanda.footer.Footer
 import com.example.telecomanda.header.Header
 import com.example.telecomanda.logo.Logo
@@ -71,7 +65,8 @@ fun ConfigurationScreen(
                 onClick = {
                     navController.navigate(Routes.CloseRegisterScreenRoute.route)
                 },
-                text = "Cerrar Caja"
+                text = "Cerrar Caja",
+                modifier = Modifier.width(266.dp).height(52.dp)
             )
 
             Spacer(modifier = Modifier.height(16.dp))
@@ -80,7 +75,8 @@ fun ConfigurationScreen(
                 onClick = {
                     navController.navigate(Routes.AddToMenuScreenRoute.route)
                 },
-                text = "Añadir a la Carta"
+                text = "Añadir a la Carta",
+                modifier = Modifier.width(266.dp).height(52.dp)
             )
 
 
@@ -90,7 +86,8 @@ fun ConfigurationScreen(
                 onClick = {
                     navController.navigate(Routes.DeleteFromMenuScreenRoute.route)
                 },
-                text = "Eliminar de la Carta"
+                text = "Eliminar de la Carta",
+                modifier = Modifier.width(266.dp).height(52.dp)
             )
 
 
@@ -100,7 +97,8 @@ fun ConfigurationScreen(
                 onClick = {
                     navController.navigate(Routes.TableQuantityControllerScreenRoute.route)
                 },
-                text = "Numero de mesas"
+                text = "Numero de mesas",
+                modifier = Modifier.width(266.dp).height(52.dp)
             )
 
 

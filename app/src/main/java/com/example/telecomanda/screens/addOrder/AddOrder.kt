@@ -1,22 +1,41 @@
 package com.example.telecomanda.screens.addOrder
 
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
-import androidx.compose.material3.Button
 import androidx.compose.material3.Text
-import androidx.compose.runtime.*
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
+import com.example.telecomanda.botonbig24sp.BotonBig24sp
+import com.example.telecomanda.buttonsmallmenu.ButtonSmallMenu
 import com.example.telecomanda.dataClasses.Dish
 import com.example.telecomanda.dataClasses.Drink
 import com.example.telecomanda.dataClasses.Table
+import com.example.telecomanda.footer.Footer
+import com.example.telecomanda.header.Header
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
@@ -72,7 +91,10 @@ fun AddOrder(
             contentAlignment = Alignment.Center,
             modifier = Modifier.fillMaxSize()
         ) {
-            Text(text = "Cargando datos de la mesa...")
+            Text(
+                text = "Cargando datos de la mesa...",
+                style = TextStyle(color = Color.White, fontSize = 32.sp)
+            )
         }
     }
 }
@@ -87,112 +109,198 @@ fun OrderScreen(
     navController: NavHostController,
 ) {
     val totalOrderPrice: Double by addOrderViewModel.totalOrderPrice.observeAsState(initial = 0.0)
+    var showDishes by remember { mutableStateOf(true) } // Estado para controlar la vista actual
 
-    Column(
-        horizontalAlignment = Alignment.CenterHorizontally,
-        verticalArrangement = Arrangement.Center,
+    Box(
         modifier = Modifier
             .fillMaxSize()
-            .padding(16.dp)
+            .background(Color(0xFF161618))
+            .padding(top = 35.dp)
     ) {
-        Text(
-            text = "Mesa ${table.number}",
-            style = TextStyle(fontWeight = FontWeight.Bold, fontSize = 30.sp)
+        Spacer(modifier = Modifier.height(40.dp))
+
+        Header(
+            modifier = Modifier
+                .width(430.dp)
+                .height(60.dp)
+                .background(Color(0xFF161618)),
+            onClick = { navController.popBackStack() }
         )
 
-        Spacer(modifier = Modifier.height(16.dp))
-
-        Button(onClick = { navController.popBackStack() }) {
-            Text(text = "Volver")
-        }
-
-        Spacer(modifier = Modifier.height(16.dp))
-
-        LazyColumn(
+        Column(
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.Top,
-            modifier = Modifier.fillMaxHeight(0.3f)
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(top = 60.dp)
         ) {
-            items(dishList) { dish ->
-                Button(
-                    onClick = { addOrderViewModel.addDishToCurrentList(dish) },
-                    modifier = Modifier
-                ) {
-                    Text(text = dish.name)
+            Text(
+                text = "Mesa ${table.number}",
+                style = TextStyle(
+                    fontWeight = FontWeight.Bold,
+                    color = Color.White,
+                    fontSize = 32.sp
+                )
+            )
+
+            Spacer(modifier = Modifier.height(16.dp))
+
+            Spacer(modifier = Modifier.height(16.dp))
+
+            LazyColumn(
+                horizontalAlignment = Alignment.CenterHorizontally,
+                verticalArrangement = Arrangement.Top,
+                modifier = Modifier.fillMaxSize()
+            ) {
+
+                item {
+                    LazyRow(
+                        horizontalArrangement = Arrangement.Center,
+                        modifier = Modifier.fillMaxWidth()
+                    ) {
+                        item {
+                            ButtonSmallMenu(
+                                onClick = { showDishes = true },
+                                text = "Platos",
+                                textColor = if (showDishes) Color.White else Color.Gray
+                            )
+                        }
+                        item { Spacer(modifier = Modifier.width(8.dp)) }
+
+                        item {
+                            ButtonSmallMenu(
+                                onClick = { showDishes = false },
+                                text = "Bebidas",
+                                textColor = if (showDishes) Color.Gray else Color.White
+                            )
+                        }
+                    }
+                }
+
+                item { Spacer(modifier = Modifier.height(24.dp)) }
+
+                if (showDishes) {
+                    items(dishList) { dish ->
+                        Spacer(modifier = Modifier.height(8.dp))
+                        BotonBig24sp(
+                            onClick = { addOrderViewModel.addDishToCurrentList(dish) },
+                            text = dish.name,
+                            modifier = Modifier.width(266.dp)
+                        )
+                    }
+                } else {
+                    items(drinkList) { drink ->
+                        Spacer(modifier = Modifier.height(8.dp))
+                        BotonBig24sp(
+                            onClick = { addOrderViewModel.addDrinkToCurrentList(drink) },
+                            text = drink.name,
+                            modifier = Modifier.width(266.dp)
+                        )
+                    }
+                }
+
+                item {
+                    Spacer(modifier = Modifier.height(16.dp))
+
+                    Text(
+                        text = "Comanda Actual",
+                        style = TextStyle(color = Color.White, fontSize = 32.sp)
+                    )
+
+                    addOrderViewModel.currentOrderList.forEach { orderItem ->
+                        Text(
+                            text = "${orderItem.name} - ${orderItem.price}€ | x${orderItem.quantity}",
+                            style = TextStyle(color = Color.White, fontSize = 24.sp)
+                        )
+                    }
+
+                    Spacer(modifier = Modifier.height(16.dp))
+                    Text(
+                        text = "Total: ${totalPrice}€",
+                        style = TextStyle(color = Color.White, fontSize = 24.sp)
+                    )
+
+                    Spacer(modifier = Modifier.height(16.dp))
+
+                    Text(
+                        text = "Total Order",
+                        style = TextStyle(color = Color.White, fontSize = 32.sp)
+                    )
+
+                    addOrderViewModel.totalOrderList.forEach { orderItem ->
+                        Text(
+                            text = "${orderItem.name} - ${orderItem.price}€ | x${orderItem.quantity}",
+                            style = TextStyle(color = Color.White, fontSize = 24.sp)
+                        )
+                    }
+
+                    Spacer(modifier = Modifier.height(16.dp))
+                    Text(
+                        text = "Total Order Price: ${totalOrderPrice}€",
+                        style = TextStyle(color = Color.White, fontSize = 24.sp)
+                    )
+
+                    Spacer(modifier = Modifier.height(16.dp))
+
+                    BotonBig24sp(
+                        onClick = {
+                            addOrderViewModel.clearCurrentOrderList()
+                        },
+                        text = "Limpiar Comanda",
+                        modifier = Modifier.width(266.dp).height(52.dp)
+                    )
+
+                    Spacer(modifier = Modifier.height(16.dp))
+
+                    BotonBig24sp(
+                        onClick = {
+                            val combinedOrderList = addOrderViewModel.totalOrderList.toMutableList()
+                            combinedOrderList.addAll(addOrderViewModel.currentOrderList)
+                            addOrderViewModel.totalOrderList.clear()
+                            addOrderViewModel.totalOrderList.addAll(combinedOrderList)
+                            addOrderViewModel.saveTable(table.number, table.code, combinedOrderList)
+                            addOrderViewModel.clearCurrentOrderList()
+                            navController.popBackStack()
+                        },
+                        text = "Confirmar Comanda",
+                        modifier = Modifier.width(266.dp).height(52.dp)
+                    )
+
+                    Spacer(modifier = Modifier.height(16.dp))
+
+                    BotonBig24sp(
+                        onClick = {
+                            addOrderViewModel.closeTable(table.number)
+                            navController.popBackStack()
+                        },
+                        text = "Cerrar Mesa",
+                        modifier = Modifier.width(266.dp).height(52.dp)
+                    )
+
+                    Spacer(modifier = Modifier.height(75.dp))
+
                 }
             }
-
-            items(drinkList) { drink ->
-                Button(
-                    onClick = { addOrderViewModel.addDrinkToCurrentList(drink) },
-                    modifier = Modifier
-                ) {
-                    Text(text = drink.name)
-                }
-            }
         }
 
-        Spacer(modifier = Modifier.height(16.dp))
-
-        Text(text = "Current Order")
-        LazyColumn(
+        Column(
             horizontalAlignment = Alignment.CenterHorizontally,
-            verticalArrangement = Arrangement.Top,
-            modifier = Modifier.fillMaxHeight(0.3f)
+            verticalArrangement = Arrangement.Bottom,
+            modifier = Modifier.fillMaxSize()
         ) {
-            items(addOrderViewModel.currentOrderList) { orderItem ->
-                Text(text = "${orderItem.name} - ${orderItem.price}€ | x${orderItem.quantity}")
-            }
-            item {
-                Spacer(modifier = Modifier.height(16.dp))
-                Text(text = "Total: ${totalPrice}€")
-            }
-        }
-
-        Spacer(modifier = Modifier.height(16.dp))
-
-        Text(text = "Total Order")
-        LazyColumn(
-            horizontalAlignment = Alignment.CenterHorizontally,
-            verticalArrangement = Arrangement.Top,
-            modifier = Modifier.fillMaxHeight(0.3f)
-        ) {
-            items(addOrderViewModel.totalOrderList) { orderItem ->
-                Text(text = "${orderItem.name} - ${orderItem.price}€ | x${orderItem.quantity}")
-            }
-            item {
-                Spacer(modifier = Modifier.height(16.dp))
-                Text(text = "Total Order Price: ${totalOrderPrice}€")
-            }
-        }
-
-        Spacer(modifier = Modifier.height(16.dp))
-
-        Button(
-            onClick = {
-                val combinedOrderList = addOrderViewModel.totalOrderList.toMutableList()
-                combinedOrderList.addAll(addOrderViewModel.currentOrderList)
-                addOrderViewModel.totalOrderList.clear()
-                addOrderViewModel.totalOrderList.addAll(combinedOrderList)
-                addOrderViewModel.saveTable(table.number, table.code, combinedOrderList)
-                addOrderViewModel.clearCurrentOrderList()
-                navController.popBackStack()
-            },
-            modifier = Modifier
-        ) {
-            Text(text = "Confirmar Comanda")
-        }
-
-        Spacer(modifier = Modifier.height(16.dp))
-
-        Button(
-            onClick = {
-                addOrderViewModel.closeTable(table.number)
-                navController.popBackStack()
-            },
-            modifier = Modifier
-        ) {
-            Text(text = "Cerrar Mesa")
+            Footer(
+                modifier = Modifier
+                    .width(430.dp)
+                    .height(54.dp)
+                    .background(Color(0xFF161618))
+            )
+            Spacer(
+                modifier = Modifier
+                    .height(16.dp)
+                    .fillMaxWidth()
+                    .background(Color(0xFF161618))
+            )
         }
     }
 }
+

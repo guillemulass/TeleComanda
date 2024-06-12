@@ -1,27 +1,23 @@
 package com.example.telecomanda.botonbig24sp
 
-import androidx.compose.foundation.layout.fillMaxHeight
+import androidx.compose.foundation.layout.IntrinsicSize
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.requiredHeight
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.requiredWidth
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.DpOffset
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.em
 import androidx.compose.ui.unit.sp
-import com.example.telecomanda.R
 import com.google.relay.compose.RelayContainer
+import com.google.relay.compose.RelayContainerArrangement
 import com.google.relay.compose.RelayContainerScope
 import com.google.relay.compose.RelayText
-import com.google.relay.compose.RelayVector
 import com.google.relay.compose.tappable
 
 /**
@@ -38,29 +34,11 @@ fun BotonBig24sp(
         onClick = onClick,
         modifier = modifier
     ) {
-        BotonBig24spBackground(
-            modifier = Modifier.boxAlign(
-                alignment = Alignment.Center,
-                offset = DpOffset(
-                    x = 0.0.dp,
-                    y = 0.0.dp
-                )
-            )
-        )
-        BotonBig24spText(
-            text = text,
-            modifier = Modifier.boxAlign(
-                alignment = Alignment.Center,
-                offset = DpOffset(
-                    x = 0.0.dp,
-                    y = 0.5.dp
-                )
-            )
-        )
+        BotonBig24spText(text = text)
     }
 }
 
-@Preview(widthDp = 266, heightDp = 53)
+@Preview(widthDp = 266, heightDp = 52)
 @Composable
 private fun BotonBig24spPreview() {
     MaterialTheme {
@@ -68,18 +46,10 @@ private fun BotonBig24spPreview() {
             BotonBig24sp(
                 onClick = {},
                 text = "Empleado",
-                modifier = Modifier.rowWeight(1.0f).columnWeight(1.0f)
+                modifier = Modifier.rowWeight(1.0f)
             )
         }
     }
-}
-
-@Composable
-fun BotonBig24spBackground(modifier: Modifier = Modifier) {
-    RelayVector(
-        vector = painterResource(R.drawable.boton_big24sp_boton_big24sp_background),
-        modifier = modifier.requiredWidth(266.0.dp).requiredHeight(53.0.dp)
-    )
 }
 
 @Composable
@@ -97,9 +67,9 @@ fun BotonBig24spText(
             blue = 255
         ),
         height = 1.171875.em,
-        textAlign = TextAlign.Left,
         fontWeight = FontWeight(700.0.toInt()),
-        modifier = modifier
+        maxLines = -1,
+        modifier = modifier.requiredWidth(247.0.dp)
     )
 }
 
@@ -110,9 +80,22 @@ fun TopLevel(
     content: @Composable RelayContainerScope.() -> Unit
 ) {
     RelayContainer(
-        isStructured = false,
-        clipToParent = false,
+        backgroundColor = Color(
+            alpha = 255,
+            red = 102,
+            green = 186,
+            blue = 222
+        ),
+        arrangement = RelayContainerArrangement.Row,
+        padding = PaddingValues(
+            start = 79.0.dp,
+            top = 12.0.dp,
+            end = 79.0.dp,
+            bottom = 12.0.dp
+        ),
+        itemSpacing = 10.0,
+        radius = 16.0,
         content = content,
-        modifier = modifier.tappable(onTap = onClick).fillMaxWidth(1.0f).fillMaxHeight(1.0f)
+        modifier = modifier.tappable(onTap = onClick).height(IntrinsicSize.Min).fillMaxWidth(1.0f)
     )
 }

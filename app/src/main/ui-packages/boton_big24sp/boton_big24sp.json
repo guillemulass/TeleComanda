@@ -5,7 +5,7 @@
     "type": "figma",
     "file": "nosByj6i2Xg6s3qmGLrKUh",
     "node": "138:107",
-    "version": "5976229562",
+    "version": "5986490732",
     "component-id": "5efceb263500dddfccc92f3875401e0eb6aec2c2"
   },
   "default": "BotonBig24sp",
@@ -17,10 +17,6 @@
         "root": "true"
       },
       {
-        "type": "vector",
-        "id": "BotonBig24spBackground"
-      },
-      {
         "type": "text",
         "id": "BotonBig24spText"
       }
@@ -30,49 +26,44 @@
         "rules": [
           {
             "id": "top_level",
-            "tap-handler": "$onClick",
-            "is-structured": false,
-            "children": [
-              "BotonBig24spBackground",
-              "BotonBig24spText"
-            ],
-            "clip-content": false
-          },
-          {
-            "id": "BotonBig24spBackground",
-            "border-radius": 16.0,
-            "alignment": {
-              "horizontal": {
-                "attachment": "center",
-                "offset": 0.0
-              },
-              "vertical": {
-                "attachment": "center",
-                "offset": 0.0
-              }
+            "padding": {
+              "left": 79.0,
+              "top": 12.0,
+              "right": 79.0,
+              "bottom": 12.0
             },
+            "border-radius": 16.0,
+            "tap-handler": "$onClick",
             "size-constraints": {
               "width-constraints": {
-                "sizing-mode": "fixed",
-                "value": 266.0
+                "sizing-mode": "proportional",
+                "value": 1.0
               },
               "height-constraints": {
-                "sizing-mode": "fixed",
-                "value": 53.0
+                "sizing-mode": "shrink"
               }
             },
-            "vector-content": "boton_big24sp_background.svg"
+            "arrangement": "row",
+            "children": [
+              "BotonBig24spText"
+            ],
+            "item-spacing": 10.0,
+            "background-color": {
+              "alpha": 1.0,
+              "hue": 198.00000000000003,
+              "saturation": 0.5405405405405406,
+              "value": 0.8705882352941177
+            }
           },
           {
             "id": "BotonBig24spText",
-            "alignment": {
-              "horizontal": {
-                "attachment": "center",
-                "offset": 0.0
+            "size-constraints": {
+              "width-constraints": {
+                "sizing-mode": "fixed",
+                "value": 247.0
               },
-              "vertical": {
-                "attachment": "center",
-                "offset": 0.5
+              "height-constraints": {
+                "sizing-mode": "shrink"
               }
             },
             "font-weight": 700.0,
@@ -84,7 +75,7 @@
             },
             "text-content": "$text",
             "overflow": "visible",
-            "text-align": "left",
+            "max-lines": -1,
             "text-size": 24.0,
             "line-height": 1.171875
           }
@@ -109,7 +100,7 @@
       "design": "BotonBig24sp",
       "size": {
         "width": 266.0,
-        "height": 53.0
+        "height": 52.0
       },
       "parameters": {
         "text": "Empleado"
