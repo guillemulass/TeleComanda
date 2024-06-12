@@ -101,6 +101,7 @@ dimen notification_top_pad_large_text
 drawable abc_vector_test
 drawable boton_big24sp_boton_big24sp_background
 drawable boton_big32sp_boton_big32sp_background
+drawable button_small_menu_rectangle_2
 drawable common_full_open_on_phone
 drawable common_google_signin_btn_icon_dark
 drawable common_google_signin_btn_icon_dark_focused
@@ -135,6 +136,8 @@ drawable ic_launcher_background
 drawable ic_launcher_foreground
 drawable logo_logo_img
 drawable main_header_main_header_separator_bot
+drawable menu_item_show_item_img
+drawable menu_item_show_rectangle_back
 drawable notification_action_background
 drawable notification_bg
 drawable notification_bg_low
@@ -148,6 +151,7 @@ drawable notification_template_icon_bg
 drawable notification_template_icon_low_bg
 drawable notification_tile_bg
 drawable notify_panel_notification_icon_bg
+drawable small_button_rectangle_2
 id accessibility_action_clickable_span
 id accessibility_custom_action_0
 id accessibility_custom_action_1

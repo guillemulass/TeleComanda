@@ -6,6 +6,7 @@ import android.net.Uri
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.ScrollState
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -13,6 +14,7 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.text.KeyboardOptions
@@ -30,14 +32,14 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.text.TextStyle
-import androidx.compose.ui.text.font.FontWeight.Companion.Bold
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
+import com.example.telecomanda.botonbig32sp.BotonBig32sp
 import com.example.telecomanda.enumClass.*
+import com.example.telecomanda.footer.Footer
+import com.example.telecomanda.header.Header
+import com.example.telecomanda.logo.Logo
 import com.google.accompanist.permissions.ExperimentalPermissionsApi
 import com.google.accompanist.permissions.isGranted
 import com.google.accompanist.permissions.rememberPermissionState
@@ -51,61 +53,55 @@ fun AddToMenu(
     val drinkOrDishText: String by addToMenuViewModel.dishOrDrinkString.observeAsState(initial = "Plato")
     val stateText: String by addToMenuViewModel.stateText.observeAsState(initial = "")
 
-    Box (
-        modifier = Modifier.fillMaxSize()
+    Box(
+        modifier = Modifier
+            .fillMaxSize()
+            .background(Color(0xFF161618))
     ) {
         Column(
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.Top,
             modifier = Modifier
                 .fillMaxSize()
-                .verticalScroll(
-                    ScrollState(10000),
-                    enabled = true,
-                    reverseScrolling = true
-                )
-                .padding(
-                    top = 35.dp
-                )
+                .verticalScroll(ScrollState(0))
+                .padding(top = 35.dp)
         ) {
 
-            Text(
-                text = "TeleComanda",
-                style = TextStyle(
-                    fontWeight = Bold,
-                    fontSize = 40.sp)
-            )
+            Box{
+                Header(
+                    modifier = Modifier
+                        .width(450.dp)
+                        .height(60.dp),
+                    onClick = {navController.popBackStack()}
+                )
+            }
 
-            Spacer(modifier = Modifier.height(16.dp))
+            Spacer(modifier = Modifier.height(32.dp))
 
-            Text(
-                text = "NombreRestaurante",
-                style = TextStyle(
-                    fontWeight = Bold,
-                    fontSize = 30.sp)
+            Logo(
+                modifier = Modifier
+                    .width(136.dp)
+                    .height(159.dp)
             )
 
             Spacer(modifier = Modifier.height(32.dp))
 
-            Button(
+            BotonBig32sp(
                 onClick = {
                     addToMenuViewModel.drinkOrDishAlternator()
                 },
-                modifier = Modifier
-            ) {
-                Text(text = drinkOrDishText )
-            }
+                text = drinkOrDishText
+            )
+
 
             Spacer(modifier = Modifier.height(16.dp))
 
             if (isDrink){
-                textFieldsDrink(
-                    navController,
+                TextFieldsDrink(
                     addToMenuViewModel
                 )
             } else
-                textFieldsDish(
-                    navController,
+                TextFieldsDish(
                     addToMenuViewModel
                 )
 
@@ -115,14 +111,25 @@ fun AddToMenu(
                 Text(text = stateText, color = Color.Red)
             }
         }
+        Column(
+            horizontalAlignment = Alignment.CenterHorizontally,
+            verticalArrangement = Arrangement.Bottom,
+            modifier = Modifier
+                .fillMaxSize()
+        ) {
+            Footer(
+                modifier = Modifier
+                    .width(430.dp)
+                    .height(54.dp)
+            )
+            Spacer(modifier = Modifier.height(16.dp))
+        }
     }
-
 }
 
 @OptIn(ExperimentalPermissionsApi::class)
 @Composable
-fun textFieldsDrink(
-    navController: NavHostController,
+fun TextFieldsDrink(
     addToMenuViewModel: AddToMenuViewModel
 ) {
     var name by remember { mutableStateOf("") }
@@ -166,7 +173,6 @@ fun textFieldsDrink(
 
     Spacer(modifier = Modifier.height(16.dp))
 
-    val context = LocalContext.current
     val pickImageLauncher = rememberLauncherForActivityResult(
         contract = ActivityResultContracts.GetContent()
     ) { uri: Uri? ->
@@ -206,10 +212,8 @@ fun textFieldsDrink(
     }
 }
 
-
 @Composable
-fun textFieldsDish(
-    navController: NavHostController,
+fun TextFieldsDish(
     addToMenuViewModel: AddToMenuViewModel
 ){
     var name by remember { mutableStateOf("") }
@@ -283,8 +287,6 @@ fun textFieldsDish(
 
     Spacer(modifier = Modifier.height(16.dp))
 
-    // Implement image picker button
-    val context = LocalContext.current
     val pickImageLauncher = rememberLauncherForActivityResult(
         contract = ActivityResultContracts.GetContent()
     ) { uri: Uri? ->

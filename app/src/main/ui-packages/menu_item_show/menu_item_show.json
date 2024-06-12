@@ -1,0 +1,225 @@
+{
+  "name": "menu_item_show",
+  "version": 33,
+  "source-key": {
+    "type": "figma",
+    "file": "nosByj6i2Xg6s3qmGLrKUh",
+    "node": "235:10",
+    "version": "5982691599",
+    "component-id": "620db9d233744ab3397b83a0648abfaeee3abb9e"
+  },
+  "default": "MenuItemShow",
+  "design": {
+    "atoms": [
+      {
+        "type": "group",
+        "id": "top_level",
+        "root": "true"
+      },
+      {
+        "type": "group",
+        "id": "Frame 7"
+      },
+      {
+        "type": "image",
+        "id": "ItemImg"
+      },
+      {
+        "type": "text",
+        "id": "Papa con Carne"
+      },
+      {
+        "type": "text",
+        "id": "3.5€"
+      },
+      {
+        "type": "text",
+        "id": "Ingredientes"
+      }
+    ],
+    "modes": {
+      "MenuItemShow": {
+        "rules": [
+          {
+            "id": "top_level",
+            "padding": {
+              "left": 8.0,
+              "right": 8.0
+            },
+            "border-radius": 16.0,
+            "size-constraints": {
+              "width-constraints": {
+                "sizing-mode": "proportional",
+                "value": 1.0
+              },
+              "height-constraints": {
+                "sizing-mode": "shrink"
+              }
+            },
+            "arrangement": "row",
+            "children": [
+              "Frame 7",
+              "ItemImg"
+            ],
+            "item-spacing": 8.0,
+            "background-color": {
+              "alpha": 1.0,
+              "hue": 198.00000000000003,
+              "saturation": 0.5405405405405406,
+              "value": 0.8705882352941177
+            }
+          },
+          {
+            "id": "Frame 7",
+            "size-constraints": {
+              "width-constraints": {
+                "sizing-mode": "shrink"
+              },
+              "height-constraints": {
+                "sizing-mode": "shrink"
+              }
+            },
+            "children": [
+              "Papa con Carne",
+              "3.5€",
+              "Ingredientes"
+            ],
+            "clip-content": false
+          },
+          {
+            "id": "ItemImg",
+            "border-radius": 16.0,
+            "size-constraints": {
+              "width-constraints": {
+                "sizing-mode": "fixed",
+                "value": 155.0
+              },
+              "height-constraints": {
+                "sizing-mode": "fixed",
+                "value": 156.0
+              }
+            },
+            "image-content": "$ItemImg",
+            "scale": "cover"
+          },
+          {
+            "id": "Papa con Carne",
+            "size-constraints": {
+              "width-constraints": {
+                "sizing-mode": "fixed",
+                "value": 142.0
+              },
+              "height-constraints": {
+                "sizing-mode": "shrink"
+              }
+            },
+            "font-weight": 600.0,
+            "color": {
+              "alpha": 1.0,
+              "hue": 0.0,
+              "saturation": 0.0,
+              "value": 1.0
+            },
+            "text-content": "$ItemNameText",
+            "overflow": "visible",
+            "max-lines": -1,
+            "text-align-vertical": "center",
+            "text-size": 24.0,
+            "line-height": 1.171875
+          },
+          {
+            "id": "3.5€",
+            "size-constraints": {
+              "width-constraints": {
+                "sizing-mode": "fixed",
+                "value": 142.0
+              },
+              "height-constraints": {
+                "sizing-mode": "fixed",
+                "value": 28.0
+              }
+            },
+            "font-weight": 600.0,
+            "color": {
+              "alpha": 1.0,
+              "hue": 0.0,
+              "saturation": 0.0,
+              "value": 1.0
+            },
+            "text-content": "$ItemPriceText",
+            "overflow": "visible",
+            "max-lines": -1,
+            "text-align-vertical": "center",
+            "text-size": 24.0,
+            "line-height": 1.171875
+          },
+          {
+            "id": "Ingredientes",
+            "size-constraints": {
+              "width-constraints": {
+                "sizing-mode": "fixed",
+                "value": 135.0
+              },
+              "height-constraints": {
+                "sizing-mode": "shrink"
+              }
+            },
+            "font-weight": 600.0,
+            "color": {
+              "alpha": 1.0,
+              "hue": 0.0,
+              "saturation": 0.0,
+              "value": 1.0
+            },
+            "text-content": "$ItemIngredientsText",
+            "overflow": "visible",
+            "max-lines": -1,
+            "text-align-vertical": "center",
+            "text-size": 24.0,
+            "line-height": 1.171875
+          }
+        ]
+      }
+    }
+  },
+  "parameters": {
+    "ItemImg": {
+      "data-type": "image",
+      "required": false,
+      "description": ""
+    },
+    "ItemNameText": {
+      "data-type": "text",
+      "required": false,
+      "description": ""
+    },
+    "ItemPriceText": {
+      "data-type": "text",
+      "required": false,
+      "description": ""
+    },
+    "ItemIngredientsText": {
+      "data-type": "text",
+      "required": false,
+      "description": ""
+    }
+  },
+  "previews": [
+    {
+      "design": "MenuItemShow",
+      "size": {
+        "width": 305.0,
+        "height": 156.0
+      },
+      "parameters": {
+        "ItemImg": "item_img.jpeg",
+        "ItemNameText": "Papa con Carne",
+        "ItemPriceText": "3.5€",
+        "ItemIngredientsText": "Ingredientes"
+      }
+    }
+  ],
+  "adin-component-search-paths": [],
+  "image-search-paths": [],
+  "vector-search-paths": []
+}
