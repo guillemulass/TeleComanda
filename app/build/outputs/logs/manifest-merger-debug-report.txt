@@ -37,6 +37,7 @@ MERGED from [com.google.android.gms:play-services-auth-api-phone:17.4.0] C:\User
 MERGED from [com.google.android.gms:play-services-base:18.1.0] C:\Users\mrano\.gradle\caches\transforms-3\881a1092a720ef913c5ef04411c53e7f\transformed\play-services-base-18.1.0\AndroidManifest.xml:16:1-24:12
 MERGED from [com.google.android.recaptcha:recaptcha:18.4.0] C:\Users\mrano\.gradle\caches\transforms-3\6910dbace8d35a007327c76f6f1926ae\transformed\recaptcha-18.4.0\AndroidManifest.xml:2:1-11:12
 MERGED from [com.google.android.play:integrity:1.2.0] C:\Users\mrano\.gradle\caches\transforms-3\45d7430f567a58abde23d3bff5ac96db\transformed\integrity-1.2.0\AndroidManifest.xml:2:1-7:12
+MERGED from [com.google.accompanist:accompanist-flowlayout:0.24.13-rc] C:\Users\mrano\.gradle\caches\transforms-3\92730cb7c5e75bec5527c232fa933116\transformed\accompanist-flowlayout-0.24.13-rc\AndroidManifest.xml:17:1-24:12
 MERGED from [androidx.compose.foundation:foundation-layout-android:1.5.4] C:\Users\mrano\.gradle\caches\transforms-3\9bd3061cd9c0c88c531c5e0a29bd6592\transformed\foundation-layout-release\AndroidManifest.xml:2:1-7:12
 MERGED from [androidx.compose.animation:animation-core-android:1.5.4] C:\Users\mrano\.gradle\caches\transforms-3\cbe1442bdb9ae1e7489e0b44e070eee5\transformed\animation-core-release\AndroidManifest.xml:2:1-7:12
 MERGED from [androidx.compose.animation:animation-android:1.5.4] C:\Users\mrano\.gradle\caches\transforms-3\c92ca04d0d0e65b54c20763511aa0c98\transformed\animation-release\AndroidManifest.xml:2:1-7:12
@@ -350,6 +351,8 @@ MERGED from [com.google.android.recaptcha:recaptcha:18.4.0] C:\Users\mrano\.grad
 MERGED from [com.google.android.recaptcha:recaptcha:18.4.0] C:\Users\mrano\.gradle\caches\transforms-3\6910dbace8d35a007327c76f6f1926ae\transformed\recaptcha-18.4.0\AndroidManifest.xml:5:5-44
 MERGED from [com.google.android.play:integrity:1.2.0] C:\Users\mrano\.gradle\caches\transforms-3\45d7430f567a58abde23d3bff5ac96db\transformed\integrity-1.2.0\AndroidManifest.xml:4:5-44
 MERGED from [com.google.android.play:integrity:1.2.0] C:\Users\mrano\.gradle\caches\transforms-3\45d7430f567a58abde23d3bff5ac96db\transformed\integrity-1.2.0\AndroidManifest.xml:4:5-44
+MERGED from [com.google.accompanist:accompanist-flowlayout:0.24.13-rc] C:\Users\mrano\.gradle\caches\transforms-3\92730cb7c5e75bec5527c232fa933116\transformed\accompanist-flowlayout-0.24.13-rc\AndroidManifest.xml:20:5-22:41
+MERGED from [com.google.accompanist:accompanist-flowlayout:0.24.13-rc] C:\Users\mrano\.gradle\caches\transforms-3\92730cb7c5e75bec5527c232fa933116\transformed\accompanist-flowlayout-0.24.13-rc\AndroidManifest.xml:20:5-22:41
 MERGED from [androidx.compose.foundation:foundation-layout-android:1.5.4] C:\Users\mrano\.gradle\caches\transforms-3\9bd3061cd9c0c88c531c5e0a29bd6592\transformed\foundation-layout-release\AndroidManifest.xml:5:5-44
 MERGED from [androidx.compose.foundation:foundation-layout-android:1.5.4] C:\Users\mrano\.gradle\caches\transforms-3\9bd3061cd9c0c88c531c5e0a29bd6592\transformed\foundation-layout-release\AndroidManifest.xml:5:5-44
 MERGED from [androidx.compose.animation:animation-core-android:1.5.4] C:\Users\mrano\.gradle\caches\transforms-3\cbe1442bdb9ae1e7489e0b44e070eee5\transformed\animation-core-release\AndroidManifest.xml:5:5-44
