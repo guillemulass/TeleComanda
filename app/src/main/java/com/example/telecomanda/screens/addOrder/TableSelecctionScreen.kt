@@ -1,5 +1,6 @@
 package com.example.telecomanda.screens.addOrder
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
@@ -14,6 +15,11 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import androidx.compose.runtime.livedata.observeAsState
+import androidx.compose.ui.graphics.Color
+import com.example.telecomanda.botonbig32sp.BotonBig32sp
+import com.example.telecomanda.footer.Footer
+import com.example.telecomanda.header.Header
+import com.example.telecomanda.logo.Logo
 
 @Composable
 fun TableSelectionScreen(
@@ -26,36 +32,72 @@ fun TableSelectionScreen(
         addOrderViewModel.fetchTables()
     }
 
-    Column(
-        horizontalAlignment = Alignment.CenterHorizontally,
-        verticalArrangement = Arrangement.Center,
+    Box(
         modifier = Modifier
             .fillMaxSize()
-            .padding(16.dp)
+            .background(Color(0xFF161618))
+            .padding(top = 35.dp)
+
     ) {
-        Text(
-            text = "Seleccionar Mesa",
-            style = TextStyle(fontWeight = FontWeight.Bold, fontSize = 30.sp)
+        Spacer(modifier = Modifier.height(40.dp))
+
+        Header(
+            modifier = Modifier
+                .width(430.dp)
+                .height(60.dp)
+                .background(Color(0xFF161618))
+            ,
+            onClick = { navController.popBackStack() }
         )
-
-        Spacer(modifier = Modifier.height(16.dp))
-
         LazyColumn(
             horizontalAlignment = Alignment.CenterHorizontally,
-            verticalArrangement = Arrangement.Top
+            verticalArrangement = Arrangement.Top,
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(top = 60.dp)
         ) {
+
+            item {
+                Spacer(modifier = Modifier.height(16.dp))
+
+                Logo(
+                    modifier = Modifier
+                    .width(199.dp)
+                    .height(232.dp)
+                )
+                Spacer(modifier = Modifier.height(8.dp))
+
+            }
+
             items(tables) { table ->
-                Button(
+                Spacer(modifier = Modifier.height(8.dp))
+
+                BotonBig32sp(
                     onClick = {
                         navController.navigate("addOrder/${table.number}")
                     },
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(8.dp)
-                ) {
-                    Text(text = "Mesa ${table.number} - Código: ${table.code}")
-                }
+                    text = "Mesa ${table.number}"
+                )
             }
+
+            item {
+                Spacer(modifier = Modifier.height(70.dp))
+            }
+
+        }
+        Column(
+            horizontalAlignment = Alignment.CenterHorizontally,
+            verticalArrangement = Arrangement.Bottom,
+            modifier = Modifier
+                .fillMaxSize()
+
+        ) {
+            Footer(
+                modifier = Modifier
+                    .width(430.dp)
+                    .height(54.dp)
+                    .background(Color(0xFF161618))
+            )
         }
     }
 }

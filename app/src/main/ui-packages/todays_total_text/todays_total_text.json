@@ -1,0 +1,114 @@
+{
+  "name": "todays_total_text",
+  "version": 33,
+  "source-key": {
+    "type": "figma",
+    "file": "nosByj6i2Xg6s3qmGLrKUh",
+    "node": "230:6",
+    "version": "5976270861",
+    "component-id": "7071ec63c7fc6f635705fb01c1408a4be6ca60e6"
+  },
+  "default": "TodaysTotalText",
+  "design": {
+    "atoms": [
+      {
+        "type": "group",
+        "id": "top_level",
+        "root": "true"
+      },
+      {
+        "type": "text",
+        "id": "124.67€"
+      },
+      {
+        "type": "text",
+        "id": "Total ingresado hoy"
+      }
+    ],
+    "modes": {
+      "TodaysTotalText": {
+        "rules": [
+          {
+            "id": "top_level",
+            "is-structured": false,
+            "children": [
+              "124.67€",
+              "Total ingresado hoy"
+            ],
+            "clip-content": false
+          },
+          {
+            "id": "124.67€",
+            "alignment": {
+              "horizontal": {
+                "attachment": "center",
+                "offset": -0.5
+              },
+              "vertical": {
+                "attachment": "center",
+                "offset": 19.0
+              }
+            },
+            "font-weight": 600.0,
+            "color": {
+              "alpha": 1.0,
+              "hue": 198.00000000000003,
+              "saturation": 0.5405405405405406,
+              "value": 0.8705882352941177
+            },
+            "text-content": "$MoneyText",
+            "overflow": "visible",
+            "text-size": 32.0,
+            "line-height": 1.171875
+          },
+          {
+            "id": "Total ingresado hoy",
+            "alignment": {
+              "horizontal": {
+                "attachment": "center",
+                "offset": 0.0
+              },
+              "vertical": {
+                "attachment": "center",
+                "offset": -19.0
+              }
+            },
+            "font-weight": 600.0,
+            "color": {
+              "alpha": 1.0,
+              "hue": 0.0,
+              "saturation": 0.0,
+              "value": 1.0
+            },
+            "text-content": "Total ingresado hoy ",
+            "overflow": "visible",
+            "text-size": 32.0,
+            "line-height": 1.171875
+          }
+        ]
+      }
+    }
+  },
+  "parameters": {
+    "MoneyText": {
+      "data-type": "text",
+      "required": false,
+      "description": ""
+    }
+  },
+  "previews": [
+    {
+      "design": "TodaysTotalText",
+      "size": {
+        "width": 290.0,
+        "height": 76.0
+      },
+      "parameters": {
+        "MoneyText": "124.67€"
+      }
+    }
+  ],
+  "adin-component-search-paths": [],
+  "image-search-paths": [],
+  "vector-search-paths": []
+}

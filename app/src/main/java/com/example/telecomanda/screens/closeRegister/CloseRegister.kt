@@ -16,8 +16,11 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
+import com.example.telecomanda.botonbig32sp.BotonBig32sp
+import com.example.telecomanda.footer.Footer
 import com.example.telecomanda.header.Header
 import com.example.telecomanda.logo.Logo
+import com.example.telecomanda.todaystotaltext.TodaysTotalText
 import kotlinx.coroutines.launch
 
 @Composable
@@ -63,28 +66,37 @@ fun CloseRegisterScreen(
                     .height(232.dp)
             )
 
-            Spacer(modifier = Modifier.height(32.dp))
-            Text(
-                text = "Total ingresado: €$todaysTotal",
-                style = TextStyle(
-                    fontWeight = FontWeight.Bold,
-                    fontSize = 16.sp
-                )
+            Spacer(modifier = Modifier.height(40.dp))
+
+            TodaysTotalText(
+                moneyText = "$todaysTotal€",
             )
 
-            Spacer(modifier = Modifier.height(16.dp))
+            Spacer(modifier = Modifier.height(32.dp))
 
-            Button(
+            BotonBig32sp(
                 onClick = {
                     coroutineScope.launch {
                         closeRegisterViewModel.closeRegister(todaysTotal)
                         todaysTotal = 0.0
                     }
                 },
+                text = "Cerrar Caja"
+            )
+
+        }
+        Column(
+            horizontalAlignment = Alignment.CenterHorizontally,
+            verticalArrangement = Arrangement.Bottom,
+            modifier = Modifier
+                .fillMaxSize()
+        ) {
+            Footer(
                 modifier = Modifier
-            ) {
-                Text(text = "Cerrar Caja")
-            }
+                    .width(430.dp)
+                    .height(54.dp)
+            )
+            Spacer(modifier = Modifier.height(16.dp))
         }
     }
 }
