@@ -1,17 +1,19 @@
 package com.example.telecomanda.buttonsmallmenu
 
-import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.requiredHeight
+import androidx.compose.foundation.layout.requiredWidth
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.DpOffset
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.em
 import androidx.compose.ui.unit.sp
@@ -30,16 +32,37 @@ import com.google.relay.compose.tappable
 fun ButtonSmallMenu(
     modifier: Modifier = Modifier,
     text: String = "",
+    textColor: Color = Color(
+        alpha = 0,
+        red = 0,
+        green = 0,
+        blue = 0
+    ),
     onClick: () -> Unit = {}
 ) {
     TopLevel(
         onClick = onClick,
         modifier = modifier
     ) {
-        Rectangle2(modifier = Modifier.rowWeight(1.0f).columnWeight(1.0f))
+        Rectangle2(
+            modifier = Modifier.boxAlign(
+                alignment = Alignment.Center,
+                offset = DpOffset(
+                    x = 0.0.dp,
+                    y = 0.0.dp
+                )
+            )
+        )
         Primero(
+            textColor = textColor,
             text = text,
-            modifier = Modifier.rowWeight(1.0f).columnWeight(1.0f)
+            modifier = Modifier.boxAlign(
+                alignment = Alignment.Center,
+                offset = DpOffset(
+                    x = 0.0.dp,
+                    y = 0.5.dp
+                )
+            )
         )
     }
 }
@@ -52,6 +75,12 @@ private fun ButtonSmallMenuPreview() {
             ButtonSmallMenu(
                 onClick = {},
                 text = "Primero",
+                textColor = Color(
+                    alpha = 255,
+                    red = 255,
+                    green = 255,
+                    blue = 255
+                ),
                 modifier = Modifier.rowWeight(1.0f).columnWeight(1.0f)
             )
         }
@@ -62,36 +91,24 @@ private fun ButtonSmallMenuPreview() {
 fun Rectangle2(modifier: Modifier = Modifier) {
     RelayVector(
         vector = painterResource(R.drawable.button_small_menu_rectangle_2),
-        modifier = modifier.fillMaxWidth(1.0f).fillMaxHeight(1.0f)
+        modifier = modifier.requiredWidth(125.0.dp).requiredHeight(53.0.dp)
     )
 }
 
 @Composable
 fun Primero(
+    textColor: Color,
     text: String,
     modifier: Modifier = Modifier
 ) {
     RelayText(
         content = text,
-        fontSize = 24.0.sp,
-        color = Color(
-            alpha = 255,
-            red = 255,
-            green = 255,
-            blue = 255
-        ),
+        fontSize = 22.0.sp,
+        color = textColor,
         height = 1.171875.em,
         textAlign = TextAlign.Left,
         fontWeight = FontWeight(600.0.toInt()),
-        maxLines = -1,
-        modifier = modifier.padding(
-            paddingValues = PaddingValues(
-                start = 17.0.dp,
-                top = 13.0.dp,
-                end = 17.0.dp,
-                bottom = 12.0.dp
-            )
-        ).fillMaxWidth(1.0f).fillMaxHeight(1.0f)
+        modifier = modifier
     )
 }
 

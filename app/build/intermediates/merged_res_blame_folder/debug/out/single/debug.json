@@ -40,12 +40,12 @@
         "source": "C:\\Users\\mrano\\.gradle\\daemon\\8.2\\com.example.telecomanda.app-main-66:\\mipmap-hdpi\\ic_launcher.webp"
     },
     {
-        "merged": "com.example.telecomanda.app-merged_res-64:/drawable-nodpi_button_small_menu_rectangle_2.xml.flat",
-        "source": "com.example.telecomanda.app-relay-60:/drawable-nodpi/button_small_menu_rectangle_2.xml"
-    },
-    {
         "merged": "C:\\Users\\mrano\\.gradle\\daemon\\8.2\\com.example.telecomanda.app-merged_res-64:\\drawable-nodpi_menu_item_show_item_img.jpeg.flat",
         "source": "C:\\Users\\mrano\\.gradle\\daemon\\8.2\\com.example.telecomanda.app-relay-60:\\drawable-nodpi\\menu_item_show_item_img.jpeg"
+    },
+    {
+        "merged": "C:\\Users\\mrano\\.gradle\\daemon\\8.2\\com.example.telecomanda.app-merged_res-64:\\drawable-nodpi_button_small_menu_rectangle_2.xml.flat",
+        "source": "C:\\Users\\mrano\\.gradle\\daemon\\8.2\\com.example.telecomanda.app-relay-60:\\drawable-nodpi\\button_small_menu_rectangle_2.xml"
     },
     {
         "merged": "C:\\Users\\mrano\\.gradle\\daemon\\8.2\\com.example.telecomanda.app-merged_res-64:\\mipmap-xxhdpi_ic_launcher_round.webp.flat",
@@ -86,6 +86,10 @@
     {
         "merged": "C:\\Users\\mrano\\.gradle\\daemon\\8.2\\com.example.telecomanda.app-merged_res-64:\\drawable-nodpi_menu_item_show_rectangle_back.xml.flat",
         "source": "C:\\Users\\mrano\\.gradle\\daemon\\8.2\\com.example.telecomanda.app-relay-60:\\drawable-nodpi\\menu_item_show_rectangle_back.xml"
+    },
+    {
+        "merged": "C:\\Users\\mrano\\.gradle\\daemon\\8.2\\com.example.telecomanda.app-merged_res-64:\\drawable-nodpi_button_mid_rectangle_2.xml.flat",
+        "source": "C:\\Users\\mrano\\.gradle\\daemon\\8.2\\com.example.telecomanda.app-relay-60:\\drawable-nodpi\\button_mid_rectangle_2.xml"
     },
     {
         "merged": "C:\\Users\\mrano\\.gradle\\daemon\\8.2\\com.example.telecomanda.app-merged_res-64:\\xml_data_extraction_rules.xml.flat",

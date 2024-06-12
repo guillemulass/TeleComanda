@@ -12,6 +12,7 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
@@ -20,7 +21,6 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Button
-import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
@@ -32,10 +32,15 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
+import com.example.telecomanda.botonbig24sp.BotonBig24sp
 import com.example.telecomanda.botonbig32sp.BotonBig32sp
+import com.example.telecomanda.buttonmid.ButtonMid
+import com.example.telecomanda.buttonsmallmenu.ButtonSmallMenu
 import com.example.telecomanda.enumClass.*
 import com.example.telecomanda.footer.Footer
 import com.example.telecomanda.header.Header
@@ -58,35 +63,50 @@ fun AddToMenu(
             .fillMaxSize()
             .background(Color(0xFF161618))
     ) {
+
+        Box(
+            modifier = Modifier
+                .background(Color(0xFF161618))
+                .padding(top = 35.dp)
+
+        ){
+
+            Header(
+                modifier = Modifier
+                    .width(450.dp)
+                    .height(60.dp),
+                onClick = {navController.popBackStack()}
+            )
+
+            Column(
+                horizontalAlignment = Alignment.CenterHorizontally,
+                verticalArrangement = Arrangement.Top,
+                modifier = Modifier
+                    .fillMaxSize()
+                    .verticalScroll(ScrollState(0))
+                    .padding(top = 35.dp)
+            ) {
+                Spacer(modifier = Modifier.height(32.dp))
+
+                Logo(
+                    modifier = Modifier
+                        .width(136.dp)
+                        .height(159.dp)
+                )
+            }
+
+        }
+
         Column(
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.Top,
             modifier = Modifier
                 .fillMaxSize()
                 .verticalScroll(ScrollState(0))
-                .padding(top = 35.dp)
+                .padding(top = 270.dp)
         ) {
 
-            Box{
-                Header(
-                    modifier = Modifier
-                        .width(450.dp)
-                        .height(60.dp),
-                    onClick = {navController.popBackStack()}
-                )
-            }
-
-            Spacer(modifier = Modifier.height(32.dp))
-
-            Logo(
-                modifier = Modifier
-                    .width(136.dp)
-                    .height(159.dp)
-            )
-
-            Spacer(modifier = Modifier.height(32.dp))
-
-            BotonBig32sp(
+            ButtonMid(
                 onClick = {
                     addToMenuViewModel.drinkOrDishAlternator()
                 },
@@ -110,6 +130,9 @@ fun AddToMenu(
             if (stateText.isNotEmpty()) {
                 Text(text = stateText, color = Color.Red)
             }
+
+            Spacer(modifier = Modifier.height(58.dp))
+
         }
         Column(
             horizontalAlignment = Alignment.CenterHorizontally,
@@ -121,8 +144,9 @@ fun AddToMenu(
                 modifier = Modifier
                     .width(430.dp)
                     .height(54.dp)
+                    .background(Color(0xFF161618))
             )
-            Spacer(modifier = Modifier.height(16.dp))
+            Spacer(modifier = Modifier.height(16.dp).fillMaxWidth().background(Color(0xFF161618)))
         }
     }
 }
@@ -160,14 +184,14 @@ fun TextFieldsDrink(
 
     LazyRow {
         items(addToMenuViewModel.drinkTypesArray) { drinkType ->
-            Button(
+            Spacer(modifier = Modifier.width(8.dp))
+            ButtonSmallMenu(
                 onClick = {
                     lastSelectedDrinkType = drinkType
                 },
-                colors = ButtonDefaults.buttonColors(if (drinkType == lastSelectedDrinkType) Color.Green else Color.Gray)
-            ) {
-                Text(text = drinkType.toString())
-            }
+                text = drinkType.toString(),
+                textColor = if (drinkType == lastSelectedDrinkType) Color.White else Color(0xFF161618)
+            )
         }
     }
 
@@ -179,7 +203,7 @@ fun TextFieldsDrink(
         imageUri = uri
     }
 
-    Button(
+    BotonBig24sp(
         onClick = {
             if (permissionState.status.isGranted) {
                 pickImageLauncher.launch("image/*")
@@ -187,29 +211,30 @@ fun TextFieldsDrink(
                 permissionState.launchPermissionRequest()
             }
         },
-        modifier = Modifier
-    ) {
-        Text(text = "Seleccionar Imagen")
-    }
+        text = "Seleccionar Imagen"
+    )
+
 
     imageUri?.let {
         Spacer(modifier = Modifier.height(16.dp))
-        Text(text = "Imagen seleccionada: ${it.path}")
+        Text(
+            text = "Imagen seleccionada: ${it.path}",
+            style = TextStyle(color = Color.White, fontSize = 32.sp)
+        )
     }
 
     Spacer(modifier = Modifier.height(16.dp))
 
-    Button(
+    ButtonMid(
         onClick = {
             addToMenuViewModel.saveDrink(name, price, lastSelectedDrinkType.toString(), imageUri)
             name = ""
             price = ""
             imageUri = null
         },
-        modifier = Modifier
-    ) {
-        Text(text = "Añadir Bebida")
-    }
+        text = "Añadir Bebida"
+    )
+
 }
 
 @Composable
@@ -274,14 +299,14 @@ fun TextFieldsDish(
 
     LazyRow {
         items(addToMenuViewModel.dishTypesArray) { dishType ->
-            Button(
+            Spacer(modifier = Modifier.width(8.dp))
+            ButtonSmallMenu(
                 onClick = {
                     lastSelectedDishType = dishType
                 },
-                colors = ButtonDefaults.buttonColors(if (dishType == lastSelectedDishType) Color.Green else Color.Gray)
-            ) {
-                Text(text = dishType.toString())
-            }
+                text = dishType.toString(),
+                textColor = if (dishType == lastSelectedDishType) Color.White else Color(0xFF161618)
+            )
         }
     }
 
@@ -293,14 +318,13 @@ fun TextFieldsDish(
         imageUri = uri
     }
 
-    Button(
+    BotonBig24sp(
         onClick = {
             pickImageLauncher.launch("image/*")
         },
-        modifier = Modifier
-    ) {
-        Text(text = "Seleccionar Imagen")
-    }
+        text = "Seleccionar Imagen"
+    )
+
 
     imageUri?.let {
         Spacer(modifier = Modifier.height(16.dp))
@@ -309,7 +333,7 @@ fun TextFieldsDish(
 
     Spacer(modifier = Modifier.height(16.dp))
 
-    Button(
+    ButtonMid(
         onClick = {
             addToMenuViewModel.saveDish(name, price, lastSelectedDishType.toString(), ingredientTexts, imageUri)
             name = ""
@@ -318,9 +342,7 @@ fun TextFieldsDish(
             ingredientTexts = List(0) { "" }
             imageUri = null
         },
-        modifier = Modifier
-    ) {
-        Text(text = "Añadir Plato")
-    }
+        text = "Añadir Plato"
+    )
 }
 

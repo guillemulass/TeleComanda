@@ -5,7 +5,7 @@
     "type": "figma",
     "file": "nosByj6i2Xg6s3qmGLrKUh",
     "node": "247:12",
-    "version": "5983637689",
+    "version": "5984132843",
     "component-id": "a5db34e316a2330df1c99223c28b2d2479af934e"
   },
   "default": "ButtonSmallMenu",
@@ -41,48 +41,46 @@
           {
             "id": "Rectangle 2",
             "border-radius": 16.0,
+            "alignment": {
+              "horizontal": {
+                "attachment": "center",
+                "offset": 0.0
+              },
+              "vertical": {
+                "attachment": "center",
+                "offset": 0.0
+              }
+            },
             "size-constraints": {
               "width-constraints": {
-                "sizing-mode": "proportional",
-                "value": 1.0
+                "sizing-mode": "fixed",
+                "value": 125.0
               },
               "height-constraints": {
-                "sizing-mode": "proportional",
-                "value": 1.0
+                "sizing-mode": "fixed",
+                "value": 53.0
               }
             },
             "vector-content": "rectangle_2.svg"
           },
           {
             "id": "Primero",
-            "margin": {
-              "left": 17.0,
-              "top": 13.0,
-              "right": 17.0,
-              "bottom": 12.0
-            },
-            "size-constraints": {
-              "width-constraints": {
-                "sizing-mode": "proportional",
-                "value": 1.0
+            "alignment": {
+              "horizontal": {
+                "attachment": "center",
+                "offset": 0.0
               },
-              "height-constraints": {
-                "sizing-mode": "proportional",
-                "value": 1.0
+              "vertical": {
+                "attachment": "center",
+                "offset": 0.5
               }
             },
             "font-weight": 600.0,
-            "color": {
-              "alpha": 1.0,
-              "hue": 0.0,
-              "saturation": 0.0,
-              "value": 1.0
-            },
+            "color": "$textColor",
             "text-content": "$text",
             "overflow": "visible",
-            "max-lines": -1,
             "text-align": "left",
-            "text-size": 24.0,
+            "text-size": 22.0,
             "line-height": 1.171875
           }
         ]
@@ -99,6 +97,11 @@
       "data-type": "text",
       "required": false,
       "description": ""
+    },
+    "textColor": {
+      "data-type": "color",
+      "required": false,
+      "description": ""
     }
   },
   "previews": [
@@ -109,7 +112,13 @@
         "height": 53.0
       },
       "parameters": {
-        "text": "Primero"
+        "text": "Primero",
+        "textColor": {
+          "alpha": 1.0,
+          "hue": 0.0,
+          "saturation": 0.0,
+          "value": 1.0
+        }
       }
     }
   ],

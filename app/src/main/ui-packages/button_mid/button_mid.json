@@ -1,0 +1,122 @@
+{
+  "name": "button_mid",
+  "version": 33,
+  "source-key": {
+    "type": "figma",
+    "file": "nosByj6i2Xg6s3qmGLrKUh",
+    "node": "247:11",
+    "version": "5983710172",
+    "component-id": "5b0b45cbdf5628f20419417c36d48d64dcc13eef"
+  },
+  "default": "ButtonMid",
+  "design": {
+    "atoms": [
+      {
+        "type": "group",
+        "id": "top_level",
+        "root": "true"
+      },
+      {
+        "type": "vector",
+        "id": "Rectangle 2"
+      },
+      {
+        "type": "text",
+        "id": "Continuar"
+      }
+    ],
+    "modes": {
+      "ButtonMid": {
+        "rules": [
+          {
+            "id": "top_level",
+            "tap-handler": "$onClick",
+            "is-structured": false,
+            "children": [
+              "Rectangle 2",
+              "Continuar"
+            ],
+            "clip-content": false
+          },
+          {
+            "id": "Rectangle 2",
+            "border-radius": 16.0,
+            "alignment": {
+              "horizontal": {
+                "attachment": "center",
+                "offset": 0.0
+              },
+              "vertical": {
+                "attachment": "center",
+                "offset": 0.0
+              }
+            },
+            "size-constraints": {
+              "width-constraints": {
+                "sizing-mode": "fixed",
+                "value": 209.0
+              },
+              "height-constraints": {
+                "sizing-mode": "fixed",
+                "value": 41.64285659790039
+              }
+            },
+            "vector-content": "rectangle_2.svg"
+          },
+          {
+            "id": "Continuar",
+            "alignment": {
+              "horizontal": {
+                "attachment": "center",
+                "offset": -0.142822265625
+              },
+              "vertical": {
+                "attachment": "center",
+                "offset": 0.3929271697998047
+              }
+            },
+            "font-weight": 600.0,
+            "color": {
+              "alpha": 1.0,
+              "hue": 0.0,
+              "saturation": 0.0,
+              "value": 1.0
+            },
+            "text-content": "$text",
+            "overflow": "visible",
+            "text-align-vertical": "center",
+            "text-size": 24.0,
+            "line-height": 1.171875
+          }
+        ]
+      }
+    }
+  },
+  "parameters": {
+    "onClick": {
+      "data-type": "void-callback",
+      "required": false,
+      "description": ""
+    },
+    "text": {
+      "data-type": "text",
+      "required": false,
+      "description": ""
+    }
+  },
+  "previews": [
+    {
+      "design": "ButtonMid",
+      "size": {
+        "width": 209.0,
+        "height": 41.64285659790039
+      },
+      "parameters": {
+        "text": "Continuar"
+      }
+    }
+  ],
+  "adin-component-search-paths": [],
+  "image-search-paths": [],
+  "vector-search-paths": []
+}
