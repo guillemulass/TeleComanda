@@ -17,6 +17,7 @@ import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.ExposedDropdownMenuBox
 import androidx.compose.material3.ExposedDropdownMenuDefaults
+import androidx.compose.material3.OutlinedTextFieldDefaults
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
@@ -131,7 +132,6 @@ fun ClientMenuScreen(
 
                 Spacer(modifier = Modifier.height(16.dp))
 
-                // Dropdown menu for selecting type
                 var selectedText by remember { mutableStateOf("") }
                 val types = if (selectedCategory == "Platos") DishTypes.values() else DrinkTypes.values()
 
@@ -147,11 +147,20 @@ fun ClientMenuScreen(
                         trailingIcon = {
                             ExposedDropdownMenuDefaults.TrailingIcon(expanded = expanded)
                         },
+                        colors = OutlinedTextFieldDefaults.colors(
+                            focusedBorderColor = Color(0xFFD9D9D9),
+                            unfocusedBorderColor = Color(0xFFD9D9D9),
+                            focusedLabelColor = Color(0xFFD9D9D9),
+                            unfocusedLabelColor = Color(0xFFD9D9D9),
+                            unfocusedTextColor = Color(0xFFD9D9D9),
+                            focusedTextColor = Color(0xFFD9D9D9)
+                        ),
                         modifier = Modifier
-                            .fillMaxWidth()
+                            .width(330.dp)
                             .padding(horizontal = 16.dp)
                             .menuAnchor()
                     )
+
                     ExposedDropdownMenu(
                         expanded = expanded,
                         onDismissRequest = { expanded = false }
