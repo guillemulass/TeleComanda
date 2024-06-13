@@ -162,4 +162,39 @@ class EmployeeAddOrderViewModel : ViewModel() {
             }
         }
     }
+
+    fun closeTable(tableNumber: Int) {
+        viewModelScope.launch {
+            try {
+                val restaurantName = getRestaurantName()
+                if (restaurantName.isNotEmpty()) {
+                    // Obtener datos de la mesa
+                    val tableRef = db.collection("restaurants").document(restaurantName).collection("tables").document(tableNumber.toString())
+                    val tableSnapshot = tableRef.get().await()
+                    val table = tableSnapshot.toObject(Table::class.java)
+
+                    if (table != null) {
+                        // Sumar total de la mesa a todaysTotal
+                        val todaysTotalRef = db.collection("restaurants").document(restaurantName)
+                        val todaysTotalSnapshot = todaysTotalRef.get().await()
+                        var todaysTotal = todaysTotalSnapshot.getDouble("todaysTotal") ?: 0.0
+
+                        val tableTotal = table.orders.sumOf { (it.price.toDoubleOrNull() ?: 0.0) * it.quantity }
+                        todaysTotal += tableTotal
+
+                        todaysTotalRef.update("todaysTotal", todaysTotal).await()
+
+                        // Vaciar comanda de la mesa
+                        tableRef.update("orders", emptyList<OrderItem>()).await()
+
+                        // Actualizar vista
+                        totalOrderList.clear()
+                        updateTotalOrderPrice()
+                    }
+                }
+            } catch (e: Exception) {
+                println("Error al cerrar la mesa: $e")
+            }
+        }
+    }
 }

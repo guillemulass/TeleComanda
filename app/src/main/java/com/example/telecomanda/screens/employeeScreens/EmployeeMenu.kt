@@ -1,92 +1,212 @@
 package com.example.telecomanda.screens.employeeScreens
 
-import androidx.compose.foundation.Image
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
+import androidx.compose.material3.DropdownMenuItem
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.ExposedDropdownMenuBox
+import androidx.compose.material3.ExposedDropdownMenuDefaults
+import androidx.compose.material3.OutlinedTextFieldDefaults
 import androidx.compose.material3.Text
-import androidx.compose.runtime.*
+import androidx.compose.material3.TextField
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.text.TextStyle
-import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
-import coil.compose.rememberImagePainter
+import coil.compose.rememberAsyncImagePainter
+import com.example.telecomanda.buttonsmallmenu.ButtonSmallMenu
 import com.example.telecomanda.dataClasses.Dish
 import com.example.telecomanda.dataClasses.Drink
+import com.example.telecomanda.enumClass.DishTypes
+import com.example.telecomanda.enumClass.DrinkTypes
+import com.example.telecomanda.footer.Footer
+import com.example.telecomanda.header.Header
+import com.example.telecomanda.menuitemshow.MenuItemShow
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.ktx.auth
+import com.google.firebase.ktx.Firebase
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun EmployeeMenuScreen(
     navController: NavHostController,
-    menuScreenViewModel: EmployeeMenuViewModel
+    menuScreenViewModel: EmployeeMenuViewModel = viewModel()
 ) {
+    val auth: FirebaseAuth = Firebase.auth
     var dishList by remember { mutableStateOf(emptyList<Dish>()) }
     var drinkList by remember { mutableStateOf(emptyList<Drink>()) }
 
+    var selectedCategory by remember { mutableStateOf("Platos") }
+    var selectedType by remember { mutableStateOf("") }
+    var expanded by remember { mutableStateOf(false) }
+
+    val filteredDishes = dishList.filter { it.type.contains(selectedType, ignoreCase = true) }
+    val filteredDrinks = drinkList.filter { it.type.contains(selectedType, ignoreCase = true) }
+
     LaunchedEffect(Unit) {
-        menuScreenViewModel.getDishData(
-            onSuccess = { dishes ->
-                dishList = dishes
-            },
-            onFailure = {
-                println(it)
-            }
-        )
-        menuScreenViewModel.getDrinkData(
-            onSuccess = { drinks ->
-                drinkList = drinks
-            },
-            onFailure = {
-                println(it)
-            }
-        )
+        val userId = auth.currentUser?.uid
+        if (userId != null) {
+            menuScreenViewModel.getDishData(
+                onSuccess = { dishes ->
+                    dishList = dishes
+                },
+                onFailure = {
+                    println(it)
+                }
+            )
+            menuScreenViewModel.getDrinkData(
+                onSuccess = { drinks ->
+                    drinkList = drinks
+                },
+                onFailure = {
+                    println(it)
+                }
+            )
+        }
     }
 
     Box(
-        modifier = Modifier.fillMaxSize()
+        modifier = Modifier
+            .fillMaxSize()
+            .background(Color(0xFF161618))
+            .padding(top = 35.dp)
     ) {
+        Column(
+            horizontalAlignment = Alignment.CenterHorizontally,
+            verticalArrangement = Arrangement.Top,
+        ) {
+            Header(
+                modifier = Modifier
+                    .width(430.dp)
+                    .height(60.dp)
+                    .background(Color(0xFF161618)),
+                onClick = { navController.popBackStack() }
+            )
+        }
+
         LazyColumn(
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.Top,
             modifier = Modifier
                 .fillMaxSize()
-                .padding(top = 35.dp)
+                .padding(top = 70.dp, bottom = 70.dp)
         ) {
+
             item {
-                Text(
-                    text = "TeleComanda",
-                    style = TextStyle(
-                        fontWeight = FontWeight.Bold,
-                        fontSize = 40.sp
-                    )
-                )
+                Spacer(modifier = Modifier.height(8.dp))
+                LazyRow {
+                    item {
+                        ButtonSmallMenu(
+                            onClick = { selectedCategory = "Platos" },
+                            text = "Platos",
+                            textColor = if (selectedCategory == "Platos") Color.White else Color.Gray
+                        )
+                    }
+
+                    item {
+                        Spacer(modifier = Modifier.width(16.dp))
+                    }
+
+                    item {
+                        ButtonSmallMenu(
+                            onClick = { selectedCategory = "Bebidas" },
+                            text = "Bebidas",
+                            textColor = if (selectedCategory == "Bebidas") Color.White else Color.Gray
+                        )
+                    }
+                }
 
                 Spacer(modifier = Modifier.height(16.dp))
 
-                Text(
-                    text = "Crear Restaurante",
-                    style = TextStyle(
-                        fontWeight = FontWeight.Bold,
-                        fontSize = 30.sp
+                // Dropdown menu for selecting type
+                var selectedText by remember { mutableStateOf("") }
+                val types = if (selectedCategory == "Platos") DishTypes.values() else DrinkTypes.values()
+
+                ExposedDropdownMenuBox(
+                    expanded = expanded,
+                    onExpandedChange = { expanded = !expanded }
+                ) {
+                    TextField(
+                        value = selectedText,
+                        onValueChange = { selectedText = it },
+                        label = { Text("Tipo") },
+                        readOnly = true,
+                        trailingIcon = {
+                            ExposedDropdownMenuDefaults.TrailingIcon(expanded = expanded)
+                        },
+                        colors = OutlinedTextFieldDefaults.colors(
+                            focusedBorderColor = Color(0xFFD9D9D9),
+                            unfocusedBorderColor = Color(0xFFD9D9D9),
+                            focusedLabelColor = Color(0xFFD9D9D9),
+                            unfocusedLabelColor = Color(0xFFD9D9D9),
+                            unfocusedTextColor = Color(0xFFD9D9D9),
+                            focusedTextColor = Color(0xFFD9D9D9)
+                        ),
+                        modifier = Modifier
+                            .width(330.dp)
+                            .padding(horizontal = 16.dp)
+                            .menuAnchor()
                     )
-                )
-
-                Spacer(modifier = Modifier.height(32.dp))
+                    ExposedDropdownMenu(
+                        expanded = expanded,
+                        onDismissRequest = { expanded = false }
+                    ) {
+                        types.forEach { type ->
+                            DropdownMenuItem(
+                                text = { Text(type.name) },
+                                onClick = {
+                                    selectedText = type.name
+                                    selectedType = type.name
+                                    expanded = false
+                                }
+                            )
+                        }
+                    }
+                }
             }
 
-            items(dishList) { dish ->
-                DishItem(dish)
+            if (selectedCategory == "Platos") {
+                items(filteredDishes) { dish ->
+                    DishItem(dish)
+                }
+            } else {
+                items(filteredDrinks) { drink ->
+                    DrinkItem(drink)
+                }
             }
+        }
 
-            item {
-                Spacer(modifier = Modifier.height(16.dp))
-            }
-
-            items(drinkList) { drink ->
-                DrinkItem(drink)
-            }
+        Column(
+            horizontalAlignment = Alignment.CenterHorizontally,
+            verticalArrangement = Arrangement.Bottom,
+            modifier = Modifier
+                .fillMaxSize()
+        ) {
+            Footer(
+                modifier = Modifier
+                    .width(430.dp)
+                    .height(54.dp)
+            )
+            Spacer(modifier = Modifier.height(16.dp))
         }
     }
 }
@@ -98,19 +218,32 @@ fun DishItem(dish: Dish) {
         verticalArrangement = Arrangement.Top,
         modifier = Modifier
             .fillMaxWidth()
-            .padding(16.dp)
     ) {
-        Text(text = "${dish.name} - ${dish.price} - ${dish.type}\n${dish.ingredients}")
-
-        dish.imageUrl?.let { imageUrl ->
+        dish.imageUrl.let { imageUrl ->
             Spacer(modifier = Modifier.height(8.dp))
-            Image(
-                painter = rememberImagePainter(data = imageUrl),
-                contentDescription = "Dish Image",
-                modifier = Modifier
-                    .height(200.dp)
-                    .fillMaxWidth()
-            )
+            val ingredientsText = dish.ingredients.joinToString(", ")
+
+            if (imageUrl.isNullOrEmpty()) {
+                MenuItemShow(
+                    itemNameText = dish.name,
+                    itemPriceText = "${dish.price}€",
+                    itemIngredientsText = ingredientsText,
+                    modifier = Modifier
+                        .width(305.dp)
+                        .height(156.dp)
+                )
+            } else {
+                val painter = rememberAsyncImagePainter(model = imageUrl)
+                MenuItemShow(
+                    itemImg = painter,
+                    itemNameText = dish.name,
+                    itemPriceText = "${dish.price}€",
+                    itemIngredientsText = ingredientsText,
+                    modifier = Modifier
+                        .width(305.dp)
+                        .height(156.dp)
+                )
+            }
         }
     }
 }
@@ -122,19 +255,28 @@ fun DrinkItem(drink: Drink) {
         verticalArrangement = Arrangement.Top,
         modifier = Modifier
             .fillMaxWidth()
-            .padding(16.dp)
     ) {
-        Text(text = "${drink.name} - ${drink.price} - ${drink.type}")
-
         drink.imageUrl?.let { imageUrl ->
             Spacer(modifier = Modifier.height(8.dp))
-            Image(
-                painter = rememberImagePainter(data = imageUrl),
-                contentDescription = "Drink Image",
-                modifier = Modifier
-                    .height(200.dp)
-                    .fillMaxWidth()
-            )
+            if (imageUrl.isNullOrEmpty()) {
+                MenuItemShow(
+                    itemNameText = drink.name,
+                    itemPriceText = "${drink.price}€",
+                    modifier = Modifier
+                        .width(305.dp)
+                        .height(156.dp)
+                )
+            } else {
+                val painter = rememberAsyncImagePainter(model = imageUrl)
+                MenuItemShow(
+                    itemImg = painter,
+                    itemNameText = drink.name,
+                    itemPriceText = "${drink.price}€",
+                    modifier = Modifier
+                        .width(305.dp)
+                        .height(156.dp)
+                )
+            }
         }
     }
 }

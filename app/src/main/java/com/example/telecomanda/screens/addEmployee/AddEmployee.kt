@@ -237,7 +237,6 @@ fun AddEmployee(
 
             Spacer(modifier = Modifier.height(77.dp))
 
-
         }
         Column(
             horizontalAlignment = Alignment.CenterHorizontally,
