@@ -86,7 +86,6 @@ dependencies {
     implementation("com.google.firebase:firebase-storage-ktx")
     implementation("com.google.firebase:firebase-analytics-ktx")
     implementation("com.google.firebase:firebase-database-ktx")
-
     implementation("androidx.compose.runtime:runtime-livedata:1.5.4")
 
     // Retrofit
