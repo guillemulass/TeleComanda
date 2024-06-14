@@ -1,4 +1,4 @@
-#Thu Jun 13 02:24:56 CEST 2024
+#Fri Jun 14 03:06:55 CEST 2024
 base.0=C\:\\Users\\mrano\\Desktop\\tfg\\prubas\\TeleComanda\\app\\build\\intermediates\\dex\\debug\\mergeExtDexDebug\\classes.dex
 base.1=C\:\\Users\\mrano\\Desktop\\tfg\\prubas\\TeleComanda\\app\\build\\intermediates\\dex\\debug\\mergeProjectDexDebug\\0\\classes.dex
 base.10=C\:\\Users\\mrano\\Desktop\\tfg\\prubas\\TeleComanda\\app\\build\\intermediates\\dex\\debug\\mergeProjectDexDebug\\3\\classes.dex
