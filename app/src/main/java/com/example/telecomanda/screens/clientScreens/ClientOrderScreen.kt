@@ -259,6 +259,7 @@ fun ClientOrderScreen(
             item {
                 BotonBig24sp(
                     onClick = {
+                        clientOrderViewModel.saveCommand(restaurantName, tableNumber)
                         clientOrderViewModel.sendOrderToServer(
                             tableNumber.toInt(),
                             restaurantName,

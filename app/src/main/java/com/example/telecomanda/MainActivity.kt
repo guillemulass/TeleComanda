@@ -41,6 +41,7 @@ import com.example.telecomanda.screens.logIn.LogInSelector
 import com.example.telecomanda.screens.logIn.LogInViewModel
 import com.example.telecomanda.screens.menuScreen.MenuScreen
 import com.example.telecomanda.screens.menuScreen.MenuScreenViewModel
+import com.example.telecomanda.screens.notificationScreen.NotificationScreen
 import com.example.telecomanda.screens.registerScreen.RegisterScreen
 import com.example.telecomanda.screens.registerScreen.RegisterScreenViewModel
 import com.example.telecomanda.screens.tableQuantityController.TableQuantityControllerScreen
@@ -246,6 +247,14 @@ class MainActivity : ComponentActivity() {
                         composable("employeeAddOrder/{tableNumber}") { backStackEntry ->
                             val tableNumber = backStackEntry.arguments?.getString("tableNumber")?.toInt() ?: 1
                             EmployeeAddOrder(tableNumber, navController)
+                        }
+
+                        composable(Routes.NotificationScreenRoute.route) {
+                            NotificationScreen(
+                                navController,
+                                "No funfa nene",
+                                "nono"
+                            )
                         }
 
                     }

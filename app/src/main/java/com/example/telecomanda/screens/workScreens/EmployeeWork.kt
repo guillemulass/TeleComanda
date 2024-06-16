@@ -11,16 +11,15 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material3.Button
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.text.TextStyle
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import com.example.telecomanda.botonbig32sp.BotonBig32sp
 import com.example.telecomanda.footer.Footer
@@ -32,6 +31,18 @@ import com.example.telecomanda.routes.Routes
 fun EmployeeWork(
     navController: NavHostController,
 ) {
+    val employeeWorkViewModel: EmployeeWorkViewModel = viewModel()
+    val notifications by employeeWorkViewModel.notifications.collectAsState()
+
+    LaunchedEffect(Unit) {
+        employeeWorkViewModel.getRestaurantName(
+            onSuccess = { restaurantName ->
+                employeeWorkViewModel.listenToNotifications(restaurantName)
+            },
+            onFailure = { /* Handle the error here */ }
+        )
+    }
+
     Box(
         modifier = Modifier
             .fillMaxSize()
@@ -82,6 +93,7 @@ fun EmployeeWork(
             )
 
         }
+
         Column(
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.Bottom,
@@ -97,3 +109,4 @@ fun EmployeeWork(
         }
     }
 }
+

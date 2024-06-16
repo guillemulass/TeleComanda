@@ -128,6 +128,28 @@ class ClientOrderViewModel : ViewModel() {
         }
     }
 
+    fun saveCommand(restaurantName: String, tableNumber: String) {
+        viewModelScope.launch {
+            try {
+                val commandString = currentOrderList.value.joinToString(separator = "\n") {
+                    "${it.name} - ${it.price}€ | x${it.quantity}"
+                }
+
+                db.collection("restaurants")
+                    .document(restaurantName)
+                    .collection("notificationText")
+                    .add(mapOf(
+                        "command" to commandString,
+                        "tableNumber" to tableNumber
+                    ))
+                    .await()
+            } catch (e: Exception) {
+                _errorMessage.value = "Error al guardar la comanda: ${e.message}"
+            }
+        }
+    }
+
+
     fun clearCurrentOrderList() {
         _currentOrderList.value = emptyList()
         updateCurrentOrderPrice()
