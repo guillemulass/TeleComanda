@@ -34,6 +34,8 @@ class EmployeeWorkViewModel(application: Application) : AndroidViewModel(applica
     private val _notifications = MutableStateFlow<List<String>>(emptyList())
     val notifications: StateFlow<List<String>> = _notifications
 
+    var restaurantName = ""
+
     private var notificationListenerRegistration: ListenerRegistration? = null
 
     init {
@@ -52,6 +54,11 @@ class EmployeeWorkViewModel(application: Application) : AndroidViewModel(applica
             val notificationManager = getApplication<Application>().getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
             notificationManager.createNotificationChannel(channel)
         }
+    }
+
+    suspend fun getRestaurantState(): Boolean {
+        val document = db.collection("restaurants").document(restaurantName).get().await()
+        return document.getBoolean("restaurantOpen") ?: false
     }
 
     private fun sendNotification(title: String, text: String, tableNumber: String) {
@@ -81,15 +88,11 @@ class EmployeeWorkViewModel(application: Application) : AndroidViewModel(applica
                     Manifest.permission.POST_NOTIFICATIONS
                 ) != PackageManager.PERMISSION_GRANTED
             ) {
-                // ActivityCompat#requestPermissions should be called from an Activity, not a ViewModel.
-                // So, consider requesting permissions from the Activity/Fragment that owns this ViewModel.
                 return
             }
             notify((0..10000).random(), builder.build())
         }
     }
-
-
 
     fun getRestaurantName(onSuccess: (String) -> Unit, onFailure: (Exception) -> Unit) {
         viewModelScope.launch {

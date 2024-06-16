@@ -5,7 +5,6 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.telecomanda.dataClasses.UserModel
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.firestore.FirebaseFirestore
@@ -76,7 +75,10 @@ class RegisterScreenViewModel : ViewModel() {
         val data = hashMapOf(
             "restaurantName" to restaurantName,
             "restaurantEmail" to restaurantEmail,
-            "restaurantId" to uid
+            "restaurantId" to uid,
+            "todaysTotal" to 0,
+            "restaurantOpen" to false,
+            "TableQuantity" to 0
         )
 
         restaurantInfoRef.set(data).addOnCompleteListener {

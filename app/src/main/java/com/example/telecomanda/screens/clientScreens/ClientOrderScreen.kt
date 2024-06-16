@@ -20,11 +20,13 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
@@ -35,6 +37,7 @@ import com.example.telecomanda.dataClasses.Dish
 import com.example.telecomanda.dataClasses.Drink
 import com.example.telecomanda.footer.Footer
 import com.example.telecomanda.header.Header
+import kotlinx.coroutines.launch
 
 @Composable
 fun ClientOrderScreen(
@@ -52,6 +55,9 @@ fun ClientOrderScreen(
     val currentOrderPrice by clientOrderViewModel.currentOrderPrice.collectAsState()
     val totalOrderPrice by clientOrderViewModel.totalOrderPrice.collectAsState()
     val errorMessage by clientOrderViewModel.errorMessage.collectAsState()
+    val coroutineScope = rememberCoroutineScope()
+    var isRestaurantOpen by remember { mutableStateOf(false) }
+    var restaurantNameSet by remember { mutableStateOf(false) }
 
     LaunchedEffect(restaurantName) {
         clientOrderViewModel.getDrinkData(
@@ -69,6 +75,15 @@ fun ClientOrderScreen(
             onFailure = {}
         )
         clientOrderViewModel.listenToOrderUpdates(tableNumber.toInt(), restaurantName)
+        restaurantNameSet = true
+    }
+
+    LaunchedEffect(restaurantNameSet) {
+        if (restaurantNameSet) {
+            coroutineScope.launch {
+                isRestaurantOpen = clientOrderViewModel.getRestaurantState(restaurantName)
+            }
+        }
     }
 
     Box(
@@ -84,8 +99,7 @@ fun ClientOrderScreen(
             modifier = Modifier
                 .width(430.dp)
                 .height(60.dp)
-                .background(Color(0xFF161618))
-            ,
+                .background(Color(0xFF161618)),
             onClick = { navController.popBackStack() }
         )
 
@@ -97,195 +111,209 @@ fun ClientOrderScreen(
                 .padding(top = 60.dp)
         ) {
 
-            item {
-                Spacer(modifier = Modifier.height(32.dp))
-            }
+            if (isRestaurantOpen) {
 
-            item {
-                Text(
-                    text = "Mesa: $tableNumber",
-                    style = TextStyle(color = Color.White, fontSize = 32.sp)
-                )
-
-                Text(
-                    text = restaurantName,
-                    style = TextStyle(color = Color.White, fontSize = 32.sp)
-                )
-            }
-
-            item {
-                Spacer(modifier = Modifier.height(16.dp))
-            }
-
-            item {
-                BotonBig24sp(
-                    onClick = {
-                        navController.navigate("client_menu_screen/$restaurantName")
-                    },
-                    text = "Ver Carta",
-                    modifier = Modifier
-                        .width(150.dp)
-                        .height(52.dp)
-                )
-                Spacer(modifier = Modifier.height(16.dp))
-            }
-
-            item {
-                errorMessage?.let {
-                    Text(
-                        text = "Error: $it",
-                        style = TextStyle(color = Color.Red, fontSize = 24.sp),
-                    )
+                item {
+                    Spacer(modifier = Modifier.height(32.dp))
                 }
-            }
 
-            item {
-                LazyRow(
-                    horizontalArrangement = Arrangement.Center,
-                    modifier = Modifier.fillMaxWidth()
-                ) {
-                    item {
-                        ButtonSmallMenu(
-                            onClick = { showDrinks = true },
-                            text = "Bebidas",
-                            textColor = if (showDrinks) Color.White else Color.Gray
-                        )
-                    }
-
-                    item { Spacer(modifier = Modifier.width(16.dp)) }
-
-                    item {
-                        ButtonSmallMenu(
-                            onClick = { showDrinks = false },
-                            text = "Platos",
-                            textColor = if (showDrinks) Color.Gray else Color.White
-                        )
-                    }
-                }
-            }
-
-            if (showDrinks && drinks.isNotEmpty()) {
-                items(drinks) { drink ->
-                    Spacer(modifier = Modifier.height(8.dp))
-                    BotonBig24sp(
-                        onClick = { clientOrderViewModel.addDrinkToCurrentList(drink) },
-                        text = drink.name,
-                        modifier = Modifier.width(266.dp)
-                    )
-                }
-            } else if (!showDrinks && dishes.isNotEmpty()) {
-                items(dishes) { dish ->
-                    Spacer(modifier = Modifier.height(8.dp))
-                    BotonBig24sp(
-                        onClick = { clientOrderViewModel.addDishToCurrentList(dish) },
-                        text = dish.name,
-                        modifier = Modifier.width(266.dp)
-                    )
-                }
-            } else {
                 item {
                     Text(
-                        text = "No ${if (showDrinks) "bebidas" else "platos"} disponibles",
-                        style = TextStyle(color = Color.Red, fontSize = 24.sp),
+                        text = "Mesa: $tableNumber",
+                        style = TextStyle(color = Color.White, fontSize = 32.sp)
+                    )
+
+                    Text(
+                        text = restaurantName,
+                        style = TextStyle(color = Color.White, fontSize = 32.sp)
                     )
                 }
-            }
 
-            item {
-                Spacer(modifier = Modifier.height(16.dp))
-            }
+                item {
+                    Spacer(modifier = Modifier.height(16.dp))
+                }
 
-            item {
-                Text(text = "Comanda Actual",
-                    style = TextStyle(color = Color.White, fontSize = 24.sp),
-                )
-            }
+                item {
+                    BotonBig24sp(
+                        onClick = {
+                            navController.navigate("client_menu_screen/$restaurantName")
+                        },
+                        text = "Ver Carta",
+                        modifier = Modifier
+                            .width(150.dp)
+                            .height(52.dp)
+                    )
+                    Spacer(modifier = Modifier.height(16.dp))
+                }
 
-            items(currentOrderList) { orderItem ->
-                Text(text = "${orderItem.name} - ${orderItem.price}€ | x${orderItem.quantity}",
-                    style = TextStyle(color = Color.White, fontSize = 24.sp),
-                )
-            }
-
-            item {
-                Text(text = "Total: ${currentOrderPrice}€",
-                    style = TextStyle(color = Color.White, fontSize = 24.sp),
-                )
-            }
-
-            item {
-                Spacer(modifier = Modifier.height(16.dp))
-            }
-
-            item {
-                Text(text = "Comanda Completa",
-                    style = TextStyle(color = Color.White, fontSize = 24.sp),
-                )
-            }
-
-            items(totalOrderList) { orderItem ->
-                Text(
-                    text = "${orderItem.name} - ${orderItem.price}€ | x${orderItem.quantity}",
-                    style = TextStyle(color = Color.White, fontSize = 24.sp),
-                )
-            }
-
-            item {
-                Spacer(modifier = Modifier.height(16.dp))
-                Text(
-                    text = "Total: ${totalOrderPrice}€",
-                    style = TextStyle(color = Color.White, fontSize = 24.sp),
-                )
-            }
-
-            item {
-                Spacer(modifier = Modifier.height(16.dp))
-            }
-
-            item {
-                BotonBig24sp(
-                    onClick = { clientOrderViewModel.clearCurrentOrderList() },
-                    text = "Vaciar Comanda Actual",
-                    modifier = Modifier
-                        .width(266.dp)
-                        .height(80.dp)
-                )
-            }
-
-            item {
-                Spacer(modifier = Modifier.height(16.dp))
-            }
-
-            item {
-                BotonBig24sp(
-                    onClick = {
-                        clientOrderViewModel.saveCommand(restaurantName, tableNumber)
-                        clientOrderViewModel.sendOrderToServer(
-                            tableNumber.toInt(),
-                            restaurantName,
-                            tableCode
+                item {
+                    errorMessage?.let {
+                        Text(
+                            text = "Error: $it",
+                            style = TextStyle(color = Color.Red, fontSize = 24.sp),
                         )
-                    },
-                    text = "Confirmar Comanda",
-                    modifier = Modifier
-                        .width(266.dp)
-                        .height(52.dp)
-                )
+                    }
+                }
+
+                item {
+                    LazyRow(
+                        horizontalArrangement = Arrangement.Center,
+                        modifier = Modifier.fillMaxWidth()
+                    ) {
+                        item {
+                            ButtonSmallMenu(
+                                onClick = { showDrinks = true },
+                                text = "Bebidas",
+                                textColor = if (showDrinks) Color.White else Color.Gray
+                            )
+                        }
+
+                        item { Spacer(modifier = Modifier.width(16.dp)) }
+
+                        item {
+                            ButtonSmallMenu(
+                                onClick = { showDrinks = false },
+                                text = "Platos",
+                                textColor = if (showDrinks) Color.Gray else Color.White
+                            )
+                        }
+                    }
+                }
+
+                if (showDrinks && drinks.isNotEmpty()) {
+                    items(drinks) { drink ->
+                        Spacer(modifier = Modifier.height(8.dp))
+                        BotonBig24sp(
+                            onClick = { clientOrderViewModel.addDrinkToCurrentList(drink) },
+                            text = drink.name,
+                            modifier = Modifier.width(266.dp)
+                        )
+                    }
+                } else if (!showDrinks && dishes.isNotEmpty()) {
+                    items(dishes) { dish ->
+                        Spacer(modifier = Modifier.height(8.dp))
+                        BotonBig24sp(
+                            onClick = { clientOrderViewModel.addDishToCurrentList(dish) },
+                            text = dish.name,
+                            modifier = Modifier.width(266.dp)
+                        )
+                    }
+                } else {
+                    item {
+                        Text(
+                            text = "No ${if (showDrinks) "bebidas" else "platos"} disponibles",
+                            style = TextStyle(color = Color.Red, fontSize = 24.sp),
+                        )
+                    }
+                }
+
+                item {
+                    Spacer(modifier = Modifier.height(16.dp))
+                }
+
+                item {
+                    Text(
+                        text = "Comanda Actual",
+                        style = TextStyle(color = Color.White, fontSize = 24.sp),
+                    )
+                }
+
+                items(currentOrderList) { orderItem ->
+                    Text(
+                        text = "${orderItem.name} - ${orderItem.price}€ | x${orderItem.quantity}",
+                        style = TextStyle(color = Color.White, fontSize = 24.sp),
+                    )
+                }
+
+                item {
+                    Text(
+                        text = "Total: ${currentOrderPrice}€",
+                        style = TextStyle(color = Color.White, fontSize = 24.sp),
+                    )
+                }
+
+                item {
+                    Spacer(modifier = Modifier.height(16.dp))
+                }
+
+                item {
+                    Text(
+                        text = "Comanda Completa",
+                        style = TextStyle(color = Color.White, fontSize = 24.sp),
+                    )
+                }
+
+                items(totalOrderList) { orderItem ->
+                    Text(
+                        text = "${orderItem.name} - ${orderItem.price}€ | x${orderItem.quantity}",
+                        style = TextStyle(color = Color.White, fontSize = 24.sp),
+                    )
+                }
+
+                item {
+                    Spacer(modifier = Modifier.height(16.dp))
+                    Text(
+                        text = "Total: ${totalOrderPrice}€",
+                        style = TextStyle(color = Color.White, fontSize = 24.sp),
+                    )
+                }
+
+                item {
+                    Spacer(modifier = Modifier.height(16.dp))
+                }
+
+                item {
+                    BotonBig24sp(
+                        onClick = { clientOrderViewModel.clearCurrentOrderList() },
+                        text = "Vaciar Comanda Actual",
+                        modifier = Modifier
+                            .width(266.dp)
+                            .height(80.dp)
+                    )
+                }
+
+                item {
+                    Spacer(modifier = Modifier.height(16.dp))
+                }
+
+                item {
+                    BotonBig24sp(
+                        onClick = {
+                            clientOrderViewModel.saveCommand(restaurantName, tableNumber)
+                            clientOrderViewModel.sendOrderToServer(
+                                tableNumber.toInt(),
+                                restaurantName,
+                                tableCode
+                            )
+                        },
+                        text = "Confirmar Comanda",
+                        modifier = Modifier
+                            .width(266.dp)
+                            .height(52.dp)
+                    )
+                }
+
+                item {
+                    Spacer(modifier = Modifier.height(75.dp))
+                }
+
+            } else {
+                item {
+                    Spacer(modifier = Modifier.height(30.dp))
+                    Text(
+                        text = "Lo sentimos, la caja ha cerrado.",
+                        style = TextStyle(color = Color.White, fontSize = 32.sp, fontWeight = FontWeight.Bold),
+                        modifier = Modifier.padding(16.dp)
+                    )
+                    Spacer(modifier = Modifier.height(30.dp))
+                }
             }
-
-
-
-            item {
-                Spacer(modifier = Modifier.height(75.dp))
-            }
-
         }
         Column(
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.Bottom,
             modifier = Modifier
                 .fillMaxSize()
-
         ) {
             Footer(
                 modifier = Modifier

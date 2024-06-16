@@ -65,7 +65,7 @@ fun ConfigurationScreen(
                 onClick = {
                     navController.navigate(Routes.CloseRegisterScreenRoute.route)
                 },
-                text = "Cerrar Caja",
+                text = "Abrir/Cerrar Caja",
                 modifier = Modifier.width(266.dp).height(52.dp)
             )
 

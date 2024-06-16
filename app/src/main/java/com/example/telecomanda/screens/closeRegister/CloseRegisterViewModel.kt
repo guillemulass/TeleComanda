@@ -2,9 +2,9 @@ package com.example.telecomanda.screens.closeRegister
 
 import androidx.lifecycle.ViewModel
 import com.example.telecomanda.dataClasses.OrderItem
+import com.example.telecomanda.dataClasses.Table
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
-import com.example.telecomanda.dataClasses.Table
 import kotlinx.coroutines.tasks.await
 
 class CloseRegisterViewModel : ViewModel() {
@@ -23,6 +23,23 @@ class CloseRegisterViewModel : ViewModel() {
         val document = db.collection("restaurants").document(restaurantName).get().await()
         return document.getDouble("todaysTotal") ?: 0.0
     }
+
+    suspend fun getRestaurantState(): Boolean {
+        val restaurantName = getRestaurantName()
+        val document = db.collection("restaurants").document(restaurantName).get().await()
+        return document.getBoolean("restaurantOpen") ?: false
+    }
+
+    suspend fun toggleRestaurantState() {
+        val restaurantName = getRestaurantName()
+        val documentReference = db.collection("restaurants").document(restaurantName)
+        val currentState = getRestaurantState()
+        val newState = !currentState
+
+        documentReference.update("restaurantOpen", newState).await()
+    }
+
+
 
     suspend fun closeRegister(todaysTotal: Double) {
         val restaurantName = getRestaurantName()

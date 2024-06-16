@@ -11,14 +11,22 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import com.example.telecomanda.botonbig32sp.BotonBig32sp
@@ -26,21 +34,28 @@ import com.example.telecomanda.footer.Footer
 import com.example.telecomanda.header.Header
 import com.example.telecomanda.logo.Logo
 import com.example.telecomanda.routes.Routes
+import kotlinx.coroutines.launch
 
 @Composable
 fun AdminWork(
     navController: NavHostController,
 ) {
-
     val adminWorkViewModel: AdminWorkViewModel = viewModel()
     val notifications by adminWorkViewModel.notifications.collectAsState()
+    val coroutineScope = rememberCoroutineScope()
+    var isRestaurantOpen by remember { mutableStateOf(false) }
+
 
     LaunchedEffect(Unit) {
         adminWorkViewModel.getRestaurantName(
             onSuccess = { restaurantName ->
+                adminWorkViewModel.restaurantName = restaurantName
                 adminWorkViewModel.listenToNotifications(restaurantName)
-            },
-            onFailure = { /* Handle the error here */ }
+                coroutineScope.launch {
+                    isRestaurantOpen = adminWorkViewModel.getRestaurantState()
+                }
+                        },
+            onFailure = { println("FAIL adminWorkViewModel.getRestaurantName() ") }
         )
     }
 
@@ -58,12 +73,12 @@ fun AdminWork(
                 .padding(top = 35.dp)
         ) {
 
-            Box{
+            Box {
                 Header(
                     modifier = Modifier
                         .width(450.dp)
                         .height(60.dp),
-                    onClick = {navController.popBackStack()}
+                    onClick = { navController.popBackStack() }
                 )
             }
 
@@ -77,24 +92,32 @@ fun AdminWork(
 
             Spacer(modifier = Modifier.height(32.dp))
 
-            BotonBig32sp(
-                onClick = {
-                    navController.navigate(Routes.TableSelecctionScreenRoute.route)
-                },
-                text = "Ver Mesas"
-            )
+            if (isRestaurantOpen) {
+                BotonBig32sp(
+                    onClick = {
+                        navController.navigate(Routes.TableSelecctionScreenRoute.route)
+                    },
+                    text = "Ver Mesas"
+                )
 
+                Spacer(modifier = Modifier.height(16.dp))
+
+                BotonBig32sp(
+                    onClick = {
+                        navController.navigate(Routes.MenuScreenRoute.route)
+                    },
+                    text = "Ver Carta"
+                )
+
+            } else {
+                Text(
+                    text = "Caja Cerrada",
+                    style = TextStyle(color = Color.White, fontSize = 32.sp, fontWeight = FontWeight.Bold)
+                )
+            }
 
             Spacer(modifier = Modifier.height(16.dp))
 
-            BotonBig32sp(
-                onClick = {
-                    navController.navigate(Routes.MenuScreenRoute.route)
-                },
-                text = "Ver Carta"
-            )
-
-            Spacer(modifier = Modifier.height(16.dp))
 
             BotonBig32sp(
                 onClick = {
@@ -103,10 +126,9 @@ fun AdminWork(
                 text = "Configuracion"
             )
 
-
             Spacer(modifier = Modifier.height(16.dp))
-
         }
+
         Column(
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.Bottom,

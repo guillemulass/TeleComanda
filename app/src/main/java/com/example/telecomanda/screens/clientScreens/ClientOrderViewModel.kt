@@ -34,6 +34,11 @@ class ClientOrderViewModel : ViewModel() {
 
     private var orderListenerRegistration: ListenerRegistration? = null
 
+    suspend fun getRestaurantState(restaurantName: String): Boolean {
+        val document = db.collection("restaurants").document(restaurantName).get().await()
+        return document.getBoolean("restaurantOpen") ?: false
+    }
+
     fun getDrinkData(restaurantName: String, onSuccess: (List<Drink>) -> Unit, onFailure: (Exception) -> Unit) {
         viewModelScope.launch {
             try {
@@ -148,7 +153,6 @@ class ClientOrderViewModel : ViewModel() {
             }
         }
     }
-
 
     fun clearCurrentOrderList() {
         _currentOrderList.value = emptyList()
