@@ -6,6 +6,9 @@ import com.example.telecomanda.dataClasses.Table
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import kotlinx.coroutines.tasks.await
+import java.text.SimpleDateFormat
+import java.util.Date
+import java.util.Locale
 
 class CloseRegisterViewModel : ViewModel() {
 
@@ -39,8 +42,6 @@ class CloseRegisterViewModel : ViewModel() {
         documentReference.update("restaurantOpen", newState).await()
     }
 
-
-
     suspend fun closeRegister(todaysTotal: Double) {
         val restaurantName = getRestaurantName()
         val tablesCollection = db.collection("restaurants").document(restaurantName).collection("tables")
@@ -59,6 +60,23 @@ class CloseRegisterViewModel : ViewModel() {
 
         // Actualizar el total de hoy en Firebase
         db.collection("restaurants").document(restaurantName).update("todaysTotal", total).await()
+
+        // Registrar el cierre de la caja en /restaurants/$restaurantName/registerLog
+        val currentDate = Date()
+        val dateFormat = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())
+        val timeFormat = SimpleDateFormat("HH:mm:ss", Locale.getDefault())
+        val dateStr = dateFormat.format(currentDate)
+        val timeStr = timeFormat.format(currentDate)
+
+        val registerLog = hashMapOf(
+            "date" to dateStr,
+            "time" to timeStr,
+            "total" to total
+        )
+
+        db.collection("restaurants").document(restaurantName)
+            .collection("registerLog").document(dateStr)
+            .set(registerLog).await()
 
         // Restablecer el total de hoy a 0
         db.collection("restaurants").document(restaurantName).update("todaysTotal", 0).await()
