@@ -1,9 +1,9 @@
 -- Merging decision tree log ---
 manifest
-ADDED from C:\Users\mrano\Desktop\tfg\prubas\TeleComanda\app\src\main\AndroidManifest.xml:2:1-34:12
-INJECTED from C:\Users\mrano\Desktop\tfg\prubas\TeleComanda\app\src\main\AndroidManifest.xml:2:1-34:12
-INJECTED from C:\Users\mrano\Desktop\tfg\prubas\TeleComanda\app\src\main\AndroidManifest.xml:2:1-34:12
-INJECTED from C:\Users\mrano\Desktop\tfg\prubas\TeleComanda\app\src\main\AndroidManifest.xml:2:1-34:12
+ADDED from C:\Users\mrano\Desktop\tfg\prubas\TeleComanda\app\src\main\AndroidManifest.xml:2:1-39:12
+INJECTED from C:\Users\mrano\Desktop\tfg\prubas\TeleComanda\app\src\main\AndroidManifest.xml:2:1-39:12
+INJECTED from C:\Users\mrano\Desktop\tfg\prubas\TeleComanda\app\src\main\AndroidManifest.xml:2:1-39:12
+INJECTED from C:\Users\mrano\Desktop\tfg\prubas\TeleComanda\app\src\main\AndroidManifest.xml:2:1-39:12
 MERGED from [io.coil-kt:coil-compose:2.5.0] C:\Users\mrano\.gradle\caches\transforms-3\4e7f5f6e68c8d56ac4cd443c43fd6419\transformed\coil-compose-2.5.0\AndroidManifest.xml:2:1-7:12
 MERGED from [com.google.accompanist:accompanist-permissions:0.29.1-alpha] C:\Users\mrano\.gradle\caches\transforms-3\770c3d893c2e9118bb2c749aab552b1d\transformed\accompanist-permissions-0.29.1-alpha\AndroidManifest.xml:17:1-26:12
 MERGED from [com.google.firebase:firebase-storage-ktx:20.3.0] C:\Users\mrano\.gradle\caches\transforms-3\452de8a2b73694518be2ae67ceb89f3c\transformed\firebase-storage-ktx-20.3.0\AndroidManifest.xml:2:1-18:12
@@ -163,8 +163,8 @@ ADDED from C:\Users\mrano\Desktop\tfg\prubas\TeleComanda\app\src\main\AndroidMan
 	android:name
 		ADDED from C:\Users\mrano\Desktop\tfg\prubas\TeleComanda\app\src\main\AndroidManifest.xml:8:22-78
 application
-ADDED from C:\Users\mrano\Desktop\tfg\prubas\TeleComanda\app\src\main\AndroidManifest.xml:11:5-32:19
-INJECTED from C:\Users\mrano\Desktop\tfg\prubas\TeleComanda\app\src\main\AndroidManifest.xml:11:5-32:19
+ADDED from C:\Users\mrano\Desktop\tfg\prubas\TeleComanda\app\src\main\AndroidManifest.xml:10:5-37:19
+INJECTED from C:\Users\mrano\Desktop\tfg\prubas\TeleComanda\app\src\main\AndroidManifest.xml:10:5-37:19
 MERGED from [com.google.firebase:firebase-storage-ktx:20.3.0] C:\Users\mrano\.gradle\caches\transforms-3\452de8a2b73694518be2ae67ceb89f3c\transformed\firebase-storage-ktx-20.3.0\AndroidManifest.xml:8:5-16:19
 MERGED from [com.google.firebase:firebase-storage-ktx:20.3.0] C:\Users\mrano\.gradle\caches\transforms-3\452de8a2b73694518be2ae67ceb89f3c\transformed\firebase-storage-ktx-20.3.0\AndroidManifest.xml:8:5-16:19
 MERGED from [com.google.firebase:firebase-database-ktx:20.3.1] C:\Users\mrano\.gradle\caches\transforms-3\04966187f37fc66ba0e5fb4ad182137e\transformed\firebase-database-ktx-20.3.1\AndroidManifest.xml:8:5-16:19
@@ -244,43 +244,51 @@ MERGED from [androidx.startup:startup-runtime:1.1.1] C:\Users\mrano\.gradle\cach
 	android:appComponentFactory
 		ADDED from [androidx.core:core:1.12.0] C:\Users\mrano\.gradle\caches\transforms-3\5980a985b8a416d30fc3b8ebf4e0a658\transformed\core-1.12.0\AndroidManifest.xml:28:18-86
 	android:supportsRtl
-		ADDED from C:\Users\mrano\Desktop\tfg\prubas\TeleComanda\app\src\main\AndroidManifest.xml:18:9-35
+		ADDED from C:\Users\mrano\Desktop\tfg\prubas\TeleComanda\app\src\main\AndroidManifest.xml:17:9-35
 	android:label
-		ADDED from C:\Users\mrano\Desktop\tfg\prubas\TeleComanda\app\src\main\AndroidManifest.xml:16:9-41
+		ADDED from C:\Users\mrano\Desktop\tfg\prubas\TeleComanda\app\src\main\AndroidManifest.xml:15:9-41
 	android:fullBackupContent
-		ADDED from C:\Users\mrano\Desktop\tfg\prubas\TeleComanda\app\src\main\AndroidManifest.xml:14:9-54
+		ADDED from C:\Users\mrano\Desktop\tfg\prubas\TeleComanda\app\src\main\AndroidManifest.xml:13:9-54
 	android:roundIcon
-		ADDED from C:\Users\mrano\Desktop\tfg\prubas\TeleComanda\app\src\main\AndroidManifest.xml:17:9-54
+		ADDED from C:\Users\mrano\Desktop\tfg\prubas\TeleComanda\app\src\main\AndroidManifest.xml:16:9-54
 	tools:targetApi
-		ADDED from C:\Users\mrano\Desktop\tfg\prubas\TeleComanda\app\src\main\AndroidManifest.xml:20:9-29
+		ADDED from C:\Users\mrano\Desktop\tfg\prubas\TeleComanda\app\src\main\AndroidManifest.xml:19:9-29
 	android:icon
-		ADDED from C:\Users\mrano\Desktop\tfg\prubas\TeleComanda\app\src\main\AndroidManifest.xml:15:9-43
+		ADDED from C:\Users\mrano\Desktop\tfg\prubas\TeleComanda\app\src\main\AndroidManifest.xml:14:9-43
 	android:allowBackup
-		ADDED from C:\Users\mrano\Desktop\tfg\prubas\TeleComanda\app\src\main\AndroidManifest.xml:12:9-35
+		ADDED from C:\Users\mrano\Desktop\tfg\prubas\TeleComanda\app\src\main\AndroidManifest.xml:11:9-35
 	android:theme
-		ADDED from C:\Users\mrano\Desktop\tfg\prubas\TeleComanda\app\src\main\AndroidManifest.xml:19:9-49
+		ADDED from C:\Users\mrano\Desktop\tfg\prubas\TeleComanda\app\src\main\AndroidManifest.xml:18:9-49
 	android:dataExtractionRules
-		ADDED from C:\Users\mrano\Desktop\tfg\prubas\TeleComanda\app\src\main\AndroidManifest.xml:13:9-65
+		ADDED from C:\Users\mrano\Desktop\tfg\prubas\TeleComanda\app\src\main\AndroidManifest.xml:12:9-65
 activity#com.example.telecomanda.MainActivity
-ADDED from C:\Users\mrano\Desktop\tfg\prubas\TeleComanda\app\src\main\AndroidManifest.xml:21:9-31:20
+ADDED from C:\Users\mrano\Desktop\tfg\prubas\TeleComanda\app\src\main\AndroidManifest.xml:20:9-29:20
 	android:label
-		ADDED from C:\Users\mrano\Desktop\tfg\prubas\TeleComanda\app\src\main\AndroidManifest.xml:24:13-45
+		ADDED from C:\Users\mrano\Desktop\tfg\prubas\TeleComanda\app\src\main\AndroidManifest.xml:23:13-45
 	android:exported
-		ADDED from C:\Users\mrano\Desktop\tfg\prubas\TeleComanda\app\src\main\AndroidManifest.xml:23:13-36
+		ADDED from C:\Users\mrano\Desktop\tfg\prubas\TeleComanda\app\src\main\AndroidManifest.xml:22:13-36
 	android:theme
-		ADDED from C:\Users\mrano\Desktop\tfg\prubas\TeleComanda\app\src\main\AndroidManifest.xml:25:13-53
+		ADDED from C:\Users\mrano\Desktop\tfg\prubas\TeleComanda\app\src\main\AndroidManifest.xml:24:13-53
 	android:name
-		ADDED from C:\Users\mrano\Desktop\tfg\prubas\TeleComanda\app\src\main\AndroidManifest.xml:22:13-41
+		ADDED from C:\Users\mrano\Desktop\tfg\prubas\TeleComanda\app\src\main\AndroidManifest.xml:21:13-41
 intent-filter#action:name:android.intent.action.MAIN+category:name:android.intent.category.LAUNCHER
-ADDED from C:\Users\mrano\Desktop\tfg\prubas\TeleComanda\app\src\main\AndroidManifest.xml:26:13-30:29
+ADDED from C:\Users\mrano\Desktop\tfg\prubas\TeleComanda\app\src\main\AndroidManifest.xml:25:13-28:29
 action#android.intent.action.MAIN
-ADDED from C:\Users\mrano\Desktop\tfg\prubas\TeleComanda\app\src\main\AndroidManifest.xml:27:17-69
+ADDED from C:\Users\mrano\Desktop\tfg\prubas\TeleComanda\app\src\main\AndroidManifest.xml:26:17-69
 	android:name
-		ADDED from C:\Users\mrano\Desktop\tfg\prubas\TeleComanda\app\src\main\AndroidManifest.xml:27:25-66
+		ADDED from C:\Users\mrano\Desktop\tfg\prubas\TeleComanda\app\src\main\AndroidManifest.xml:26:25-66
 category#android.intent.category.LAUNCHER
-ADDED from C:\Users\mrano\Desktop\tfg\prubas\TeleComanda\app\src\main\AndroidManifest.xml:29:17-77
+ADDED from C:\Users\mrano\Desktop\tfg\prubas\TeleComanda\app\src\main\AndroidManifest.xml:27:17-77
 	android:name
-		ADDED from C:\Users\mrano\Desktop\tfg\prubas\TeleComanda\app\src\main\AndroidManifest.xml:29:27-74
+		ADDED from C:\Users\mrano\Desktop\tfg\prubas\TeleComanda\app\src\main\AndroidManifest.xml:27:27-74
+activity#com.example.telecomanda.NotificationActivity
+ADDED from C:\Users\mrano\Desktop\tfg\prubas\TeleComanda\app\src\main\AndroidManifest.xml:32:9-36:20
+	android:exported
+		ADDED from C:\Users\mrano\Desktop\tfg\prubas\TeleComanda\app\src\main\AndroidManifest.xml:34:13-36
+	android:theme
+		ADDED from C:\Users\mrano\Desktop\tfg\prubas\TeleComanda\app\src\main\AndroidManifest.xml:35:13-53
+	android:name
+		ADDED from C:\Users\mrano\Desktop\tfg\prubas\TeleComanda\app\src\main\AndroidManifest.xml:33:13-49
 uses-sdk
 INJECTED from C:\Users\mrano\Desktop\tfg\prubas\TeleComanda\app\src\main\AndroidManifest.xml reason: use-sdk injection requested
 INJECTED from C:\Users\mrano\Desktop\tfg\prubas\TeleComanda\app\src\main\AndroidManifest.xml
