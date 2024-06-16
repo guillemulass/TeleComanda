@@ -121,7 +121,7 @@ class EmployeeWorkViewModel(application: Application) : AndroidViewModel(applica
                     val tableNumber = document.getString("tableNumber") ?: "Desconocido"
                     if (command != null) {
                         sendNotification("Se ha pedido una comanda en la mesa $tableNumber", command, tableNumber)
-                        //document.reference.delete()
+                        document.reference.delete()
                     }
                 }
             }
