@@ -50,7 +50,7 @@ fun NotificationScreen(
                         .width(450.dp)
                         .height(60.dp),
                     onClick = {
-                        navController.navigate(Routes.EmployeeWorkScreenRoute.route)
+                        navController.navigate(Routes.InitialScreenRoute.route)
                     }
                 )
             }
