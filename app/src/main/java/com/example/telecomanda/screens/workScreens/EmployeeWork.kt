@@ -103,7 +103,7 @@ fun EmployeeWork(
                     onClick = {
                         navController.navigate(Routes.EmployeeTableSelectionScreenRoute.route)
                     },
-                    text = "Ver Mesas"
+                    text = "Ver Mesas",
                 )
 
                 Spacer(modifier = Modifier.height(16.dp))

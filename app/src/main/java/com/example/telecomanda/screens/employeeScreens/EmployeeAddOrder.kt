@@ -32,6 +32,7 @@ import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import com.example.telecomanda.botonbig24sp.BotonBig24sp
+import com.example.telecomanda.buttonorderitem.ButtonOrderItem
 import com.example.telecomanda.dataClasses.Dish
 import com.example.telecomanda.dataClasses.Drink
 import com.example.telecomanda.dataClasses.Table
@@ -180,21 +181,20 @@ fun OrderScreen(
 
                 item { Spacer(modifier = Modifier.height(24.dp)) }
 
-                if (showDishes) {
+                if (searchQuery!="") {
                     items(filteredDishList) { dish ->
                         Spacer(modifier = Modifier.height(8.dp))
-                        BotonBig24sp(
+                        ButtonOrderItem(
                             onClick = { addOrderViewModel.addDishToCurrentList(dish) },
-                            text = dish.name,
+                            text = "${dish.name} | ${dish.price}€",
                             modifier = Modifier.width(266.dp)
                         )
                     }
-                } else {
                     items(filteredDrinkList) { drink ->
                         Spacer(modifier = Modifier.height(8.dp))
-                        BotonBig24sp(
+                        ButtonOrderItem(
                             onClick = { addOrderViewModel.addDrinkToCurrentList(drink) },
-                            text = drink.name,
+                            text = "${drink.name} | ${drink.price}€",
                             modifier = Modifier.width(266.dp)
                         )
                     }

@@ -60,7 +60,7 @@ fun TableSelectionScreen(
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.Top,
             modifier = Modifier
-                .padding(top = 60.dp)
+                .padding(top = 70.dp)
         ){
 
             Logo(
