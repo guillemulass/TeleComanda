@@ -11,7 +11,6 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.OutlinedTextFieldDefaults
 import androidx.compose.material3.Text
@@ -34,7 +33,6 @@ import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import com.example.telecomanda.botonbig24sp.BotonBig24sp
-import com.example.telecomanda.buttonsmallmenu.ButtonSmallMenu
 import com.example.telecomanda.dataClasses.Dish
 import com.example.telecomanda.dataClasses.Drink
 import com.example.telecomanda.footer.Footer
@@ -51,7 +49,6 @@ fun ClientOrderScreen(
     val clientOrderViewModel: ClientOrderViewModel = viewModel()
     var drinks by remember { mutableStateOf(listOf<Drink>()) }
     var dishes by remember { mutableStateOf(listOf<Dish>()) }
-    var showDrinks by remember { mutableStateOf(true) }
     var searchText by remember { mutableStateOf("") }
     val currentOrderList by clientOrderViewModel.currentOrderList.collectAsState()
     val totalOrderList by clientOrderViewModel.totalOrderList.collectAsState()
@@ -184,33 +181,9 @@ fun ClientOrderScreen(
                     Spacer(modifier = Modifier.height(8.dp))
                 }
 
-                item {
-                    LazyRow(
-                        horizontalArrangement = Arrangement.Center,
-                        modifier = Modifier.fillMaxWidth()
-                    ) {
-                        item {
-                            ButtonSmallMenu(
-                                onClick = { showDrinks = true },
-                                text = "Bebidas",
-                                textColor = if (showDrinks) Color.White else Color.Gray
-                            )
-                        }
-
-                        item { Spacer(modifier = Modifier.width(16.dp)) }
-
-                        item {
-                            ButtonSmallMenu(
-                                onClick = { showDrinks = false },
-                                text = "Platos",
-                                textColor = if (showDrinks) Color.Gray else Color.White
-                            )
-                        }
-                    }
-                }
 
 
-                if (showDrinks && drinks.isNotEmpty() && searchText != "") {
+                if (drinks.isNotEmpty() && searchText != "") {
                     items(filteredDrinks) { drink ->
                         Spacer(modifier = Modifier.height(8.dp))
                         BotonBig24sp(
@@ -219,7 +192,7 @@ fun ClientOrderScreen(
                             modifier = Modifier.width(266.dp)
                         )
                     }
-                } else if (!showDrinks && dishes.isNotEmpty() && searchText != "") {
+                } else if (dishes.isNotEmpty() && searchText != "") {
                     items(filteredDishes) { dish ->
                         Spacer(modifier = Modifier.height(8.dp))
                         BotonBig24sp(

@@ -1,13 +1,27 @@
 package com.example.telecomanda.screens.employeeScreens
 
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
+import androidx.compose.material3.OutlinedTextFieldDefaults
 import androidx.compose.material3.Text
-import androidx.compose.runtime.*
+import androidx.compose.material3.TextField
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -18,7 +32,6 @@ import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import com.example.telecomanda.botonbig24sp.BotonBig24sp
-import com.example.telecomanda.buttonsmallmenu.ButtonSmallMenu
 import com.example.telecomanda.dataClasses.Dish
 import com.example.telecomanda.dataClasses.Drink
 import com.example.telecomanda.dataClasses.Table
@@ -87,6 +100,7 @@ fun EmployeeAddOrder(
     }
 }
 
+
 @Composable
 fun OrderScreen(
     table: Table,
@@ -97,7 +111,11 @@ fun OrderScreen(
     navController: NavHostController,
 ) {
     val totalOrderPrice: Double by addOrderViewModel.totalOrderPrice.observeAsState(initial = 0.0)
-    var showDishes by remember { mutableStateOf(true) } // Estado para controlar la vista actual
+    var showDishes by remember { mutableStateOf(true) }
+    var searchQuery by remember { mutableStateOf("") }
+
+    val filteredDishList = dishList.filter { it.name.contains(searchQuery, ignoreCase = true) }
+    val filteredDrinkList = drinkList.filter { it.name.contains(searchQuery, ignoreCase = true) }
 
     Box(
         modifier = Modifier
@@ -131,9 +149,28 @@ fun OrderScreen(
                 )
             )
 
-            Spacer(modifier = Modifier.height(16.dp))
+            Spacer(modifier = Modifier.height(8.dp))
 
-            Spacer(modifier = Modifier.height(16.dp))
+            TextField(
+                value = searchQuery,
+                onValueChange = { searchQuery = it },
+                label = { Text(text = "Buscar...") },
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(horizontal = 16.dp),
+                textStyle = TextStyle(color = Color.White),
+                colors = OutlinedTextFieldDefaults.colors(
+                    focusedBorderColor = Color(0xFFD9D9D9),
+                    unfocusedBorderColor = Color(0xFFD9D9D9),
+                    focusedLabelColor = Color(0xFFD9D9D9),
+                    unfocusedLabelColor = Color(0xFFD9D9D9),
+                    unfocusedTextColor = Color(0xFFD9D9D9),
+                    focusedTextColor = Color(0xFFD9D9D9)
+                ),
+                singleLine = true
+            )
+
+            Spacer(modifier = Modifier.height(8.dp))
 
             LazyColumn(
                 horizontalAlignment = Alignment.CenterHorizontally,
@@ -141,34 +178,10 @@ fun OrderScreen(
                 modifier = Modifier.fillMaxSize()
             ) {
 
-                item {
-                    LazyRow(
-                        horizontalArrangement = Arrangement.Center,
-                        modifier = Modifier.fillMaxWidth()
-                    ) {
-                        item {
-                            ButtonSmallMenu(
-                                onClick = { showDishes = true },
-                                text = "Platos",
-                                textColor = if (showDishes) Color.White else Color.Gray
-                            )
-                        }
-                        item { Spacer(modifier = Modifier.width(8.dp)) }
-
-                        item {
-                            ButtonSmallMenu(
-                                onClick = { showDishes = false },
-                                text = "Bebidas",
-                                textColor = if (showDishes) Color.Gray else Color.White
-                            )
-                        }
-                    }
-                }
-
                 item { Spacer(modifier = Modifier.height(24.dp)) }
 
                 if (showDishes) {
-                    items(dishList) { dish ->
+                    items(filteredDishList) { dish ->
                         Spacer(modifier = Modifier.height(8.dp))
                         BotonBig24sp(
                             onClick = { addOrderViewModel.addDishToCurrentList(dish) },
@@ -177,7 +190,7 @@ fun OrderScreen(
                         )
                     }
                 } else {
-                    items(drinkList) { drink ->
+                    items(filteredDrinkList) { drink ->
                         Spacer(modifier = Modifier.height(8.dp))
                         BotonBig24sp(
                             onClick = { addOrderViewModel.addDrinkToCurrentList(drink) },
@@ -209,7 +222,6 @@ fun OrderScreen(
                     )
 
                     Spacer(modifier = Modifier.height(16.dp))
-
                     Text(
                         text = "Total Order",
                         style = TextStyle(color = Color.White, fontSize = 32.sp)
@@ -291,3 +303,4 @@ fun OrderScreen(
         }
     }
 }
+

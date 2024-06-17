@@ -55,8 +55,8 @@ fun ConfigurationScreen(
 
             Logo(
                 modifier = Modifier
-                    .width(199.dp)
-                    .height(232.dp)
+                    .width(169.dp)
+                    .height(197.dp)
             )
 
             Spacer(modifier = Modifier.height(32.dp))

@@ -20,6 +20,7 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.material3.OutlinedTextFieldDefaults
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
@@ -155,6 +156,16 @@ fun TextFieldsDrink(
         value = name,
         onValueChange = { name = it },
         label = { Text("Nombre") },
+        textStyle = TextStyle(color = Color.White),
+        colors = OutlinedTextFieldDefaults.colors(
+            focusedBorderColor = Color(0xFFD9D9D9),
+            unfocusedBorderColor = Color(0xFFD9D9D9),
+            focusedLabelColor = Color(0xFFD9D9D9),
+            unfocusedLabelColor = Color(0xFFD9D9D9),
+            unfocusedTextColor = Color(0xFFD9D9D9),
+            focusedTextColor = Color(0xFFD9D9D9)
+        ),
+        singleLine = true
     )
 
     Spacer(modifier = Modifier.height(16.dp))
@@ -163,7 +174,17 @@ fun TextFieldsDrink(
         value = price,
         onValueChange = { price = it },
         label = { Text("Precio") },
-        keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number)
+        keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
+        textStyle = TextStyle(color = Color.White),
+        colors = OutlinedTextFieldDefaults.colors(
+            focusedBorderColor = Color(0xFFD9D9D9),
+            unfocusedBorderColor = Color(0xFFD9D9D9),
+            focusedLabelColor = Color(0xFFD9D9D9),
+            unfocusedLabelColor = Color(0xFFD9D9D9),
+            unfocusedTextColor = Color(0xFFD9D9D9),
+            focusedTextColor = Color(0xFFD9D9D9)
+        ),
+        singleLine = true
     )
 
     Spacer(modifier = Modifier.height(16.dp))
@@ -243,6 +264,16 @@ fun TextFieldsDish(
         value = name,
         onValueChange = { name = it },
         label = { Text("Nombre") },
+        textStyle = TextStyle(color = Color.White),
+        colors = OutlinedTextFieldDefaults.colors(
+            focusedBorderColor = Color(0xFFD9D9D9),
+            unfocusedBorderColor = Color(0xFFD9D9D9),
+            focusedLabelColor = Color(0xFFD9D9D9),
+            unfocusedLabelColor = Color(0xFFD9D9D9),
+            unfocusedTextColor = Color(0xFFD9D9D9),
+            focusedTextColor = Color(0xFFD9D9D9)
+        ),
+        singleLine = true
     )
 
     Spacer(modifier = Modifier.height(16.dp))
@@ -251,7 +282,17 @@ fun TextFieldsDish(
         value = price,
         onValueChange = { price = it },
         label = { Text("Precio") },
-        keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number)
+        keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
+        textStyle = TextStyle(color = Color.White),
+        colors = OutlinedTextFieldDefaults.colors(
+            focusedBorderColor = Color(0xFFD9D9D9),
+            unfocusedBorderColor = Color(0xFFD9D9D9),
+            focusedLabelColor = Color(0xFFD9D9D9),
+            unfocusedLabelColor = Color(0xFFD9D9D9),
+            unfocusedTextColor = Color(0xFFD9D9D9),
+            focusedTextColor = Color(0xFFD9D9D9)
+        ),
+        singleLine = true
     )
 
     Spacer(modifier = Modifier.height(16.dp))
@@ -267,7 +308,17 @@ fun TextFieldsDish(
             ingredientTexts = List(ingredientsNumber.toInt()) { "" }
         },
         label = { Text("Número de Ingredientes") },
-        keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number)
+        keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
+        textStyle = TextStyle(color = Color.White),
+        colors = OutlinedTextFieldDefaults.colors(
+            focusedBorderColor = Color(0xFFD9D9D9),
+            unfocusedBorderColor = Color(0xFFD9D9D9),
+            focusedLabelColor = Color(0xFFD9D9D9),
+            unfocusedLabelColor = Color(0xFFD9D9D9),
+            unfocusedTextColor = Color(0xFFD9D9D9),
+            focusedTextColor = Color(0xFFD9D9D9)
+        ),
+        singleLine = true
     )
 
     Spacer(modifier = Modifier.height(16.dp))
@@ -281,6 +332,16 @@ fun TextFieldsDish(
                 }
             },
             label = { Text("Ingrediente ${i + 1}") },
+            textStyle = TextStyle(color = Color.White),
+            colors = OutlinedTextFieldDefaults.colors(
+                focusedBorderColor = Color(0xFFD9D9D9),
+                unfocusedBorderColor = Color(0xFFD9D9D9),
+                focusedLabelColor = Color(0xFFD9D9D9),
+                unfocusedLabelColor = Color(0xFFD9D9D9),
+                unfocusedTextColor = Color(0xFFD9D9D9),
+                focusedTextColor = Color(0xFFD9D9D9)
+            ),
+            singleLine = true
         )
 
         Spacer(modifier = Modifier.height(16.dp))
