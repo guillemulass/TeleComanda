@@ -29,6 +29,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import coil.compose.rememberAsyncImagePainter
@@ -54,9 +55,10 @@ fun ClientMenuScreen(
     var selectedCategory by remember { mutableStateOf("Platos") }
     var selectedType by remember { mutableStateOf("") }
     var expanded by remember { mutableStateOf(false) }
+    var searchText by remember { mutableStateOf("") }
 
-    val filteredDishes = dishList.filter { it.type.contains(selectedType, ignoreCase = true) }
-    val filteredDrinks = drinkList.filter { it.type.contains(selectedType, ignoreCase = true) }
+    val filteredDishes = dishList.filter { it.type.contains(selectedType, ignoreCase = true) && it.name.contains(searchText, ignoreCase = true) }
+    val filteredDrinks = drinkList.filter { it.type.contains(selectedType, ignoreCase = true) && it.name.contains(searchText, ignoreCase = true) }
 
     LaunchedEffect(restaurantName) {
         clientOrderViewModel.getDishData(
@@ -177,6 +179,28 @@ fun ClientMenuScreen(
                         }
                     }
                 }
+
+                Spacer(modifier = Modifier.height(16.dp))
+
+                // TextField para la búsqueda
+                TextField(
+                    value = searchText,
+                    onValueChange = { searchText = it },
+                    label = { Text(text = "Buscar...") },
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(horizontal = 16.dp),
+                    textStyle = TextStyle(color = Color.White),
+                    colors = OutlinedTextFieldDefaults.colors(
+                        focusedBorderColor = Color(0xFFD9D9D9),
+                        unfocusedBorderColor = Color(0xFFD9D9D9),
+                        focusedLabelColor = Color(0xFFD9D9D9),
+                        unfocusedLabelColor = Color(0xFFD9D9D9),
+                        unfocusedTextColor = Color(0xFFD9D9D9),
+                        focusedTextColor = Color(0xFFD9D9D9)
+                    ),
+                    singleLine = true
+                )
             }
 
             if (selectedCategory == "Platos") {

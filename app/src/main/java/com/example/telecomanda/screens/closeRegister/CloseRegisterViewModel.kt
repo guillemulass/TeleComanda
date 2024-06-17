@@ -63,7 +63,7 @@ class CloseRegisterViewModel : ViewModel() {
 
         // Registrar el cierre de la caja en /restaurants/$restaurantName/registerLog
         val currentDate = Date()
-        val dateFormat = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())
+        val dateFormat = SimpleDateFormat("dd-MM-yyyy", Locale.getDefault())
         val timeFormat = SimpleDateFormat("HH:mm:ss", Locale.getDefault())
         val dateStr = dateFormat.format(currentDate)
         val timeStr = timeFormat.format(currentDate)

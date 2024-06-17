@@ -94,6 +94,32 @@ class AddOrderViewModel : ViewModel() {
         updateTotalPrice()
     }
 
+    fun combineOrderLists(currentList: List<OrderItem>, totalList: List<OrderItem>): List<OrderItem> {
+        val combinedList = mutableListOf<OrderItem>()
+        val itemMap = mutableMapOf<String, OrderItem>()
+
+        // Agrega los elementos del totalList al mapa
+        totalList.forEach { item ->
+            val key = "${item.name}-${item.type}"
+            itemMap[key] = item
+        }
+
+        // Agrega o combina los elementos del currentList
+        currentList.forEach { item ->
+            val key = "${item.name}-${item.type}"
+            val existingItem = itemMap[key]
+            if (existingItem != null) {
+                existingItem.quantity += item.quantity
+            } else {
+                itemMap[key] = item
+            }
+        }
+
+        combinedList.addAll(itemMap.values)
+        return combinedList
+    }
+
+
     fun updateTotalPrice() {
         _totalPrice.value = currentOrderList.sumOf { (it.price.toDoubleOrNull() ?: 0.0) * it.quantity }
     }

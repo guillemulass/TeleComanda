@@ -13,7 +13,9 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
+import androidx.compose.material3.OutlinedTextFieldDefaults
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
@@ -50,6 +52,7 @@ fun ClientOrderScreen(
     var drinks by remember { mutableStateOf(listOf<Drink>()) }
     var dishes by remember { mutableStateOf(listOf<Dish>()) }
     var showDrinks by remember { mutableStateOf(true) }
+    var searchText by remember { mutableStateOf("") }
     val currentOrderList by clientOrderViewModel.currentOrderList.collectAsState()
     val totalOrderList by clientOrderViewModel.totalOrderList.collectAsState()
     val currentOrderPrice by clientOrderViewModel.currentOrderPrice.collectAsState()
@@ -58,6 +61,9 @@ fun ClientOrderScreen(
     val coroutineScope = rememberCoroutineScope()
     var isRestaurantOpen by remember { mutableStateOf(false) }
     var restaurantNameSet by remember { mutableStateOf(false) }
+
+    val filteredDrinks = drinks.filter { it.name.contains(searchText, ignoreCase = true) }
+    val filteredDishes = dishes.filter { it.name.contains(searchText, ignoreCase = true) }
 
     LaunchedEffect(restaurantName) {
         clientOrderViewModel.getDrinkData(
@@ -91,7 +97,6 @@ fun ClientOrderScreen(
             .fillMaxSize()
             .background(Color(0xFF161618))
             .padding(top = 35.dp)
-
     ) {
         Spacer(modifier = Modifier.height(40.dp))
 
@@ -114,7 +119,7 @@ fun ClientOrderScreen(
             if (isRestaurantOpen) {
 
                 item {
-                    Spacer(modifier = Modifier.height(32.dp))
+                    Spacer(modifier = Modifier.height(8.dp))
                 }
 
                 item {
@@ -156,6 +161,30 @@ fun ClientOrderScreen(
                 }
 
                 item {
+                    Spacer(modifier = Modifier.height(8.dp))
+                    // TextField para la búsqueda
+                    TextField(
+                        value = searchText,
+                        onValueChange = { searchText = it },
+                        label = { Text(text = "Buscar...") },
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(horizontal = 16.dp),
+                        textStyle = TextStyle(color = Color.White),
+                        colors = OutlinedTextFieldDefaults.colors(
+                            focusedBorderColor = Color(0xFFD9D9D9),
+                            unfocusedBorderColor = Color(0xFFD9D9D9),
+                            focusedLabelColor = Color(0xFFD9D9D9),
+                            unfocusedLabelColor = Color(0xFFD9D9D9),
+                            unfocusedTextColor = Color(0xFFD9D9D9),
+                            focusedTextColor = Color(0xFFD9D9D9)
+                        ),
+                        singleLine = true
+                    )
+                    Spacer(modifier = Modifier.height(8.dp))
+                }
+
+                item {
                     LazyRow(
                         horizontalArrangement = Arrangement.Center,
                         modifier = Modifier.fillMaxWidth()
@@ -180,8 +209,9 @@ fun ClientOrderScreen(
                     }
                 }
 
-                if (showDrinks && drinks.isNotEmpty()) {
-                    items(drinks) { drink ->
+
+                if (showDrinks && drinks.isNotEmpty() && searchText != "") {
+                    items(filteredDrinks) { drink ->
                         Spacer(modifier = Modifier.height(8.dp))
                         BotonBig24sp(
                             onClick = { clientOrderViewModel.addDrinkToCurrentList(drink) },
@@ -189,20 +219,13 @@ fun ClientOrderScreen(
                             modifier = Modifier.width(266.dp)
                         )
                     }
-                } else if (!showDrinks && dishes.isNotEmpty()) {
-                    items(dishes) { dish ->
+                } else if (!showDrinks && dishes.isNotEmpty() && searchText != "") {
+                    items(filteredDishes) { dish ->
                         Spacer(modifier = Modifier.height(8.dp))
                         BotonBig24sp(
                             onClick = { clientOrderViewModel.addDishToCurrentList(dish) },
                             text = dish.name,
                             modifier = Modifier.width(266.dp)
-                        )
-                    }
-                } else {
-                    item {
-                        Text(
-                            text = "No ${if (showDrinks) "bebidas" else "platos"} disponibles",
-                            style = TextStyle(color = Color.Red, fontSize = 24.sp),
                         )
                     }
                 }
@@ -238,7 +261,7 @@ fun ClientOrderScreen(
 
                 item {
                     Text(
-                        text = "Comanda Completa",
+                        text = "Cuenta",
                         style = TextStyle(color = Color.White, fontSize = 24.sp),
                     )
                 }
