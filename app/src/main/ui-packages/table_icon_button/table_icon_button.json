@@ -1,0 +1,110 @@
+{
+  "name": "table_icon_button",
+  "version": 33,
+  "source-key": {
+    "type": "figma",
+    "file": "nosByj6i2Xg6s3qmGLrKUh",
+    "node": "310:76",
+    "version": "6019246624",
+    "component-id": "f227e2d3ce3d9b7c3005a8fa3aebe5e4716eddc1"
+  },
+  "default": "TableIconButton",
+  "design": {
+    "atoms": [
+      {
+        "type": "group",
+        "id": "top_level",
+        "root": "true"
+      },
+      {
+        "type": "text",
+        "id": "1"
+      },
+      {
+        "type": "image",
+        "id": "Table"
+      }
+    ],
+    "modes": {
+      "TableIconButton": {
+        "rules": [
+          {
+            "id": "top_level",
+            "tap-handler": "$onClick",
+            "size-constraints": {
+              "width-constraints": {
+                "sizing-mode": "shrink"
+              },
+              "height-constraints": {
+                "sizing-mode": "shrink"
+              }
+            },
+            "children": [
+              "1",
+              "Table"
+            ],
+            "item-spacing": -30.0,
+            "clip-content": false
+          },
+          {
+            "id": "1",
+            "font-weight": 600.0,
+            "color": {
+              "alpha": 1.0,
+              "hue": 198.00000000000003,
+              "saturation": 0.5405405405405406,
+              "value": 0.8705882352941177
+            },
+            "text-content": "$tableNumber",
+            "overflow": "visible",
+            "text-align": "left",
+            "text-size": 50.0,
+            "line-height": 1.171875
+          },
+          {
+            "id": "Table",
+            "size-constraints": {
+              "width-constraints": {
+                "sizing-mode": "fixed",
+                "value": 100.0
+              },
+              "height-constraints": {
+                "sizing-mode": "fixed",
+                "value": 100.0
+              }
+            },
+            "image-content": "table.png",
+            "scale": "contain"
+          }
+        ]
+      }
+    }
+  },
+  "parameters": {
+    "onClick": {
+      "data-type": "void-callback",
+      "required": false,
+      "description": ""
+    },
+    "tableNumber": {
+      "data-type": "text",
+      "required": false,
+      "description": ""
+    }
+  },
+  "previews": [
+    {
+      "design": "TableIconButton",
+      "size": {
+        "width": 100.0,
+        "height": 129.0
+      },
+      "parameters": {
+        "tableNumber": "1"
+      }
+    }
+  ],
+  "adin-component-search-paths": [],
+  "image-search-paths": [],
+  "vector-search-paths": []
+}
