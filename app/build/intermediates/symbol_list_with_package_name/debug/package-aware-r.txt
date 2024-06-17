@@ -139,6 +139,7 @@ drawable ic_launcher_foreground
 drawable logo_logo_img
 drawable main_header_main_header_separator_bot
 drawable menu_item_show_item_img
+drawable no_image
 drawable notification_action_background
 drawable notification_bg
 drawable notification_bg_low

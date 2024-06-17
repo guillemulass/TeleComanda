@@ -29,9 +29,11 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import coil.compose.rememberAsyncImagePainter
+import com.example.telecomanda.R
 import com.example.telecomanda.buttonsmallmenu.ButtonSmallMenu
 import com.example.telecomanda.dataClasses.Dish
 import com.example.telecomanda.dataClasses.Drink
@@ -225,7 +227,9 @@ fun DishItem(dish: Dish) {
             val ingredientsText = dish.ingredients.joinToString(", ")
 
             if (imageUrl.isNullOrEmpty()) {
+                val defaultPainter = painterResource(id = R.drawable.no_image)
                 MenuItemShow(
+                    itemImg = defaultPainter,
                     itemNameText = dish.name,
                     itemPriceText = "${dish.price}€",
                     itemIngredientsText = ingredientsText,
@@ -259,8 +263,11 @@ fun DrinkItem(drink: Drink) {
     ) {
         drink.imageUrl?.let { imageUrl ->
             Spacer(modifier = Modifier.height(8.dp))
+
             if (imageUrl.isNullOrEmpty()) {
+                val defaultPainter = painterResource(id = R.drawable.no_image)
                 MenuItemShow(
+                    itemImg = defaultPainter,
                     itemNameText = drink.name,
                     itemPriceText = "${drink.price}€",
                     modifier = Modifier

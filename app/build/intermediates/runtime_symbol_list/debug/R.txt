@@ -138,6 +138,7 @@ int drawable ic_launcher_foreground 0x7f040026
 int drawable logo_logo_img 0x7f040027
 int drawable main_header_main_header_separator_bot 0x7f040028
 int drawable menu_item_show_item_img 0x7f040029
+int drawable no_image 0x7f040039
 int drawable notification_action_background 0x7f04002a
 int drawable notification_bg 0x7f04002b
 int drawable notification_bg_low 0x7f04002c

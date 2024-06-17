@@ -20,6 +20,7 @@ drawable ic_launcher_foreground
 drawable logo_logo_img
 drawable main_header_main_header_separator_bot
 drawable menu_item_show_item_img
+drawable no_image
 drawable small_button_rectangle_2
 drawable table_icon_button_table
 mipmap ic_launcher
