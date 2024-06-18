@@ -11,16 +11,11 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material3.Button
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.text.TextStyle
-import androidx.compose.ui.text.font.FontWeight.Companion.Bold
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import com.example.telecomanda.botonbig32sp.BotonBig32sp
 import com.example.telecomanda.footer.Footer
@@ -70,10 +65,6 @@ fun LogInSelector(
                 onClick = { navController.navigate(Routes.LogInAdministratorScreenRoute.route) },
                 text = "Administrador"
             )
-            BotonBig32sp(
-                onClick = { navController.navigate(Routes.AdminWorkScreenRoute.route) },
-                text = "Administrador"
-            )
 
             Spacer(modifier = Modifier.height(16.dp))
 
@@ -81,11 +72,6 @@ fun LogInSelector(
                 onClick = { navController.navigate(Routes.LogInEmployeeScreenRoute.route) },
                 text = "Empleado"
             )
-            BotonBig32sp(
-                onClick = { navController.navigate(Routes.EmployeeWorkScreenRoute.route) },
-                text = "Empleado"
-            )
-
 
         }
         Column(
