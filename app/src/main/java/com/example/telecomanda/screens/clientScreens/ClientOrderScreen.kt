@@ -180,8 +180,6 @@ fun ClientOrderScreen(
                     Spacer(modifier = Modifier.height(8.dp))
                 }
 
-
-
                 if (searchText != "") {
                     items(filteredDrinks) { drink ->
                         Spacer(modifier = Modifier.height(8.dp))
