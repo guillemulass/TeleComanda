@@ -159,7 +159,6 @@ fun ClientOrderScreen(
 
                 item {
                     Spacer(modifier = Modifier.height(8.dp))
-                    // TextField para la búsqueda
                     TextField(
                         value = searchText,
                         onValueChange = { searchText = it },
@@ -183,24 +182,25 @@ fun ClientOrderScreen(
 
 
 
-                if (drinks.isNotEmpty() && searchText != "") {
+                if (searchText != "") {
                     items(filteredDrinks) { drink ->
                         Spacer(modifier = Modifier.height(8.dp))
                         BotonBig24sp(
                             onClick = { clientOrderViewModel.addDrinkToCurrentList(drink) },
-                            text = drink.name,
+                            text = "${drink.name} | ${drink.price}€",
                             modifier = Modifier.width(266.dp)
                         )
                     }
-                } else if (dishes.isNotEmpty() && searchText != "") {
+
                     items(filteredDishes) { dish ->
                         Spacer(modifier = Modifier.height(8.dp))
                         BotonBig24sp(
                             onClick = { clientOrderViewModel.addDishToCurrentList(dish) },
-                            text = dish.name,
+                            text = "${dish.name} | ${dish.price}€",
                             modifier = Modifier.width(266.dp)
                         )
                     }
+
                 }
 
                 item {
