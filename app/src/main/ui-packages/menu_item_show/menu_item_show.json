@@ -5,7 +5,7 @@
     "type": "figma",
     "file": "nosByj6i2Xg6s3qmGLrKUh",
     "node": "235:10",
-    "version": "5982691599",
+    "version": "6037219048",
     "component-id": "620db9d233744ab3397b83a0648abfaeee3abb9e"
   },
   "default": "MenuItemShow",
@@ -71,6 +71,10 @@
           },
           {
             "id": "Frame 7",
+            "padding": {
+              "top": 8.0,
+              "bottom": 8.0
+            },
             "size-constraints": {
               "width-constraints": {
                 "sizing-mode": "shrink"
@@ -84,6 +88,7 @@
               "3.5€",
               "Ingredientes"
             ],
+            "item-spacing": 8.0,
             "clip-content": false
           },
           {
@@ -95,8 +100,8 @@
                 "value": 155.0
               },
               "height-constraints": {
-                "sizing-mode": "fixed",
-                "value": 156.0
+                "sizing-mode": "proportional",
+                "value": 1.0
               }
             },
             "image-content": "$ItemImg",
@@ -139,7 +144,7 @@
                 "value": 28.0
               }
             },
-            "font-weight": 600.0,
+            "font-weight": 900.0,
             "color": {
               "alpha": 1.0,
               "hue": 0.0,
@@ -209,7 +214,7 @@
       "design": "MenuItemShow",
       "size": {
         "width": 305.0,
-        "height": 156.0
+        "height": 144.0
       },
       "parameters": {
         "ItemImg": "item_img.jpeg",

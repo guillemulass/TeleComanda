@@ -2,6 +2,7 @@ package com.example.telecomanda.menuitemshow
 
 import androidx.compose.foundation.layout.IntrinsicSize
 import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.requiredHeight
@@ -47,11 +48,14 @@ fun MenuItemShow(
             Class35(itemPriceText = itemPriceText)
             Ingredientes(itemIngredientsText = itemIngredientsText)
         }
-        ItemImg(itemImg = itemImg)
+        ItemImg(
+            itemImg = itemImg,
+            modifier = Modifier.columnWeight(1.0f)
+        )
     }
 }
 
-@Preview(widthDp = 305, heightDp = 156)
+@Preview(widthDp = 305, heightDp = 144)
 @Composable
 private fun MenuItemShowPreview() {
     MaterialTheme {
@@ -106,7 +110,7 @@ fun Class35(
             blue = 255
         ),
         height = 1.171875.em,
-        fontWeight = FontWeight(600.0.toInt()),
+        fontWeight = FontWeight(900.0.toInt()),
         maxLines = -1,
         modifier = modifier.requiredWidth(142.0.dp).requiredHeight(28.0.dp).wrapContentHeight(
             align = Alignment.CenterVertically,
@@ -145,6 +149,13 @@ fun Frame7(
     content: @Composable RelayContainerScope.() -> Unit
 ) {
     RelayContainer(
+        padding = PaddingValues(
+            start = 0.0.dp,
+            top = 8.0.dp,
+            end = 0.0.dp,
+            bottom = 8.0.dp
+        ),
+        itemSpacing = 8.0,
         clipToParent = false,
         content = content,
         modifier = modifier.width(IntrinsicSize.Min)
@@ -160,7 +171,7 @@ fun ItemImg(
         image = itemImg,
         radius = 16.0,
         contentScale = ContentScale.Crop,
-        modifier = modifier.requiredWidth(155.0.dp).requiredHeight(156.0.dp)
+        modifier = modifier.requiredWidth(155.0.dp).fillMaxHeight(1.0f)
     )
 }
 

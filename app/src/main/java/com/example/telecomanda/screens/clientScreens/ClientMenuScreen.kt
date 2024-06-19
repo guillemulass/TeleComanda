@@ -239,7 +239,7 @@ fun DishItem(dish: Dish) {
             .fillMaxWidth()
     ) {
         dish.imageUrl.let { imageUrl ->
-            Spacer(modifier = Modifier.height(8.dp))
+            Spacer(modifier = Modifier.height(16.dp))
             val ingredientsText = dish.ingredients.joinToString(", ")
 
             if (imageUrl.isNullOrEmpty()) {
@@ -249,7 +249,6 @@ fun DishItem(dish: Dish) {
                     itemIngredientsText = ingredientsText,
                     modifier = Modifier
                         .width(305.dp)
-                        .height(156.dp)
                 )
             } else {
                 val painter = rememberAsyncImagePainter(model = imageUrl)
@@ -260,7 +259,6 @@ fun DishItem(dish: Dish) {
                     itemIngredientsText = ingredientsText,
                     modifier = Modifier
                         .width(305.dp)
-                        .height(156.dp)
                 )
             }
         }
@@ -276,7 +274,7 @@ fun DrinkItem(drink: Drink) {
             .fillMaxWidth()
     ) {
         drink.imageUrl?.let { imageUrl ->
-            Spacer(modifier = Modifier.height(8.dp))
+            Spacer(modifier = Modifier.height(16.dp))
             if (imageUrl.isNullOrEmpty()) {
                 MenuItemShow(
                     itemNameText = drink.name,

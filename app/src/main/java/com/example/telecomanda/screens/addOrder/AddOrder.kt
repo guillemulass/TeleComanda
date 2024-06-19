@@ -151,6 +151,15 @@ fun OrderScreen(
                 )
             )
 
+            Text(
+                text = table.code,
+                style = TextStyle(
+                    fontWeight = FontWeight.Bold,
+                    color = Color.White,
+                    fontSize = 24.sp
+                )
+            )
+
             Spacer(modifier = Modifier.height(8.dp))
 
             // TextField para la búsqueda
@@ -186,6 +195,7 @@ fun OrderScreen(
                 item { Spacer(modifier = Modifier.height(24.dp)) }
 
                 if (searchText != ""){
+
                     items(filteredDishList) { dish ->
                         Spacer(modifier = Modifier.height(8.dp))
                         ButtonOrderItem(
@@ -194,6 +204,7 @@ fun OrderScreen(
                             modifier = Modifier.width(266.dp)
                         )
                     }
+
                     items(filteredDrinkList) { drink ->
                         Spacer(modifier = Modifier.height(8.dp))
                         ButtonOrderItem(
@@ -202,6 +213,7 @@ fun OrderScreen(
                             modifier = Modifier.width(266.dp)
                         )
                     }
+
                 }
 
                 item {
